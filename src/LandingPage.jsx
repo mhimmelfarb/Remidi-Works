@@ -63,7 +63,7 @@ export default function LandingPage() {
             marginBottom: 20,
             lineHeight: 1.2
           }}>
-            Revenue Model Intelligence for PE Portfolios
+            Decision Support Platform for Revenue Model Excellence
           </h1>
           <p style={{ fontSize: 18, color: '#4b5563', maxWidth: 700, margin: '0 auto 24px', lineHeight: 1.6 }}>
             Continuous benchmarking and diagnostics that identify pricing underperformers, 
