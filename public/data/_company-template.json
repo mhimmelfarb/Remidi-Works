@@ -1,0 +1,70 @@
+{
+  "company": {
+    "name": "Company Name",
+    "industry": "Industry / Vertical",
+    "arr": "$XM",
+    "stage": "Series X"
+  },
+  "situation": {
+    "headline": "Company Name is [facing specific challenge].",
+    "narrative": "Brief description of the business context and why this matters.",
+    "context": "You've tasked your CMO and Head of Sales to diagnose the problem and build an action plan."
+  },
+  "scores": {
+    "initial": {
+      "valueArticulation": { "score": 5, "status": "warning" },
+      "differentiation": { "score": 6, "status": "warning" },
+      "salesEnablement": { "score": 3, "status": "critical" }
+    },
+    "postDiagnostic": {
+      "valueArticulation": { "score": 4.5, "status": "warning" },
+      "differentiation": { "score": 6, "status": "warning" },
+      "salesEnablement": { "score": 2.5, "status": "critical" }
+    },
+    "commercialMaturity": { "initial": 4.7, "postDiagnostic": 4.3, "benchmark": 6.2 }
+  },
+  "criticalGap": {
+    "title": "Critical Gap Detected",
+    "metric": "X/10",
+    "metricLabel": "CFO-Ready Index™",
+    "description": "Your [specific metric] score <strong>X/10</strong> on the [Framework]™. For [deal context], benchmark is Y+. This gap is likely costing <strong>X-Y% of winnable deals</strong>."
+  },
+  "aiCoachInsight": "I've analyzed [Company]'s public footprint. Your <strong>[Dimension] score of X/10</strong> is your biggest blocker. I see [specific observations]. <strong>A few quick questions will sharpen this picture.</strong>",
+  "diagnostic": {
+    "q1": {
+      "question": "When you lose deals, is it price confusion, proof points, or something else?",
+      "answer": "Specific answer based on company analysis...",
+      "insight": "→ Confirms [Dimension] gap ([specific issues])"
+    },
+    "q2": {
+      "question": "How many case studies would you confidently share with a CFO?",
+      "answer": "Specific answer...",
+      "insight": "→ [Framework]™ score: X/10 ([context])"
+    },
+    "q3": {
+      "question": "What's blocking better [deliverable] right now?",
+      "answer": "Specific answer...",
+      "insight": "→ Root cause: [diagnosis] (solvable with Remidi Works)"
+    }
+  },
+  "patternDetected": {
+    "title": "Pattern Detected",
+    "description": "[Deal size] + [buyer type] + [gap] = [consequence]",
+    "source": "Based on analysis of 47 similar companies"
+  },
+  "criticalFinding": {
+    "description": "Your [metric] score <strong>X/10 on the [Framework]™</strong>. For [deal context], benchmark is Y+. <strong>Estimated impact:</strong> This gap is likely costing X-Y% of winnable deals."
+  },
+  "priorities": [
+    { "rank": 1, "name": "Priority Name", "status": "critical", "description": "Action description using HGP methodology", "impact": "Est. +X-Y% win rate" },
+    { "rank": 2, "name": "Priority Name", "status": "warning", "description": "Action description" },
+    { "rank": 3, "name": "Priority Name", "status": "good", "description": "Action description" }
+  ],
+  "expertInsight": "Your '[specific claim]' claim could be worth $X annually to customers. That's a story that closes deals — if you quantify it.",
+  "projectedImprovement": {
+    "current": 2.5,
+    "afterProject": 6.5,
+    "benchmark": 7.0,
+    "winRateImprovement": "+15-20%"
+  }
+}

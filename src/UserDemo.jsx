@@ -1,139 +1,161 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
-const colors = {
-  primary: '#3D5A80',
-  primaryDark: '#293241',
-  accent: '#EE6C4D',
-  accentSoft: '#98C1D9',
-  cream: '#E0FBFC',
-  white: '#FFFFFF',
-  green: '#2D936C',
-  yellow: '#F4A300',
-  red: '#C1292E',
+// Default company data (NovaTech)
+const defaultCompanyData = {
+  company: {
+    name: "NovaTech",
+    industry: "Customer Data Platform",
+    arr: "$12M",
+    stage: "Series B"
+  },
+  situation: {
+    headline: "NovaTech is missing pipeline targets.",
+    narrative: "The board suspects the root cause isn't sales execution—it's gaps in your revenue model and commercialization fundamentals.",
+    context: "You've tasked your CMO and Head of Sales to diagnose the problem and build an action plan."
+  },
+  scores: {
+    initial: {
+      valueArticulation: { score: 5, status: "warning" },
+      differentiation: { score: 6, status: "warning" },
+      salesEnablement: { score: 3, status: "critical" }
+    },
+    postDiagnostic: {
+      valueArticulation: { score: 4.5, status: "warning" },
+      differentiation: { score: 6, status: "warning" },
+      salesEnablement: { score: 2.5, status: "critical" }
+    },
+    commercialMaturity: { initial: 4.7, postDiagnostic: 4.3, benchmark: 6.2 }
+  },
+  criticalGap: {
+    title: "Critical Gap Detected",
+    metric: "2/10",
+    metricLabel: "CFO-Ready Index™",
+    description: "Your case studies score <strong>2/10</strong> on the CFO-Ready Index™. For $150-250K deals with CFO sign-off, benchmark is 7+. This gap is likely costing <strong>15-25% of winnable deals</strong>."
+  },
+  aiCoachInsight: "I've analyzed NovaTech's public footprint. Your <strong>Sales Enablement score of 3/10</strong> is your biggest blocker. I see strong value claims — '70% cloud savings', '5.5 FTEs reduced' — but they're not quantified in dollars. <strong>A few quick questions will sharpen this picture.</strong>",
+  diagnostic: {
+    q1: {
+      question: "When you lose deals, is it price confusion, proof points, or something else?",
+      answer: "Prospects can't figure out what we cost. And when they ask for customer examples, we don't have strong quantified stories.",
+      insight: "→ Confirms Sales Enablement gap (pricing clarity + proof points)"
+    },
+    q2: {
+      question: "How many case studies would you confidently share with a CFO?",
+      answer: "Maybe one or two, but they don't have the financial proof points a CFO wants.",
+      insight: "→ CFO-Ready Index™ score: 2/10 (below threshold for enterprise deals)"
+    },
+    q3: {
+      question: "What's blocking better case studies right now?",
+      answer: "No process. Nobody owns it. Not sure what questions to ask customers.",
+      insight: "→ Root cause: methodology gap (solvable with Remidi Works)"
+    }
+  },
+  patternDetected: {
+    title: "Pattern Detected",
+    description: "$200K ACV + CFO sign-off + no quantified proof = deals dying at decision stage",
+    source: "Based on analysis of 47 similar companies"
+  },
+  criticalFinding: {
+    description: "Your case studies score <strong>2/10 on the CFO-Ready Index™</strong>. For $150-250K deals with CFO sign-off, benchmark is 7+. <strong>Estimated impact:</strong> This gap is likely costing 15-25% of winnable deals."
+  },
+  priorities: [
+    { rank: 1, name: "Case Study Strategy", status: "critical", description: "Transform claims → CFO-ready proof using HGP Proof Point Protocol™", impact: "Est. +20-30% win rate" },
+    { rank: 2, name: "Pricing Clarity", status: "warning", description: "Publish pricing or ROI calculator for self-qualification" },
+    { rank: 3, name: "Differentiation Messaging", status: "good", description: "Elevate white-label advantage to headline" }
+  ],
+  expertInsight: "Your '70% cloud savings' claim could be worth $1.26M annually to customers. That's a story that closes deals — if you quantify it.",
+  projectedImprovement: {
+    current: 2.5,
+    afterProject: 6.5,
+    benchmark: 7.0,
+    winRateImprovement: "+15-20%"
+  }
 };
 
 export default function UserDemo() {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
-  const [typing, setTyping] = useState(false);
-  const [displayedText, setDisplayedText] = useState('');
-  const [showActions, setShowActions] = useState(false);
-  const [answers, setAnswers] = useState({});
-  const [scores, setScores] = useState({
-    valueArticulation: 4.5,
-    pricingArchitecture: 5.2,
-    competitivePositioning: 4.8,
-    salesEnablement: 3.9,
-    customerROI: 5.0,
-  });
+  const [showTyping, setShowTyping] = useState(false);
+  const [questionAnswered, setQuestionAnswered] = useState(false);
+  const [scoresUpdated, setScoresUpdated] = useState(false);
+  const [companyData, setCompanyData] = useState(defaultCompanyData);
+  const [loading, setLoading] = useState(false);
 
-  const typeText = (text, callback) => {
-    setTyping(true);
-    setDisplayedText('');
-    setShowActions(false);
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText(prev => prev + text.charAt(i));
-        i++;
-      } else {
-        clearInterval(interval);
-        setTyping(false);
-        setTimeout(() => setShowActions(true), 300);
-        if (callback) callback();
-      }
-    }, 15);
-  };
-
-  const questions = [
-    {
-      id: 'q1',
-      text: "Looking at your website and public materials, I see you're positioned as a CDP for enterprises. Let me ask: How do your customers typically describe the main problem you solve for them?",
-      options: [
-        { label: "Data unification and identity resolution", scoreImpact: { valueArticulation: 0.8, customerROI: 0.5 } },
-        { label: "Reducing martech stack complexity", scoreImpact: { pricingArchitecture: 0.6, valueArticulation: 0.4 } },
-        { label: "Enabling personalized customer experiences", scoreImpact: { competitivePositioning: 0.5, salesEnablement: 0.3 } },
-        { label: "We're still refining our positioning", scoreImpact: { valueArticulation: -0.2, salesEnablement: -0.3 } },
-      ]
-    },
-    {
-      id: 'q2',
-      text: "I noticed your pricing isn't published. When you're in a competitive deal, how do prospects typically react to your pricing versus alternatives like Segment or mParticle?",
-      options: [
-        { label: "We're usually 30-50% lower and win on value", scoreImpact: { pricingArchitecture: 0.7, competitivePositioning: 0.8 } },
-        { label: "Similar pricing but we differentiate on capabilities", scoreImpact: { competitivePositioning: 0.5, salesEnablement: 0.4 } },
-        { label: "We often have to discount to win", scoreImpact: { valueArticulation: -0.4, pricingArchitecture: -0.3 } },
-        { label: "We rarely go head-to-head with those players", scoreImpact: { competitivePositioning: 0.3, customerROI: 0.2 } },
-      ]
-    },
-    {
-      id: 'q3',
-      text: "When your sales team is trying to get a deal approved internally at the customer, what tools or evidence do they have to help the champion build a business case?",
-      options: [
-        { label: "ROI calculator with customer-specific inputs", scoreImpact: { salesEnablement: 1.0, customerROI: 0.8 } },
-        { label: "Case studies with quantified results", scoreImpact: { customerROI: 0.6, salesEnablement: 0.5 } },
-        { label: "Generic value proposition slides", scoreImpact: { salesEnablement: 0.2, valueArticulation: 0.1 } },
-        { label: "We rely on the champion to build the case", scoreImpact: { salesEnablement: -0.5, customerROI: -0.3 } },
-      ]
-    },
-  ];
-
-  const handleAnswer = (questionId, option) => {
-    setAnswers(prev => ({ ...prev, [questionId]: option.label }));
-    
-    setScores(prev => {
-      const newScores = { ...prev };
-      Object.entries(option.scoreImpact).forEach(([key, value]) => {
-        newScores[key] = Math.min(10, Math.max(0, newScores[key] + value));
-      });
-      return newScores;
-    });
-
-    const currentQuestionIndex = questions.findIndex(q => q.id === questionId);
-    if (currentQuestionIndex < questions.length - 1) {
-      setTimeout(() => {
-        typeText(questions[currentQuestionIndex + 1].text);
-      }, 500);
-    } else {
-      setTimeout(() => setStep(3), 500);
+  // Load custom company data if client param is present
+  useEffect(() => {
+    const clientParam = searchParams.get('client');
+    if (clientParam) {
+      setLoading(true);
+      fetch(`/data/${clientParam}-company.json`)
+        .then(res => {
+          if (!res.ok) throw new Error('Not found');
+          return res.json();
+        })
+        .then(data => {
+          setCompanyData(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log('Using default company data:', err.message);
+          setLoading(false);
+        });
     }
-  };
+  }, [searchParams]);
 
   useEffect(() => {
-    if (step === 2) {
-      typeText(questions[0].text);
-    }
+    setShowTyping(false);
+    setQuestionAnswered(false);
+    if (step === 3) setTimeout(() => setScoresUpdated(true), 1500);
   }, [step]);
 
-  const getScoreColor = (score) => {
-    if (score >= 7) return colors.green;
-    if (score >= 5) return colors.yellow;
-    return colors.red;
+  const handleNext = () => {
+    if (step === 2 && !questionAnswered) {
+      setShowTyping(true);
+      setTimeout(() => { setShowTyping(false); setQuestionAnswered(true); }, 1500);
+    } else {
+      setStep(step + 1);
+    }
   };
 
-  const overallScore = Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length;
+  const handleBack = () => { if (step > 0) setStep(step - 1); };
 
-  const ScoreBadge = ({ label, score, prevScore }) => (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: 12,
-      padding: '16px 20px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-      border: '1px solid #e5e7eb',
-    }}>
-      <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 8, fontWeight: 500 }}>{label}</div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-        <span style={{ fontSize: 28, fontWeight: 700, color: getScoreColor(score) }}>{score.toFixed(1)}</span>
-        {prevScore && score !== prevScore && (
-          <span style={{ fontSize: 12, fontWeight: 600, color: score > prevScore ? colors.green : colors.red }}>
-            {score > prevScore ? '↑' : '↓'} from {prevScore.toFixed(1)}
-          </span>
-        )}
+  // HG Partners Brand Colors
+  const colors = {
+    primary: '#3D5A80',
+    primaryDark: '#293241',
+    accent: '#EE6C4D',
+    accentSoft: '#98C1D9',
+    cream: '#E0FBFC',
+    textMain: '#0f172a',
+    textMuted: '#4b5563',
+  };
+
+  const ScoreGauge = ({ label, score, previousScore, status, framework }) => {
+    const statusColors = {
+      critical: { bg: '#fef2f2', border: '#fecaca', text: '#991b1b' },
+      warning: { bg: '#fffbeb', border: '#fde68a', text: '#92400e' },
+      good: { bg: '#ecfdf5', border: '#a7f3d0', text: '#065f46' },
+    };
+    const c = statusColors[status] || statusColors.warning;
+    return (
+      <div style={{ background: c.bg, border: `1px solid ${c.border}`, borderRadius: 12, padding: '12px 16px' }}>
+        <div style={{ fontSize: 11, color: colors.textMuted, marginBottom: 4 }}>{label}</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+          <span style={{ fontSize: 24, fontWeight: 800, color: c.text }}>{score}</span>
+          <span style={{ fontSize: 14, color: colors.textMuted }}>/10</span>
+          {previousScore && previousScore !== score && (
+            <span style={{ fontSize: 11, color: score > previousScore ? '#059669' : '#dc2626' }}>
+              {score > previousScore ? '↑' : '↓'} from {previousScore}
+            </span>
+          )}
+        </div>
+        {framework && <div style={{ fontSize: 10, color: colors.primary, marginTop: 4 }}>{framework}</div>}
       </div>
-    </div>
-  );
+    );
+  };
 
-  const FrameworkBadge = ({ text }) => (
+  const ProprietaryBadge = ({ text }) => (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,
       fontSize: 10, fontWeight: 600, letterSpacing: '0.05em',
@@ -145,36 +167,35 @@ export default function UserDemo() {
   );
 
   const steps = [
-    // STEP 0: The Situation
+    // Step 0: The Situation
     {
       title: "The Situation",
       content: (
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
           <div style={{
             background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 40, marginBottom: 32, color: '#fff',
-            textAlign: 'center',
+            borderRadius: 20, padding: 40, marginBottom: 32, color: '#fff', textAlign: 'center',
           }}>
             <div style={{ fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase', color: colors.accentSoft, marginBottom: 16 }}>
               The Situation
             </div>
             <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 16, lineHeight: 1.3 }}>
-              NovaTech is missing pipeline targets.
+              {companyData.situation.headline}
             </div>
             <div style={{ fontSize: 16, color: '#d1d5db', lineHeight: 1.7, maxWidth: 600, margin: '0 auto' }}>
-              The board suspects the root cause isn't sales execution—it's gaps in your revenue model and commercialization fundamentals.
+              {companyData.situation.narrative}
             </div>
           </div>
 
           <div style={{
             backgroundColor: '#fff',
-            borderRadius: 12,
+            borderRadius: 16,
             padding: 32,
             border: '1px solid #e5e7eb',
             marginBottom: 24,
           }}>
-            <div style={{ fontSize: 16, color: colors.primaryDark, lineHeight: 1.8, marginBottom: 24 }}>
-              You've tasked your CMO and Head of Sales to diagnose the problem and build an action plan. 
+            <div style={{ fontSize: 16, color: colors.textMain, lineHeight: 1.8, marginBottom: 24 }}>
+              {companyData.situation.context}
               <strong style={{ color: colors.accent }}> This is what they found.</strong>
             </div>
 
@@ -188,50 +209,31 @@ export default function UserDemo() {
             }}>
               <div>
                 <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>Company</div>
-                <div style={{ fontWeight: 600, color: colors.primaryDark }}>NovaTech</div>
+                <div style={{ fontWeight: 600, color: colors.primaryDark }}>{companyData.company.name}</div>
               </div>
               <div>
                 <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>Industry</div>
-                <div style={{ fontWeight: 600, color: colors.primaryDark }}>Customer Data Platform</div>
+                <div style={{ fontWeight: 600, color: colors.primaryDark }}>{companyData.company.industry}</div>
               </div>
               <div>
                 <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>ARR</div>
-                <div style={{ fontWeight: 600, color: colors.primaryDark }}>$12M</div>
+                <div style={{ fontWeight: 600, color: colors.primaryDark }}>{companyData.company.arr}</div>
               </div>
               <div>
                 <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>Stage</div>
-                <div style={{ fontWeight: 600, color: colors.primaryDark }}>Series B</div>
+                <div style={{ fontWeight: 600, color: colors.primaryDark }}>{companyData.company.stage}</div>
               </div>
             </div>
           </div>
-
-          <button
-            onClick={() => setStep(1)}
-            style={{
-              width: '100%',
-              padding: '16px 24px',
-              background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
-            }}
-          >
-            See the Diagnostic Results →
-          </button>
         </div>
       )
     },
 
-    // STEP 1: Dashboard Home
+    // Step 1: Dashboard
     {
       title: "Your Dashboard",
       content: (
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          {/* Header */}
           <div style={{
             background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
             borderRadius: 16, padding: 24, marginBottom: 24, color: '#fff',
@@ -241,136 +243,98 @@ export default function UserDemo() {
                 <div style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: colors.accentSoft, marginBottom: 6 }}>
                   REMIDI WORKS • Case Study Accelerator
                 </div>
-                <div style={{ fontSize: 24, fontWeight: 700 }}>NovaTech</div>
-                <div style={{ fontSize: 13, color: '#d1d5db' }}>Customer Data Platform • Series B</div>
+                <div style={{ fontSize: 24, fontWeight: 700 }}>{companyData.company.name}</div>
+                <div style={{ fontSize: 13, color: '#d1d5db' }}>{companyData.company.industry} • {companyData.company.stage}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 11, color: colors.accentSoft }}>Commercial Maturity Score™</div>
-                <div style={{ fontSize: 36, fontWeight: 800 }}>4.7<span style={{ fontSize: 18, color: '#9ca3af' }}>/10</span></div>
-                <div style={{ fontSize: 11, color: '#9ca3af' }}>Segment benchmark: 6.2</div>
+                <div style={{ fontSize: 36, fontWeight: 800 }}>{companyData.scores.commercialMaturity.initial}<span style={{ fontSize: 18, color: '#9ca3af' }}>/10</span></div>
+                <div style={{ fontSize: 11, color: '#9ca3af' }}>Segment benchmark: {companyData.scores.commercialMaturity.benchmark}</div>
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
-            {/* Main Content */}
-            <div style={{ minWidth: 0 }}>
-              {/* Scores */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 24 }}>
-                <ScoreBadge label="Value Articulation" score={4.5} />
-                <ScoreBadge label="Pricing Architecture" score={5.2} />
-                <ScoreBadge label="Competitive Position" score={4.8} />
-                <ScoreBadge label="Sales Enablement" score={3.9} />
-                <ScoreBadge label="Customer ROI Proof" score={5.0} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 24 }}>
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
+                <ScoreGauge label="Value Articulation" score={companyData.scores.initial.valueArticulation.score} status={companyData.scores.initial.valueArticulation.status} framework="Nine Value Levers™" />
+                <ScoreGauge label="Differentiation" score={companyData.scores.initial.differentiation.score} status={companyData.scores.initial.differentiation.status} framework="Competitive Position Index™" />
+                <ScoreGauge label="Sales Enablement" score={companyData.scores.initial.salesEnablement.score} status={companyData.scores.initial.salesEnablement.status} framework="CFO-Ready Index™" />
               </div>
 
-              {/* Analysis Source */}
-              <div style={{
-                backgroundColor: colors.cream,
-                borderRadius: 12,
-                padding: 16,
-                marginBottom: 24,
-              }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: colors.primary, marginBottom: 8 }}>
-                  📊 Analysis based on observable data:
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 16, padding: 20, marginBottom: 24 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 20 }}>🔴</span>
+                    <span style={{ fontWeight: 700, color: '#991b1b' }}>{companyData.criticalGap.title}</span>
+                  </div>
+                  <ProprietaryBadge text={companyData.criticalGap.metricLabel} />
                 </div>
-                <div style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6 }}>
-                  Website content, pricing page (not found), G2 reviews (4.5★, 23 reviews), 
-                  LinkedIn (127 employees), job postings (3 open sales roles), press releases, 
-                  and competitive positioning materials.
-                </div>
+                <p style={{ fontSize: 14, color: '#7f1d1d', margin: 0, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: companyData.criticalGap.description }} />
               </div>
 
-              {/* Key Gaps */}
-              <div style={{
-                backgroundColor: '#fff',
-                borderRadius: 12,
-                padding: 20,
-                border: '1px solid #e5e7eb',
-              }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark, marginBottom: 16 }}>
-                  Preliminary Gaps Identified
+              <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%',
+                    background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14, fontWeight: 700, color: '#fff',
+                  }}>RW</div>
+                  <div>
+                    <div style={{ fontWeight: 600, color: colors.textMain }}>Remidi Works AI Coach</div>
+                    <div style={{ fontSize: 11, color: colors.textMuted }}>Based on analysis of 47 B2B SaaS companies</div>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: 12, backgroundColor: '#fef2f2', borderRadius: 8 }}>
-                    <span style={{ fontSize: 16 }}>🔴</span>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#991b1b' }}>No published ROI calculator</div>
-                      <div style={{ fontSize: 12, color: '#6b7280' }}>Competitors Segment and mParticle have interactive value tools</div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: 12, backgroundColor: '#fef2f2', borderRadius: 8 }}>
-                    <span style={{ fontSize: 16 }}>🔴</span>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#991b1b' }}>Value props feature-focused, not outcome-focused</div>
-                      <div style={{ fontSize: 12, color: '#6b7280' }}>Website describes capabilities, not customer business impact</div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: 12, backgroundColor: '#fffbeb', borderRadius: 8 }}>
-                    <span style={{ fontSize: 16 }}>🟡</span>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#92400e' }}>Pricing hidden from website</div>
-                      <div style={{ fontSize: 12, color: '#6b7280' }}>May be intentional, but creates friction in buyer journey</div>
-                    </div>
-                  </div>
+                <div style={{ background: colors.cream, borderRadius: 12, padding: 16 }}>
+                  <p style={{ fontSize: 14, color: colors.textMain, margin: 0, lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: `"${companyData.aiCoachInsight}"` }} />
                 </div>
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div>
-              <div style={{
-                backgroundColor: '#fff',
-                borderRadius: 12,
-                padding: 20,
-                border: `2px solid ${colors.accent}`,
-                marginBottom: 20,
-              }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: colors.accent, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Recommended Next Step
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
+                <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span>📚</span> Company Knowledge Base
                 </div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: colors.primaryDark, marginBottom: 8 }}>
-                  Refine Your Assessment
+                <div style={{ fontSize: 13 }}>
+                  {[
+                    { label: 'Website analysis', done: true },
+                    { label: 'Pricing page review', done: true },
+                    { label: 'Case study audit', done: true },
+                    { label: 'Competitor benchmark', done: true },
+                    { label: 'Your diagnostic input', done: false },
+                    { label: 'Customer interviews', done: false },
+                  ].map((item, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', color: item.done ? '#059669' : '#9ca3af' }}>
+                      <span>{item.done ? '✓' : '○'}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
                 </div>
-                <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 16, lineHeight: 1.6 }}>
-                  Answer 3 quick questions to sharpen this analysis with information only you know.
-                </div>
-                <button
-                  onClick={() => setStep(2)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 16px',
-                    background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 8,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
-                  }}
-                >
-                  Start Quick Diagnostic →
-                </button>
-                <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, textAlign: 'center' }}>
-                  Takes about 3 minutes
+                <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 12, paddingTop: 12, borderTop: '1px solid #e5e7eb' }}>
+                  Knowledge accumulates with each project
                 </div>
               </div>
 
               <div style={{
-                backgroundColor: colors.cream,
-                borderRadius: 12,
-                padding: 16,
+                background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+                borderRadius: 16, padding: 20, color: '#fff',
               }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: colors.primary, marginBottom: 12 }}>
-                  How Remidi Works
+                <div style={{ fontWeight: 700, marginBottom: 8 }}>Ready to dig deeper?</div>
+                <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 16 }}>
+                  Answer 3 quick questions to refine your scores and unlock your action plan.
                 </div>
-                <div style={{ fontSize: 12, color: '#4b5563', lineHeight: 1.7 }}>
-                  <div style={{ marginBottom: 8 }}>✓ Scores update as you add information</div>
-                  <div style={{ marginBottom: 8 }}>✓ Pause and resume anytime</div>
-                  <div style={{ marginBottom: 8 }}>✓ Expert backup when you need it</div>
-                  <div>✓ Board-ready outputs guaranteed</div>
-                </div>
+                <button
+                  onClick={handleNext}
+                  style={{
+                    width: '100%', padding: '12px 20px', borderRadius: 999,
+                    background: '#fff', color: colors.primaryDark,
+                    fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer',
+                  }}
+                >
+                  Start Diagnostic →
+                </button>
               </div>
             </div>
           </div>
@@ -378,118 +342,113 @@ export default function UserDemo() {
       )
     },
 
-    // STEP 2: Quick Diagnostic
+    // Step 2: Quick Diagnostic
     {
       title: "Quick Diagnostic",
       content: (
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{
-            background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 24, marginBottom: 24, color: '#fff',
+            background: colors.cream, border: `1px solid ${colors.accentSoft}`,
+            borderRadius: 12, padding: 16, marginBottom: 24,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: 11, letterSpacing: '0.1em', color: colors.accentSoft, marginBottom: 4 }}>REFINING ASSESSMENT</div>
-                <div style={{ fontSize: 20, fontWeight: 700 }}>NovaTech • Quick Diagnostic</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, color: colors.accentSoft }}>Current Score</div>
-                <div style={{ fontSize: 28, fontWeight: 800 }}>{overallScore.toFixed(1)}</div>
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: colors.primary }}>
+              <span style={{ fontSize: 20 }}>📋</span>
+              <span><strong>Diagnostic Interview</strong> — 3 questions to refine your assessment</span>
             </div>
+            <ProprietaryBadge text="HGP Diagnostic Protocol" />
           </div>
 
-          {/* Live Scores */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, marginBottom: 24 }}>
-            {Object.entries(scores).map(([key, value]) => (
-              <div key={key} style={{
-                backgroundColor: '#fff',
-                borderRadius: 8,
-                padding: 12,
-                textAlign: 'center',
-                border: '1px solid #e5e7eb',
-              }}>
-                <div style={{ fontSize: 10, color: '#6b7280', marginBottom: 4 }}>
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: getScoreColor(value) }}>
-                  {value.toFixed(1)}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Chat Interface */}
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: 12,
-            border: '1px solid #e5e7eb',
-            overflow: 'hidden',
-          }}>
-            <div style={{ padding: 20, borderBottom: '1px solid #e5e7eb', backgroundColor: '#f9fafb' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 24 }}>
+            <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24 }}>
+              {/* Q1 */}
+              <div style={{ borderLeft: `4px solid ${colors.primary}`, paddingLeft: 16, marginBottom: 24 }}>
+                <p style={{ fontWeight: 600, color: colors.textMain, marginBottom: 12 }}>
+                  Q1: "{companyData.diagnostic.q1.question}"
+                </p>
                 <div style={{
-                  width: 40, height: 40, borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', fontWeight: 700, fontSize: 14,
-                }}>RW</div>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark }}>Remidi Works AI Coach</div>
-                  <div style={{ fontSize: 11, color: '#6b7280' }}>Powered by HG Partners methodology</div>
+                  background: '#f9fafb', borderRadius: 10, padding: 14,
+                  border: questionAnswered ? '2px solid #86efac' : '1px solid #e5e7eb',
+                }}>
+                  <p style={{ fontSize: 14, color: colors.textMuted, margin: 0 }}>
+                    {questionAnswered ? 
+                      `"${companyData.diagnostic.q1.answer}"` : 
+                      'Click Next to answer...'}
+                  </p>
                 </div>
+                {questionAnswered && (
+                  <div style={{ marginTop: 8, fontSize: 12, color: colors.primary }}>
+                    {companyData.diagnostic.q1.insight}
+                  </div>
+                )}
               </div>
+
+              {questionAnswered && (
+                <>
+                  {/* Q2 */}
+                  <div style={{ borderLeft: `4px solid ${colors.primary}`, paddingLeft: 16, marginBottom: 24 }}>
+                    <p style={{ fontWeight: 600, color: colors.textMain, marginBottom: 12 }}>
+                      Q2: "{companyData.diagnostic.q2.question}"
+                    </p>
+                    <div style={{ background: '#f9fafb', borderRadius: 10, padding: 14, border: '2px solid #86efac' }}>
+                      <p style={{ fontSize: 14, color: colors.textMuted, margin: 0 }}>
+                        "{companyData.diagnostic.q2.answer}"
+                      </p>
+                    </div>
+                    <div style={{ marginTop: 8, fontSize: 12, color: colors.primary }}>
+                      {companyData.diagnostic.q2.insight}
+                    </div>
+                  </div>
+
+                  {/* Q3 */}
+                  <div style={{ borderLeft: `4px solid ${colors.primary}`, paddingLeft: 16 }}>
+                    <p style={{ fontWeight: 600, color: colors.textMain, marginBottom: 12 }}>
+                      Q3: "{companyData.diagnostic.q3.question}"
+                    </p>
+                    <div style={{ background: '#f9fafb', borderRadius: 10, padding: 14, border: '2px solid #86efac' }}>
+                      <p style={{ fontSize: 14, color: colors.textMuted, margin: 0 }}>
+                        "{companyData.diagnostic.q3.answer}"
+                      </p>
+                    </div>
+                    <div style={{ marginTop: 8, fontSize: 12, color: colors.primary }}>
+                      {companyData.diagnostic.q3.insight}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
-            <div style={{ padding: 24 }}>
-              <div style={{ 
-                fontSize: 15, 
-                color: '#374151', 
-                lineHeight: 1.7,
-                minHeight: 80,
-              }}>
-                {displayedText}
-                {typing && <span style={{ animation: 'blink 1s infinite' }}>|</span>}
+            <div>
+              <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20, marginBottom: 16 }}>
+                <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 16 }}>Live Score Updates</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 13, color: colors.textMuted }}>Value Articulation</span>
+                    <span style={{ fontWeight: 700, color: '#d97706' }}>{companyData.scores.initial.valueArticulation.score}/10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 13, color: colors.textMuted }}>Differentiation</span>
+                    <span style={{ fontWeight: 700, color: '#d97706' }}>{companyData.scores.initial.differentiation.score}/10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 13, color: colors.textMuted }}>Sales Enablement</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ fontWeight: 700, color: '#dc2626' }}>{questionAnswered ? companyData.scores.postDiagnostic.salesEnablement.score : companyData.scores.initial.salesEnablement.score}/10</span>
+                      {questionAnswered && <span style={{ fontSize: 11, color: '#dc2626' }}>↓</span>}
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {showActions && !typing && (
-                <div style={{ marginTop: 20 }}>
-                  {questions.map((q, qIndex) => {
-                    if (answers[q.id]) return null;
-                    if (qIndex > 0 && !answers[questions[qIndex - 1].id]) return null;
-                    
-                    return (
-                      <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {q.options.map((option, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleAnswer(q.id, option)}
-                            style={{
-                              padding: '12px 16px',
-                              backgroundColor: '#f3f4f6',
-                              border: '1px solid #e5e7eb',
-                              borderRadius: 8,
-                              fontSize: 14,
-                              color: '#374151',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                              transition: 'all 0.2s',
-                            }}
-                            onMouseOver={e => {
-                              e.target.style.backgroundColor = colors.cream;
-                              e.target.style.borderColor = colors.primary;
-                            }}
-                            onMouseOut={e => {
-                              e.target.style.backgroundColor = '#f3f4f6';
-                              e.target.style.borderColor = '#e5e7eb';
-                            }}
-                          >
-                            {option.label}
-                          </button>
-                        ))}
-                      </div>
-                    );
-                  })}
+              {questionAnswered && (
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 16, padding: 16 }}>
+                  <div style={{ fontWeight: 600, color: '#991b1b', marginBottom: 8 }}>🚨 {companyData.patternDetected.title}</div>
+                  <p style={{ fontSize: 13, color: '#7f1d1d', margin: 0, lineHeight: 1.5 }}>
+                    {companyData.patternDetected.description}
+                  </p>
+                  <div style={{ fontSize: 11, color: '#991b1b', marginTop: 8 }}>
+                    {companyData.patternDetected.source}
+                  </div>
                 </div>
               )}
             </div>
@@ -498,557 +457,482 @@ export default function UserDemo() {
       )
     },
 
-    // STEP 3: Updated Assessment
+    // Step 3: Updated Assessment
     {
       title: "Updated Assessment",
       content: (
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div style={{
-            background: `linear-gradient(135deg, ${colors.green} 0%, #065f46 100%)`,
-            borderRadius: 16, padding: 24, marginBottom: 24, color: '#fff',
-            textAlign: 'center',
+            background: '#ecfdf5', border: '1px solid #a7f3d0',
+            borderRadius: 12, padding: 16, marginBottom: 24,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
-            <div style={{ fontSize: 12, letterSpacing: '0.1em', marginBottom: 8 }}>✓ ASSESSMENT REFINED</div>
-            <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>
-              Your score improved to {overallScore.toFixed(1)}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#065f46' }}>
+              <span style={{ fontSize: 20 }}>📊</span>
+              <span><strong>Assessment refined</strong> — Scores updated based on diagnostic</span>
             </div>
-            <div style={{ fontSize: 14, opacity: 0.9 }}>
-              Based on your responses, we've updated our analysis
+            <div style={{ fontSize: 12, color: '#059669' }}>Confidence: High (T1 + T2 data)</div>
+          </div>
+
+          <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24, marginBottom: 24 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: colors.textMain }}>{companyData.company.name}</div>
+                <div style={{ fontSize: 13, color: colors.textMuted }}>{companyData.company.industry} • {companyData.company.stage}</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 11, color: colors.textMuted }}>Commercial Maturity Score™</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8 }}>
+                  <span style={{ fontSize: 32, fontWeight: 800, color: '#d97706' }}>{scoresUpdated ? companyData.scores.commercialMaturity.postDiagnostic : companyData.scores.commercialMaturity.initial}/10</span>
+                  {scoresUpdated && <span style={{ color: '#dc2626' }}>↓</span>}
+                </div>
+                <div style={{ fontSize: 11, color: colors.textMuted }}>Gap to benchmark: {scoresUpdated ? (companyData.scores.commercialMaturity.benchmark - companyData.scores.commercialMaturity.postDiagnostic).toFixed(1) : (companyData.scores.commercialMaturity.benchmark - companyData.scores.commercialMaturity.initial).toFixed(1)} points</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
+              <ScoreGauge label="Value Articulation" score={scoresUpdated ? companyData.scores.postDiagnostic.valueArticulation.score : companyData.scores.initial.valueArticulation.score} previousScore={companyData.scores.initial.valueArticulation.score} status={companyData.scores.postDiagnostic.valueArticulation.status} framework="Nine Value Levers™" />
+              <ScoreGauge label="Differentiation" score={companyData.scores.postDiagnostic.differentiation.score} status={companyData.scores.postDiagnostic.differentiation.status} framework="Competitive Position Index™" />
+              <ScoreGauge label="Sales Enablement" score={scoresUpdated ? companyData.scores.postDiagnostic.salesEnablement.score : companyData.scores.initial.salesEnablement.score} previousScore={companyData.scores.initial.salesEnablement.score} status={companyData.scores.postDiagnostic.salesEnablement.status} framework="CFO-Ready Index™" />
+            </div>
+
+            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 12, padding: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <span style={{ fontWeight: 700, color: '#991b1b' }}>🔴 Critical Finding</span>
+                <ProprietaryBadge text="Deal Velocity Analysis" />
+              </div>
+              <p style={{ fontSize: 14, color: '#7f1d1d', margin: 0, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: companyData.criticalFinding.description }} />
             </div>
           </div>
 
-          {/* Updated Scores */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 24 }}>
-            <ScoreBadge label="Value Articulation" score={scores.valueArticulation} prevScore={4.5} />
-            <ScoreBadge label="Pricing Architecture" score={scores.pricingArchitecture} prevScore={5.2} />
-            <ScoreBadge label="Competitive Position" score={scores.competitivePositioning} prevScore={4.8} />
-            <ScoreBadge label="Sales Enablement" score={scores.salesEnablement} prevScore={3.9} />
-            <ScoreBadge label="Customer ROI Proof" score={scores.customerROI} prevScore={5.0} />
-          </div>
-
-          {/* Priority Workstreams */}
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: 12,
-            padding: 24,
-            border: '1px solid #e5e7eb',
-            marginBottom: 24,
-          }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: colors.primaryDark, marginBottom: 16 }}>
-              Recommended Priority Order
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 24 }}>
+            <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <span style={{ fontWeight: 600, color: colors.textMain }}>Priority Ranking</span>
+                <ProprietaryBadge text="HGP Priority Algorithm" />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {companyData.priorities.map((priority, idx) => {
+                  const statusStyles = {
+                    critical: { bg: '#fef2f2', border: '2px solid #fecaca', icon: '🔴', titleColor: '#991b1b', descColor: '#7f1d1d', badge: { bg: '#fecaca', color: '#991b1b' } },
+                    warning: { bg: '#fffbeb', border: '1px solid #fde68a', icon: '🟡', titleColor: '#92400e', descColor: '#a16207' },
+                    good: { bg: '#f9fafb', border: '1px solid #e5e7eb', icon: '🟢', titleColor: colors.textMuted, descColor: '#9ca3af' }
+                  };
+                  const style = statusStyles[priority.status] || statusStyles.good;
+                  return (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 16, background: style.bg, borderRadius: 12, border: style.border }}>
+                      <span style={{ fontSize: 24 }}>{style.icon}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, color: style.titleColor }}>{priority.rank}. {priority.name}</div>
+                        <div style={{ fontSize: 13, color: style.descColor }}>{priority.description}</div>
+                      </div>
+                      {priority.impact && (
+                        <div style={{ textAlign: 'right' }}>
+                          {priority.status === 'critical' && <span style={{ fontSize: 11, background: style.badge.bg, color: style.badge.color, padding: '4px 8px', borderRadius: 4 }}>CRITICAL</span>}
+                          <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 4 }}>{priority.impact}</div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[
-                { rank: 1, name: 'Build Customer ROI Calculator', impact: 'High', effort: 'Medium', dimension: 'Sales Enablement' },
-                { rank: 2, name: 'Develop Value Story Framework', impact: 'High', effort: 'Low', dimension: 'Value Articulation' },
-                { rank: 3, name: 'Create Competitive Battle Cards', impact: 'Medium', effort: 'Low', dimension: 'Competitive Position' },
-              ].map(item => (
-                <div key={item.rank} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 16,
-                  padding: 16,
-                  backgroundColor: item.rank === 1 ? `${colors.accent}10` : '#f9fafb',
-                  borderRadius: 8,
-                  border: item.rank === 1 ? `2px solid ${colors.accent}` : '1px solid #e5e7eb',
-                }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: '50%',
-                    backgroundColor: item.rank === 1 ? colors.accent : colors.primary,
-                    color: '#fff', fontWeight: 700,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>{item.rank}</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark }}>{item.name}</div>
-                    <div style={{ fontSize: 12, color: '#6b7280' }}>Improves: {item.dimension}</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
+                <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span>🎯</span> Projected Improvement
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>Current Score</span>
+                    <span style={{ fontWeight: 700, color: '#dc2626' }}>{companyData.projectedImprovement.current}/10</span>
                   </div>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <span style={{ fontSize: 11, padding: '4px 8px', backgroundColor: colors.green + '20', color: colors.green, borderRadius: 4 }}>
-                      {item.impact} Impact
-                    </span>
-                    <span style={{ fontSize: 11, padding: '4px 8px', backgroundColor: '#e5e7eb', color: '#6b7280', borderRadius: 4 }}>
-                      {item.effort} Effort
-                    </span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>After Case Study Project</span>
+                    <span style={{ fontWeight: 700, color: '#059669' }}>{companyData.projectedImprovement.afterProject}/10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>Segment Benchmark</span>
+                    <span style={{ fontWeight: 700, color: colors.textMuted }}>{companyData.projectedImprovement.benchmark}/10</span>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              <div style={{ background: colors.cream, borderRadius: 16, padding: 16, border: `1px solid ${colors.accentSoft}` }}>
+                <div style={{ fontWeight: 600, color: colors.primary, marginBottom: 8 }}>💡 Expert Insight</div>
+                <p style={{ fontSize: 13, color: colors.textMain, margin: 0, lineHeight: 1.6 }}>
+                  "{companyData.expertInsight}"
+                </p>
+              </div>
             </div>
           </div>
-
-          <button
-            onClick={() => setStep(4)}
-            style={{
-              width: '100%',
-              padding: '16px 24px',
-              background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
-            }}
-          >
-            View Your Action Plan →
-          </button>
         </div>
       )
     },
 
-    // STEP 4: Action Plan
+    // Step 4: Action Plan
     {
       title: "Your Action Plan",
       content: (
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div style={{
-            background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 24, marginBottom: 24, color: '#fff',
+            background: colors.cream, border: `1px solid ${colors.accentSoft}`,
+            borderRadius: 12, padding: 16, marginBottom: 24,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: 11, letterSpacing: '0.1em', color: colors.accentSoft, marginBottom: 4 }}>WORKSTREAM</div>
-                <div style={{ fontSize: 22, fontWeight: 700 }}>Build Customer ROI Calculator</div>
-                <div style={{ fontSize: 13, color: '#d1d5db', marginTop: 4 }}>6-step guided process • ~4 hours total</div>
-              </div>
-              <FrameworkBadge text="CFO-Ready Index" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: colors.primary }}>
+              <span style={{ fontSize: 20 }}>🎯</span>
+              <span><strong>Case Study Accelerator</strong> — Your customized project plan</span>
             </div>
+            <ProprietaryBadge text="HGP Proof Point Protocol" />
           </div>
 
-          {/* Steps */}
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: 12,
-            border: '1px solid #e5e7eb',
-            overflow: 'hidden',
-          }}>
-            {[
-              { num: 1, title: 'Identify Value Drivers', time: '30 min', status: 'ready' },
-              { num: 2, title: 'Quantify Customer Outcomes', time: '45 min', status: 'locked' },
-              { num: 3, title: 'Build Input Variables', time: '30 min', status: 'locked' },
-              { num: 4, title: 'Design Calculator Logic', time: '60 min', status: 'locked' },
-              { num: 5, title: 'Create Visual Output', time: '45 min', status: 'locked' },
-              { num: 6, title: 'Quality Gate Review', time: '30 min', status: 'locked' },
-            ].map((s, i) => (
-              <div key={s.num} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                padding: 20,
-                borderBottom: i < 5 ? '1px solid #e5e7eb' : 'none',
-                backgroundColor: s.status === 'ready' ? `${colors.accent}08` : '#fff',
-              }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 24 }}>
+            <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: colors.textMain }}>Case Study Strategy & Execution</div>
+                  <div style={{ fontSize: 13, color: colors.textMuted }}>4-6 weeks • 8-10 hours of your time</div>
+                </div>
+                <div style={{ background: '#dcfce7', color: '#166534', padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>
+                  Active Project
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {[
+                  { num: 1, title: 'Audit & Gap Analysis', time: '1-2 hrs', status: 'ready', gate: 'CFO-Ready Index™ scoring' },
+                  { num: 2, title: 'Customer Selection', time: '30 min', status: 'locked', gate: 'Candidate Criteria™ filter' },
+                  { num: 3, title: 'Story Framework', time: '1 hr', status: 'locked', gate: 'Nine Value Levers™ template' },
+                  { num: 4, title: 'Customer Interviews', time: '2-3 hrs', status: 'locked', gate: 'Value Quantification Questions™' },
+                  { num: 5, title: 'Draft & Review', time: '1-2 hrs', status: 'locked', gate: 'Expert review checkpoint' },
+                  { num: 6, title: 'Scale & Distribute', time: '2-3 hrs', status: 'locked', gate: 'Sales enablement playbook' },
+                ].map((s) => (
+                  <div key={s.num} style={{
+                    display: 'flex', alignItems: 'center', gap: 16, padding: 16, borderRadius: 12,
+                    background: s.status === 'ready' ? colors.cream : '#f9fafb',
+                    border: s.status === 'ready' ? `2px solid ${colors.primary}` : '1px solid #e5e7eb',
+                  }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: '50%',
+                      background: s.status === 'ready' ? colors.primary : '#d1d5db',
+                      color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontWeight: 700, fontSize: 14,
+                    }}>{s.num}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, color: s.status === 'ready' ? colors.primary : colors.textMuted }}>{s.title}</div>
+                      <div style={{ fontSize: 11, color: '#9ca3af' }}>Quality Gate: {s.gate}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 12, color: colors.textMuted }}>{s.time}</div>
+                      {s.status === 'ready' ? (
+                        <span style={{
+                          display: 'inline-block', marginTop: 4,
+                          background: colors.accent, color: '#fff', fontSize: 11, fontWeight: 600,
+                          padding: '4px 12px', borderRadius: 999,
+                        }}>Start →</span>
+                      ) : (
+                        <span style={{ fontSize: 16, color: '#d1d5db' }}>🔒</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
+                <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span>📈</span> Projected Impact
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>Current Score</span>
+                    <span style={{ fontWeight: 700, color: '#dc2626' }}>2.5/10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>After Project</span>
+                    <span style={{ fontWeight: 700, color: '#059669' }}>6.5/10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: colors.textMuted }}>Segment Benchmark</span>
+                    <span style={{ fontWeight: 700, color: colors.textMuted }}>7.0/10</span>
+                  </div>
+                </div>
                 <div style={{
-                  width: 36, height: 36, borderRadius: '50%',
-                  backgroundColor: s.status === 'ready' ? colors.accent : '#e5e7eb',
-                  color: s.status === 'ready' ? '#fff' : '#9ca3af',
-                  fontWeight: 700,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>{s.num}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: s.status === 'ready' ? colors.primaryDark : '#9ca3af' }}>
-                    {s.title}
-                  </div>
-                  <div style={{ fontSize: 12, color: '#9ca3af' }}>{s.time}</div>
-                </div>
-                {s.status === 'ready' && (
-                  <button
-                    onClick={() => setStep(5)}
-                    style={{
-                      padding: '8px 16px',
-                      backgroundColor: colors.accent,
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: 6,
-                      fontSize: 13,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Start →
-                  </button>
-                )}
-                {s.status === 'locked' && (
-                  <span style={{ fontSize: 12, color: '#9ca3af' }}>🔒 Complete previous</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )
-    },
-
-    // STEP 5: Executing Step 1
-    {
-      title: "Identify Value Drivers",
-      content: (
-        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-          <div style={{
-            background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 24, marginBottom: 24, color: '#fff',
-          }}>
-            <div style={{ fontSize: 11, letterSpacing: '0.1em', color: colors.accentSoft, marginBottom: 4 }}>
-              STEP 1 OF 6 • CFO-Ready Index™
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>Identify Value Drivers</div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            {/* Left: AI Analysis */}
-            <div style={{
-              backgroundColor: '#fff',
-              borderRadius: 12,
-              padding: 20,
-              border: '1px solid #e5e7eb',
-            }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark, marginBottom: 16 }}>
-                🔍 Gap Analysis: Your ROI Evidence
-              </div>
-              
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                <thead>
-                  <tr style={{ backgroundColor: '#f9fafb' }}>
-                    <th style={{ padding: 12, textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>Component</th>
-                    <th style={{ padding: 12, textAlign: 'center', borderBottom: '1px solid #e5e7eb' }}>You</th>
-                    <th style={{ padding: 12, textAlign: 'center', borderBottom: '1px solid #e5e7eb' }}>Best Practice</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['ROI Calculator', '❌', '✅'],
-                    ['Case Studies w/ $', '⚠️ 1', '✅ 5+'],
-                    ['TCO Comparison', '❌', '✅'],
-                    ['Time-to-Value Data', '❌', '✅'],
-                    ['Customer Quotes', '✅', '✅'],
-                  ].map(([comp, you, best], i) => (
-                    <tr key={i}>
-                      <td style={{ padding: 12, borderBottom: '1px solid #e5e7eb' }}>{comp}</td>
-                      <td style={{ padding: 12, textAlign: 'center', borderBottom: '1px solid #e5e7eb' }}>{you}</td>
-                      <td style={{ padding: 12, textAlign: 'center', borderBottom: '1px solid #e5e7eb' }}>{best}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Right: Competitor Benchmark */}
-            <div style={{
-              backgroundColor: '#fff',
-              borderRadius: 12,
-              padding: 20,
-              border: '1px solid #e5e7eb',
-            }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark, marginBottom: 16 }}>
-                📊 Competitor ROI Tools
-              </div>
-              
-              {[
-                { name: 'Segment', hasCalc: true, hasStudies: true, rating: 'Strong' },
-                { name: 'mParticle', hasCalc: true, hasStudies: true, rating: 'Strong' },
-                { name: 'Tealium', hasCalc: false, hasStudies: true, rating: 'Medium' },
-                { name: 'NovaTech (You)', hasCalc: false, hasStudies: false, rating: 'Weak' },
-              ].map((c, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '12px 0',
-                  borderBottom: i < 3 ? '1px solid #e5e7eb' : 'none',
-                  backgroundColor: c.name.includes('You') ? `${colors.accent}10` : 'transparent',
-                  margin: c.name.includes('You') ? '0 -12px' : 0,
-                  padding: c.name.includes('You') ? '12px' : '12px 0',
-                  borderRadius: c.name.includes('You') ? 8 : 0,
+                  marginTop: 16, padding: 12, borderRadius: 10,
+                  background: '#ecfdf5', fontSize: 13, color: '#065f46', textAlign: 'center',
                 }}>
-                  <span style={{ fontWeight: c.name.includes('You') ? 600 : 400 }}>{c.name}</span>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <span style={{ fontSize: 11, padding: '2px 6px', backgroundColor: c.hasCalc ? colors.green + '20' : '#fee2e2', color: c.hasCalc ? colors.green : colors.red, borderRadius: 4 }}>
-                      {c.hasCalc ? '✓ Calc' : '✗ Calc'}
-                    </span>
-                    <span style={{ fontSize: 11, padding: '2px 6px', backgroundColor: c.hasStudies ? colors.green + '20' : '#fee2e2', color: c.hasStudies ? colors.green : colors.red, borderRadius: 4 }}>
-                      {c.hasStudies ? '✓ Studies' : '✗ Studies'}
-                    </span>
-                  </div>
+                  Est. win rate improvement: <strong>+15-20%</strong>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div style={{ marginTop: 24 }}>
-            <button
-              onClick={() => setStep(6)}
-              style={{
-                width: '100%',
-                padding: '16px 24px',
-                background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 15,
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
-              }}
-            >
-              Continue to Value Driver Selection →
-            </button>
+              <div style={{
+                background: `linear-gradient(135deg, ${colors.primaryDark}, #111827)`,
+                borderRadius: 16, padding: 20, color: '#e5e7eb',
+              }}>
+                <div style={{ fontWeight: 700, marginBottom: 12, color: '#fff' }}>How Remidi Works</div>
+                <div style={{ fontSize: 13, lineHeight: 1.7 }}>
+                  <p style={{ margin: '0 0 12px 0' }}>
+                    <strong style={{ color: '#fff' }}>Work at your pace.</strong> Start a step, save your progress, 
+                    come back anytime. Remidi Works picks up where you left off.
+                  </p>
+                  <p style={{ margin: 0 }}>
+                    <strong style={{ color: '#fff' }}>Quality gates built in.</strong> Each step has clear criteria — 
+                    the platform won't let you cut corners.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )
     },
 
-    // STEP 6: Pause & Resume
+    // Step 5: Pause & Return
     {
       title: "Work At Your Pace",
       content: (
-        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{
             background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 40, marginBottom: 24, color: '#fff',
+            borderRadius: 20, padding: 32, color: '#fff', marginBottom: 24, textAlign: 'center',
           }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>⏸️</div>
-            <div style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>
-              Welcome back! You left off 3 days ago.
-            </div>
-            <div style={{ fontSize: 15, color: colors.accentSoft }}>
-              Your progress is saved. Pick up right where you left off.
+            <div style={{ fontSize: 14, color: colors.accentSoft, marginBottom: 8 }}>THE REMIDI WORKS DIFFERENCE</div>
+            <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Work Stops. Remidi Waits.</div>
+            <div style={{ fontSize: 15, color: '#d1d5db', maxWidth: 500, margin: '0 auto' }}>
+              Real work takes time. Leave, come back, pick up exactly where you left off.
             </div>
           </div>
 
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: 12,
-            padding: 24,
-            border: '1px solid #e5e7eb',
-            marginBottom: 24,
-            textAlign: 'left',
-          }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark, marginBottom: 16 }}>
-              Your Progress
-            </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <div style={{ flex: 1, height: 8, backgroundColor: '#e5e7eb', borderRadius: 4 }}>
-                <div style={{ width: '17%', height: '100%', backgroundColor: colors.green, borderRadius: 4 }} />
+          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
+            <div style={{
+              background: colors.cream, padding: 16, borderBottom: '1px solid #e5e7eb',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 20 }}>🔔</span>
+                <div>
+                  <div style={{ fontWeight: 600, color: colors.textMain }}>Welcome back!</div>
+                  <div style={{ fontSize: 12, color: colors.textMuted }}>You left off 3 days ago</div>
+                </div>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: colors.primaryDark }}>1/6 steps</span>
-            </div>
-
-            <div style={{ padding: 16, backgroundColor: '#f9fafb', borderRadius: 8 }}>
-              <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>Currently working on:</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: colors.primaryDark }}>
-                Build Customer ROI Calculator → Step 2: Quantify Customer Outcomes
+              <div style={{ fontSize: 12, color: colors.textMuted }}>
+                Last active: Dec 9, 2025
               </div>
             </div>
-          </div>
 
-          <div style={{
-            backgroundColor: colors.cream,
-            borderRadius: 12,
-            padding: 20,
-            marginBottom: 24,
-          }}>
-            <div style={{ fontSize: 13, color: colors.primary, fontWeight: 500 }}>
-              💡 This is what makes Remidi Works different from ChatGPT. Real work takes time. 
-              Your context is preserved across sessions.
+            <div style={{ padding: 32 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted, letterSpacing: '0.1em', marginBottom: 12 }}>
+                    YOUR PROGRESS
+                  </div>
+                  <div style={{ background: '#f9fafb', borderRadius: 16, padding: 20 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                      <div style={{
+                        width: 48, height: 48, borderRadius: 12,
+                        background: colors.primary, color: '#fff',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontWeight: 700, fontSize: 18,
+                      }}>2</div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: colors.textMain }}>Customer Selection</div>
+                        <div style={{ fontSize: 13, color: colors.textMuted }}>60% complete</div>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: 13, color: colors.textMuted, marginBottom: 16 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                        <span style={{ color: '#059669' }}>☑</span> Reviewed customer list criteria
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                        <span style={{ color: '#059669' }}>☑</span> Identified 5 potential customers
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ color: colors.primary }}>☐</span> Rank by segment diversity
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted, letterSpacing: '0.1em', marginBottom: 12 }}>
+                    QUICK ACTIONS
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <button style={{
+                      padding: '16px 20px', borderRadius: 12, border: 'none',
+                      background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+                      color: '#fff', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    }}>
+                      <span>Continue Where I Left Off</span>
+                      <span>→</span>
+                    </button>
+                    <button style={{
+                      padding: '16px 20px', borderRadius: 12,
+                      border: `1px solid ${colors.primary}`, background: '#fff',
+                      color: colors.primary, fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    }}>
+                      <span>Get AI Coaching on This Step</span>
+                      <span>💬</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <button
-            onClick={() => setStep(7)}
-            style={{
-              width: '100%',
-              padding: '16px 24px',
-              background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
-            }}
-          >
-            Continue Where I Left Off →
-          </button>
         </div>
       )
     },
 
-    // STEP 7: Why Remidi Works
+    // Step 6: Why Remidi Works
     {
       title: "Why Remidi Works",
       content: (
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{
             background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
-            borderRadius: 16, padding: 32, marginBottom: 24, color: '#fff',
-            textAlign: 'center',
+            borderRadius: 20, padding: 32, color: '#fff', marginBottom: 32, textAlign: 'center',
           }}>
-            <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>
-              Why Remidi Works
-            </div>
-            <div style={{ fontSize: 15, color: colors.accentSoft }}>
-              The best of AI speed with human expertise
+            <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>What Makes Remidi Works Different</div>
+            <div style={{ fontSize: 16, color: '#d1d5db', maxWidth: 600, margin: '0 auto' }}>
+              This isn't ChatGPT with a wrapper. It's 25 years of commercialization expertise 
+              encoded into a system that coaches you through execution.
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20, marginBottom: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
             {[
-              { icon: '🎯', title: 'Trained by Doing', desc: 'Your team learns commercial strategy by executing it, not reading a deck.' },
-              { icon: '📊', title: 'Benchmarked', desc: 'Every score is compared against 100+ similar companies. You know where you stand.' },
-              { icon: '⏸️', title: 'Pause & Resume', desc: 'Real work takes time. Pick up where you left off. Context preserved.' },
-              { icon: '👤', title: 'Expert Backup', desc: 'When you get stuck, escalate to a human who knows the frameworks.' },
-            ].map((item, i) => (
-              <div key={i} style={{
-                backgroundColor: '#fff',
-                borderRadius: 12,
-                padding: 24,
-                border: '1px solid #e5e7eb',
-              }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{item.icon}</div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: colors.primaryDark, marginBottom: 8 }}>{item.title}</div>
-                <div style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6 }}>{item.desc}</div>
+              {
+                icon: '🔒', title: 'Proprietary Methodology',
+                items: ['CFO-Ready Index™ scoring', 'Nine Value Levers™ framework', 'T1/T2/T3 Confidence Tiers™', 'Commercial Maturity Score™'],
+              },
+              {
+                icon: '📊', title: 'Benchmark Data',
+                items: ['47 B2B SaaS companies analyzed', 'Competitor case study database', 'Segment-specific benchmarks', '"What good looks like" examples'],
+              },
+              {
+                icon: '🚦', title: 'Quality Gates',
+                items: ['Built-in scoring at each step', 'Can\'t skip until threshold met', 'Expert review checkpoints', 'Methodology enforcement'],
+              },
+              {
+                icon: '📚', title: 'Knowledge Accumulation',
+                items: ['Every output feeds knowledge base', 'Future projects build on past work', 'System gets smarter over time', 'ChatGPT starts fresh; Remidi remembers'],
+              },
+            ].map((card, i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                  <span style={{ fontSize: 24 }}>{card.icon}</span>
+                  <span style={{ fontWeight: 700, color: colors.textMain }}>{card.title}</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14, color: colors.textMuted }}>
+                  {card.items.map((item, j) => (
+                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ color: '#059669' }}>✓</span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
 
           <div style={{
-            backgroundColor: colors.cream,
-            borderRadius: 12,
-            padding: 24,
-            textAlign: 'center',
+            marginTop: 32, background: colors.cream, borderRadius: 16, padding: 24, textAlign: 'center',
           }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: colors.primary, marginBottom: 8 }}>
-              The Bottom Line
+            <div style={{ fontSize: 16, color: colors.textMain, lineHeight: 1.7 }}>
+              <strong>Could someone do this with ChatGPT?</strong> Technically, yes.
             </div>
-            <div style={{ fontSize: 16, color: colors.primaryDark, lineHeight: 1.6 }}>
-              Remidi Works is a <strong>system</strong>, not a tool. It doesn't just give you answers—
-              it builds your team's capability while delivering board-ready outputs.
+            <div style={{ fontSize: 16, color: colors.textMain, lineHeight: 1.7, marginTop: 8 }}>
+              Would they know the right sequence? Have the benchmarks? Apply quality gates? 
+              Get expert help when stuck? <strong>No.</strong>
             </div>
-          </div>
-
-          <div style={{ marginTop: 24, textAlign: 'center' }}>
-            <button
-              onClick={() => setStep(0)}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: '#fff',
-                color: colors.primary,
-                border: `2px solid ${colors.primary}`,
-                borderRadius: 8,
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: 'pointer',
-                marginRight: 12,
-              }}
-            >
-              ← Back to Start
-            </button>
-            <Link to="/" style={{ textDecoration: 'none' }}>
-              <button
-                style={{
-                  padding: '12px 24px',
-                  backgroundColor: colors.primary,
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                Explore Other Demos
-              </button>
-            </Link>
+            <div style={{ fontSize: 18, fontWeight: 700, color: colors.primary, marginTop: 16 }}>
+              That's the difference between a tool and a system.
+            </div>
           </div>
         </div>
       )
-    },
+    }
   ];
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: '#f8fafc',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ffffff 0%, #E0FBFC 40%, #98C1D9 100%)',
+      fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+      padding: '24px 16px',
     }}>
       {/* Header */}
-      <header style={{ 
-        backgroundColor: colors.primary, 
-        padding: '12px 24px',
-        borderBottom: `3px solid ${colors.accent}`
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
-              <span style={{ fontSize: '16px' }}>←</span> All Demos
-            </Link>
-            <div style={{ width: '1px', height: '24px', backgroundColor: 'rgba(255,255,255,0.2)' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ 
-                backgroundColor: colors.accent, 
-                width: '28px', 
-                height: '28px', 
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                color: '#fff',
-                fontSize: '10px'
-              }}>RW</span>
-              <span style={{ fontSize: '16px', fontWeight: 600, color: '#fff' }}>Remidi Works</span>
-              <span style={{ fontSize: '11px', color: colors.accentSoft }}>Portfolio Company View</span>
-            </div>
+      <div style={{ maxWidth: 1100, margin: '0 auto 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 8,
+              background: colors.accent, color: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 700, fontSize: 11,
+            }}>RW</div>
+            <span style={{ fontSize: 18, fontWeight: 700, color: colors.primaryDark }}>Remidi Works</span>
           </div>
-          
-          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
-            Step {step + 1} of {steps.length}
-          </div>
+          <span style={{ fontSize: 12, color: colors.textMuted }}>Portfolio Company View</span>
         </div>
-      </header>
-
-      {/* Main Content */}
-      <main style={{ padding: '32px 24px' }}>
-        {steps[step].content}
-      </main>
-
-      {/* Navigation */}
-      <div style={{ 
-        position: 'fixed', 
-        bottom: 24, 
-        left: '50%', 
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        gap: 8,
-        backgroundColor: '#fff',
-        padding: '8px 12px',
-        borderRadius: 999,
-        boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
-      }}>
-        {steps.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setStep(i)}
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              border: 'none',
-              backgroundColor: i === step ? colors.accent : '#d1d5db',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          />
-        ))}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {steps.map((_, i) => (
+            <div key={i} style={{
+              width: i === step ? 24 : 10, height: 10, borderRadius: 999,
+              background: i === step ? colors.primary : i < step ? colors.accentSoft : '#d1d5db',
+              transition: 'all 0.3s ease',
+            }} />
+          ))}
+        </div>
       </div>
 
-      <style>{`
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-      `}</style>
+      {/* Step Title */}
+      <div style={{ maxWidth: 1100, margin: '0 auto 24px' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', color: colors.textMuted, marginBottom: 4 }}>
+          STEP {step + 1} OF {steps.length}
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: colors.textMain }}>{steps[step].title}</div>
+      </div>
+
+      {/* Content */}
+      <div style={{ marginBottom: 32 }}>{steps[step].content}</div>
+
+      {/* Navigation */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
+        <button
+          onClick={handleBack}
+          disabled={step === 0}
+          style={{
+            padding: '12px 24px', borderRadius: 999, border: '1px solid #e5e7eb',
+            background: step === 0 ? '#f9fafb' : '#fff',
+            color: step === 0 ? '#d1d5db' : colors.textMain,
+            fontWeight: 600, fontSize: 14, cursor: step === 0 ? 'not-allowed' : 'pointer',
+          }}
+        >
+          ← Back
+        </button>
+
+        {step < steps.length - 1 && (
+          <button
+            onClick={handleNext}
+            disabled={showTyping}
+            style={{
+              padding: '12px 24px', borderRadius: 999, border: 'none',
+              background: showTyping ? '#d1d5db' : `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+              color: '#fff', fontWeight: 600, fontSize: 14,
+              cursor: showTyping ? 'not-allowed' : 'pointer',
+              boxShadow: showTyping ? 'none' : '0 8px 24px rgba(238, 108, 77, 0.4)',
+            }}
+          >
+            {showTyping ? 'Processing...' : 'Next →'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

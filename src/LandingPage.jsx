@@ -39,7 +39,6 @@ export default function LandingPage() {
             <span style={{ fontSize: '22px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>Remidi Works</span>
             <span style={{ fontSize: '12px', color: colors.lightBlue, marginLeft: '8px' }}>Building Revenue Model Excellence</span>
           </div>
-          <span style={{ fontSize: '12px', color: colors.lightBlue }}>RemidiWorks.com</span>
         </div>
       </header>
 
@@ -108,7 +107,6 @@ export default function LandingPage() {
             boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
             overflow: 'hidden',
             border: '1px solid #e5e7eb',
-            transition: 'transform 0.2s, box-shadow 0.2s',
           }}>
             <div style={{ 
               backgroundColor: colors.cream,
@@ -182,7 +180,6 @@ export default function LandingPage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  transition: 'background-color 0.2s'
                 }}>
                   Explore Portfolio Company Demo
                   <span style={{ fontSize: '18px' }}>→</span>
@@ -198,7 +195,6 @@ export default function LandingPage() {
             boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
             overflow: 'hidden',
             border: '1px solid #e5e7eb',
-            transition: 'transform 0.2s, box-shadow 0.2s',
           }}>
             <div style={{ 
               backgroundColor: colors.darkNavy,
@@ -272,7 +268,6 @@ export default function LandingPage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  transition: 'background-color 0.2s'
                 }}>
                   Explore Investor Demo
                   <span style={{ fontSize: '18px' }}>→</span>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 
 // HG Partners Brand Colors
 const colors = {
@@ -29,10 +29,17 @@ const peerFunds = [
   { name: 'Evergreen Tech Fund', avgHealth: 5.21, portfolioSize: 11, rank: 6 },
 ];
 
-// Fictional portfolio data - 10 companies
+// Default portfolio metadata
+const defaultMeta = {
+  fundName: "Apex Growth Partners II",
+  fundType: "Growth Equity",
+  lastUpdated: "2025-01-15"
+};
+
+// Default portfolio data - 10 companies
 // Health scores based on observable public data
 // Relative score = healthScore - UNIVERSE_AVG
-const portfolioData = [
+const defaultPortfolioData = [
   { 
     id: 1, name: 'CloudSync Pro', sector: 'DevOps/Infrastructure', stage: 'Series B', 
     healthScore: 7.8, relativeScore: 2.0,
@@ -273,6 +280,7 @@ const FundComparisonBar = ({ fund, maxHealth, isCurrentFund }) => {
 
 // Main Dashboard Component
 export default function InvestorPortfolioDashboard() {
+  const [searchParams] = useSearchParams();
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [tier, setTier] = useState('observer');
@@ -280,8 +288,39 @@ export default function InvestorPortfolioDashboard() {
   const [sortDir, setSortDir] = useState('desc');
   const [showSizeModal, setShowSizeModal] = useState(null);
   
-  // Current fund data
-  const currentFund = peerFunds[0];
+  // Dynamic portfolio loading from URL param
+  const [portfolioData, setPortfolioData] = useState(defaultPortfolioData);
+  const [fundMeta, setFundMeta] = useState(defaultMeta);
+  const [loading, setLoading] = useState(false);
+  
+  // Load custom portfolio if client param is present
+  useEffect(() => {
+    const clientParam = searchParams.get('client');
+    if (clientParam) {
+      setLoading(true);
+      fetch(`/data/${clientParam}.json`)
+        .then(res => {
+          if (!res.ok) throw new Error('Not found');
+          return res.json();
+        })
+        .then(data => {
+          if (data.portfolio) setPortfolioData(data.portfolio);
+          if (data.fundName) setFundMeta({
+            fundName: data.fundName,
+            fundType: data.fundType || 'Growth Equity',
+            lastUpdated: data.lastUpdated || new Date().toISOString().split('T')[0]
+          });
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log('Using default portfolio data:', err.message);
+          setLoading(false);
+        });
+    }
+  }, [searchParams]);
+  
+  // Current fund data (use fundMeta for dynamic name)
+  const currentFund = { ...peerFunds[0], name: fundMeta.fundName };
   
   // Calculate portfolio aggregates
   const avgHealth = portfolioData.reduce((sum, c) => sum + c.healthScore, 0) / portfolioData.length;

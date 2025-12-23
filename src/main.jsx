@@ -1,9 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LandingPage from './LandingPage'
-import UserDemo from './UserDemo'
-import InvestorDemo from './InvestorDemo'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from './LandingPage';
+import UserDemo from './UserDemo';
+import InvestorDemo from './InvestorDemo';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -14,5 +14,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/investor" element={<InvestorDemo />} />
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

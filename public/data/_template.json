@@ -1,0 +1,27 @@
+{
+  "fundName": "Your Fund Name",
+  "fundType": "Growth Equity",
+  "lastUpdated": "2025-01-15",
+  "portfolio": [
+    {
+      "id": 1,
+      "name": "Company Name",
+      "sector": "Industry / Vertical",
+      "stage": "Series B",
+      "website": "company.com",
+      "healthScore": 6.5,
+      "relativeScore": 0.7,
+      "valueArticulation": 7.0,
+      "pricingArchitecture": 5.5,
+      "competitivePositioning": 6.8,
+      "salesEnablement": 6.2,
+      "customerROI": 6.5,
+      "status": "on-track",
+      "invested": 2023,
+      "topGaps": [
+        { "dimension": "Pricing Architecture", "score": 5.5, "issue": "Description of the gap" }
+      ],
+      "observation": "Brief summary of key findings."
+    }
+  ]
+}
