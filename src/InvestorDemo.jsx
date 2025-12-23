@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // HG Partners Brand Colors
 const colors = {
@@ -14,180 +14,257 @@ const colors = {
   green: '#2D936C'
 };
 
-// Universe benchmark baseline
+// Universe benchmark baseline (from our 100-company database)
 const UNIVERSE_AVG = 5.8;
+const UNIVERSE_TOP_QUARTILE = 7.2;
+const UNIVERSE_BOTTOM_QUARTILE = 4.5;
 
-// Peer fund benchmarks
+// Peer fund benchmarks (5-10 funds contributing)
 const peerFunds = [
-  { name: 'Meridian Capital Fund III', avgHealth: 6.85, portfolioSize: 14, rank: 1 },
   { name: 'Apex Growth Partners II', avgHealth: 6.31, portfolioSize: 10, rank: 2 },
-  { name: 'Summit Partners VII', avgHealth: 6.15, portfolioSize: 12, rank: 3 },
+  { name: 'Meridian Capital Fund III', avgHealth: 6.85, portfolioSize: 14, rank: 1 },
   { name: 'Catalyst Ventures', avgHealth: 5.92, portfolioSize: 8, rank: 4 },
+  { name: 'Summit Partners VII', avgHealth: 6.15, portfolioSize: 12, rank: 3 },
   { name: 'Horizon Growth Equity', avgHealth: 5.48, portfolioSize: 9, rank: 5 },
   { name: 'Evergreen Tech Fund', avgHealth: 5.21, portfolioSize: 11, rank: 6 },
 ];
 
-// Default portfolio data (used if no client param or file not found)
-const defaultPortfolio = {
-  fundName: "Sample Growth Partners",
-  fundType: "Growth Equity",
-  lastUpdated: new Date().toISOString().split('T')[0],
-  portfolio: [
-    { id: 1, name: 'CloudSync Pro', sector: 'DevOps/Infrastructure', stage: 'Series B', healthScore: 7.8, relativeScore: 2.0, valueArticulation: 8.2, pricingArchitecture: 7.5, competitivePositioning: 7.9, salesEnablement: 6.8, customerROI: 8.5, status: 'outperformer', invested: 2022, topGaps: [], observation: 'Strong value story' },
-    { id: 2, name: 'DataForge AI', sector: 'AI/ML Platform', stage: 'Series A', healthScore: 5.4, relativeScore: -0.4, valueArticulation: 4.8, pricingArchitecture: 5.2, competitivePositioning: 6.1, salesEnablement: 4.5, customerROI: 6.4, status: 'underperformer', invested: 2023, topGaps: ['Value Articulation', 'Sales Enablement'], observation: 'No pricing page, unclear ICP' },
-    { id: 3, name: 'SecureVault', sector: 'Cybersecurity', stage: 'Series C', healthScore: 8.1, relativeScore: 2.3, valueArticulation: 8.5, pricingArchitecture: 8.0, competitivePositioning: 8.3, salesEnablement: 7.8, customerROI: 7.9, status: 'outperformer', invested: 2021, topGaps: [], observation: 'Clear differentiation' },
-    { id: 4, name: 'FleetOps', sector: 'Logistics Tech', stage: 'Series A', healthScore: 4.2, relativeScore: -1.6, valueArticulation: 3.5, pricingArchitecture: 4.8, competitivePositioning: 4.9, salesEnablement: 3.2, customerROI: 4.6, status: 'critical', invested: 2023, topGaps: ['Value Articulation', 'Sales Enablement', 'Customer ROI'], observation: 'Feature-focused, no proof' },
-    { id: 5, name: 'TalentMatch', sector: 'HR Tech', stage: 'Series B', healthScore: 6.3, relativeScore: 0.5, valueArticulation: 6.8, pricingArchitecture: 5.5, competitivePositioning: 6.2, salesEnablement: 6.5, customerROI: 6.5, status: 'average', invested: 2022, topGaps: ['Pricing Architecture'], observation: 'Solid positioning' },
-  ]
-};
-
-// Dynamic import for client data files
-const loadClientData = async (clientId) => {
-  try {
-    const module = await import(`./data/${clientId}.json`);
-    return module.default;
-  } catch (e) {
-    console.log(`No data file found for client: ${clientId}, using default`);
-    return null;
+// Fictional portfolio data - 10 companies
+// Health scores based on observable public data
+// Relative score = healthScore - UNIVERSE_AVG
+const portfolioData = [
+  { 
+    id: 1, name: 'CloudSync Pro', sector: 'DevOps/Infrastructure', stage: 'Series B', 
+    healthScore: 7.8, relativeScore: 2.0,
+    valueArticulation: 8.2, pricingArchitecture: 7.5, competitivePositioning: 7.9, salesEnablement: 6.8, customerROI: 8.5,
+    status: 'outperformer', invested: 2022,
+    topGaps: []
+  },
+  { 
+    id: 2, name: 'DataForge AI', sector: 'AI/ML Platform', stage: 'Series A', 
+    healthScore: 5.4, relativeScore: -0.4,
+    valueArticulation: 4.8, pricingArchitecture: 5.2, competitivePositioning: 6.1, salesEnablement: 4.5, customerROI: 6.4,
+    status: 'underperformer', invested: 2023,
+    topGaps: [
+      { dimension: 'Sales Enablement', score: 4.5, issue: 'No ROI calculator or quantified proof points on website' },
+      { dimension: 'Value Articulation', score: 4.8, issue: 'Features described but customer outcomes not quantified' },
+      { dimension: 'Pricing Architecture', score: 5.2, issue: 'Flat per-seat pricing doesn\'t scale with value delivered' }
+    ]
+  },
+  { 
+    id: 3, name: 'SecureVault', sector: 'Cybersecurity', stage: 'Series C', 
+    healthScore: 8.1, relativeScore: 2.3,
+    valueArticulation: 8.5, pricingArchitecture: 8.0, competitivePositioning: 8.3, salesEnablement: 7.8, customerROI: 7.9,
+    status: 'outperformer', invested: 2021,
+    topGaps: []
+  },
+  { 
+    id: 4, name: 'FleetOps', sector: 'Logistics Tech', stage: 'Series A', 
+    healthScore: 4.2, relativeScore: -1.6,
+    valueArticulation: 3.5, pricingArchitecture: 4.8, competitivePositioning: 4.9, salesEnablement: 3.2, customerROI: 4.6,
+    status: 'underperformer', invested: 2023,
+    topGaps: [
+      { dimension: 'Sales Enablement', score: 3.2, issue: 'No published pricing, no case studies with quantified ROI' },
+      { dimension: 'Value Articulation', score: 3.5, issue: 'Operational stats shown but no connection to customer P&L impact' },
+      { dimension: 'Customer ROI Proof', score: 4.6, issue: 'Claims savings but no calculator or specific customer evidence' }
+    ]
+  },
+  { 
+    id: 5, name: 'TalentMatch', sector: 'HR Tech', stage: 'Series B', 
+    healthScore: 6.3, relativeScore: 0.5,
+    valueArticulation: 6.8, pricingArchitecture: 5.5, competitivePositioning: 6.2, salesEnablement: 6.5, customerROI: 6.5,
+    status: 'on-track', invested: 2022,
+    topGaps: []
+  },
+  { 
+    id: 6, name: 'PayStream', sector: 'FinTech', stage: 'Series B', 
+    healthScore: 7.2, relativeScore: 1.4,
+    valueArticulation: 7.5, pricingArchitecture: 7.8, competitivePositioning: 6.8, salesEnablement: 7.0, customerROI: 6.9,
+    status: 'outperformer', invested: 2021,
+    topGaps: []
+  },
+  { 
+    id: 7, name: 'HealthBridge', sector: 'HealthTech', stage: 'Series A', 
+    healthScore: 5.1, relativeScore: -0.7,
+    valueArticulation: 5.5, pricingArchitecture: 4.2, competitivePositioning: 5.8, salesEnablement: 4.8, customerROI: 5.2,
+    status: 'underperformer', invested: 2024,
+    topGaps: [
+      { dimension: 'Pricing Architecture', score: 4.2, issue: 'Single flat-rate tier regardless of practice size or usage' },
+      { dimension: 'Sales Enablement', score: 4.8, issue: 'Limited competitive positioning materials visible' },
+      { dimension: 'Customer ROI Proof', score: 5.2, issue: 'Testimonials but no quantified outcomes' }
+    ]
+  },
+  { 
+    id: 8, name: 'RetailIQ', sector: 'Retail Analytics', stage: 'Series B', 
+    healthScore: 6.8, relativeScore: 1.0,
+    valueArticulation: 7.2, pricingArchitecture: 6.5, competitivePositioning: 6.9, salesEnablement: 6.2, customerROI: 7.2,
+    status: 'on-track', invested: 2022,
+    topGaps: []
+  },
+  { 
+    id: 9, name: 'SupplyCore', sector: 'Supply Chain', stage: 'Series B', 
+    healthScore: 5.5, relativeScore: -0.3,
+    valueArticulation: 5.2, pricingArchitecture: 6.8, competitivePositioning: 5.5, salesEnablement: 4.8, customerROI: 5.2,
+    status: 'underperformer', invested: 2021,
+    topGaps: [
+      { dimension: 'Sales Enablement', score: 4.8, issue: 'No visible battle cards or competitive differentiation content' },
+      { dimension: 'Value Articulation', score: 5.2, issue: 'Generic efficiency claims without segment-specific proof' },
+      { dimension: 'Customer ROI Proof', score: 5.2, issue: 'Case studies lack specific financial outcomes' }
+    ]
+  },
+  { 
+    id: 10, name: 'MarketPulse', sector: 'MarTech', stage: 'Series A', 
+    healthScore: 6.5, relativeScore: 0.7,
+    valueArticulation: 6.9, pricingArchitecture: 6.2, competitivePositioning: 6.8, salesEnablement: 5.8, customerROI: 6.8,
+    status: 'on-track', invested: 2023,
+    topGaps: []
   }
-};
+];
 
-// Score gauge component
-const ScoreGauge = ({ score, label, size = 'normal' }) => {
+// Mini gauge component
+const MiniGauge = ({ score, size = 60 }) => {
   const percentage = (score / 10) * 100;
-  const getColor = (s) => s >= 7 ? colors.green : s >= 5 ? colors.yellow : colors.red;
-  const isSmall = size === 'small';
+  const getColor = (s) => {
+    if (s >= 7) return colors.green;
+    if (s >= 5.5) return colors.yellow;
+    return colors.red;
+  };
+  
+  const radius = size / 2 - 4;
+  const circumference = Math.PI * radius;
+  const offset = circumference - (percentage / 100) * circumference;
   
   return (
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ 
-        position: 'relative', 
-        width: isSmall ? 60 : 80, 
-        height: isSmall ? 60 : 80, 
-        margin: '0 auto' 
-      }}>
-        <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
-          <path
-            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            fill="none"
-            stroke="#e5e7eb"
-            strokeWidth="3"
-          />
-          <path
-            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            fill="none"
-            stroke={getColor(score)}
-            strokeWidth="3"
-            strokeDasharray={`${percentage}, 100`}
-          />
-        </svg>
-        <div style={{ 
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          fontSize: isSmall ? 14 : 18,
-          fontWeight: 700,
-          color: colors.darkNavy
-        }}>
-          {score.toFixed(1)}
-        </div>
-      </div>
-      {label && <div style={{ fontSize: 11, color: '#6b7280', marginTop: 4 }}>{label}</div>}
-    </div>
+    <svg width={size} height={size / 2 + 10} viewBox={`0 0 ${size} ${size / 2 + 10}`}>
+      <path
+        d={`M 4 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 4} ${size / 2}`}
+        fill="none"
+        stroke="#e5e7eb"
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+      <path
+        d={`M 4 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 4} ${size / 2}`}
+        fill="none"
+        stroke={getColor(score)}
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+      />
+      <text
+        x={size / 2}
+        y={size / 2 + 4}
+        textAnchor="middle"
+        fontSize="14"
+        fontWeight="700"
+        fill={colors.darkNavy}
+      >
+        {score.toFixed(1)}
+      </text>
+    </svg>
   );
 };
 
-// Company row component
-const CompanyRow = ({ company, onClick, isSelected }) => {
-  const getStatusColor = (status) => {
-    switch(status) {
-      case 'outperformer': return colors.green;
-      case 'critical': return colors.red;
-      case 'underperformer': return colors.yellow;
-      default: return colors.lightBlue;
-    }
+// Score bar component
+const ScoreBar = ({ score, label, compact = false }) => {
+  const getColor = (s) => {
+    if (s >= 7) return colors.green;
+    if (s >= 5.5) return colors.yellow;
+    return colors.red;
   };
   
   return (
-    <div 
-      onClick={onClick}
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '2fr 1.5fr 80px 100px 120px',
-        alignItems: 'center',
-        padding: '12px 16px',
-        backgroundColor: isSelected ? colors.cream : '#fff',
-        borderBottom: '1px solid #e5e7eb',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s'
-      }}
-    >
-      <div>
-        <div style={{ fontWeight: 600, color: colors.darkNavy }}>{company.name}</div>
-        <div style={{ fontSize: 12, color: '#6b7280' }}>{company.sector}</div>
+    <div style={{ marginBottom: compact ? '6px' : '10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <span style={{ fontSize: compact ? '10px' : '11px', color: '#6b7280' }}>{label}</span>
+        <span style={{ fontSize: compact ? '10px' : '11px', fontWeight: 600, color: colors.darkNavy }}>{score.toFixed(1)}</span>
       </div>
-      <div style={{ fontSize: 13, color: '#6b7280' }}>{company.stage}</div>
-      <ScoreGauge score={company.healthScore} size="small" />
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 6,
-        color: company.relativeScore >= 0 ? colors.green : colors.red,
-        fontWeight: 600,
-        fontSize: 13
-      }}>
-        {company.relativeScore >= 0 ? '▲' : '▼'} {Math.abs(company.relativeScore).toFixed(1)} vs avg
-      </div>
-      <div style={{
-        display: 'inline-block',
-        padding: '4px 10px',
-        borderRadius: 12,
-        fontSize: 11,
-        fontWeight: 600,
-        backgroundColor: `${getStatusColor(company.status)}15`,
-        color: getStatusColor(company.status),
-        textTransform: 'capitalize'
-      }}>
-        {company.status}
+      <div style={{ height: compact ? '4px' : '6px', backgroundColor: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+        <div 
+          style={{ 
+            height: '100%', 
+            width: `${score * 10}%`, 
+            backgroundColor: getColor(score),
+            borderRadius: '3px',
+            transition: 'width 0.5s ease'
+          }} 
+        />
       </div>
     </div>
   );
 };
 
-// Peer benchmark bar
-const PeerBar = ({ fund, maxHealth, isCurrentFund }) => {
-  const percentage = (fund.avgHealth / maxHealth) * 100;
+// Status badge component
+const StatusBadge = ({ status }) => {
+  const configs = {
+    'outperformer': { bg: '#dcfce7', text: '#166534', label: 'Outperformer' },
+    'on-track': { bg: '#e0f2fe', text: '#0369a1', label: 'On Track' },
+    'underperformer': { bg: '#fee2e2', text: '#991b1b', label: 'Underperformer' }
+  };
+  const config = configs[status] || configs['on-track'];
+  
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      padding: isCurrentFund ? '8px 12px' : '6px 12px',
-      backgroundColor: isCurrentFund ? `${colors.coral}10` : 'transparent',
-      borderRadius: '6px',
-      marginBottom: '4px'
+    <span style={{
+      display: 'inline-block',
+      padding: '3px 8px',
+      fontSize: '10px',
+      fontWeight: 600,
+      borderRadius: '9999px',
+      backgroundColor: config.bg,
+      color: config.text,
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px'
     }}>
-      <div style={{ 
-        width: 140, 
-        fontSize: 12, 
-        color: isCurrentFund ? colors.darkNavy : '#6b7280',
-        fontWeight: isCurrentFund ? 600 : 400,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      }}>
-        {isCurrentFund ? '→ ' : ''}{fund.name}
+      {config.label}
+    </span>
+  );
+};
+
+// Relative score display
+const RelativeScore = ({ score }) => {
+  const isPositive = score >= 0;
+  const color = score >= 1.0 ? colors.green : score >= 0 ? colors.navy : score >= -0.5 ? colors.yellow : colors.red;
+  
+  return (
+    <span style={{ 
+      fontSize: '14px', 
+      fontWeight: 700, 
+      color,
+      fontFamily: 'monospace'
+    }}>
+      {isPositive ? '+' : ''}{score.toFixed(1)}
+    </span>
+  );
+};
+
+// Fund comparison bar
+const FundComparisonBar = ({ fund, maxHealth, isCurrentFund }) => {
+  const percentage = (fund.avgHealth / 10) * 100;
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '12px', 
+      padding: '8px 0',
+      borderLeft: isCurrentFund ? `3px solid ${colors.coral}` : '3px solid transparent',
+      paddingLeft: isCurrentFund ? '12px' : '15px'
+    }}>
+      <div style={{ width: '140px', fontSize: '12px', color: isCurrentFund ? colors.darkNavy : '#6b7280', fontWeight: isCurrentFund ? 600 : 400 }}>
+        {isCurrentFund ? '→ ' : ''}{fund.name.length > 18 ? fund.name.slice(0, 18) + '...' : fund.name}
       </div>
-      <div style={{ flex: 1, height: 8, backgroundColor: '#e5e7eb', borderRadius: 4, overflow: 'hidden' }}>
+      <div style={{ flex: 1, height: '8px', backgroundColor: '#e5e7eb', borderRadius: '4px', overflow: 'hidden' }}>
         <div style={{ 
           height: '100%', 
           width: `${percentage}%`,
           backgroundColor: isCurrentFund ? colors.coral : colors.lightBlue,
-          borderRadius: 4
+          borderRadius: '4px',
+          transition: 'width 0.5s ease'
         }} />
       </div>
-      <div style={{ width: 32, fontSize: 12, fontWeight: 600, color: colors.darkNavy, textAlign: 'right' }}>
+      <div style={{ width: '32px', fontSize: '12px', fontWeight: 600, color: colors.darkNavy, textAlign: 'right' }}>
         {fund.avgHealth.toFixed(1)}
       </div>
     </div>
@@ -195,62 +272,21 @@ const PeerBar = ({ fund, maxHealth, isCurrentFund }) => {
 };
 
 // Main Dashboard Component
-export default function InvestorDemo() {
-  const [searchParams] = useSearchParams();
-  const [portfolioData, setPortfolioData] = useState(null);
-  const [fundInfo, setFundInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function InvestorPortfolioDashboard() {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [tier, setTier] = useState('investor');
+  const [tier, setTier] = useState('observer');
   const [sortBy, setSortBy] = useState('relativeScore');
   const [sortDir, setSortDir] = useState('desc');
-
-  // Load client data based on URL parameter
-  useEffect(() => {
-    const loadData = async () => {
-      const clientId = searchParams.get('client');
-      
-      if (clientId) {
-        const clientData = await loadClientData(clientId);
-        if (clientData) {
-          setFundInfo({ name: clientData.fundName, type: clientData.fundType, lastUpdated: clientData.lastUpdated });
-          setPortfolioData(clientData.portfolio);
-        } else {
-          setFundInfo({ name: defaultPortfolio.fundName, type: defaultPortfolio.fundType, lastUpdated: defaultPortfolio.lastUpdated });
-          setPortfolioData(defaultPortfolio.portfolio);
-        }
-      } else {
-        setFundInfo({ name: defaultPortfolio.fundName, type: defaultPortfolio.fundType, lastUpdated: defaultPortfolio.lastUpdated });
-        setPortfolioData(defaultPortfolio.portfolio);
-      }
-      setLoading(false);
-    };
-    
-    loadData();
-  }, [searchParams]);
-
-  if (loading || !portfolioData) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        fontFamily: "'Inter', sans-serif"
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 24, fontWeight: 600, color: colors.navy, marginBottom: 8 }}>Loading Portfolio...</div>
-          <div style={{ color: '#6b7280' }}>Analyzing commercialization health</div>
-        </div>
-      </div>
-    );
-  }
-
+  const [showSizeModal, setShowSizeModal] = useState(null);
+  
+  // Current fund data
+  const currentFund = peerFunds[0];
+  
   // Calculate portfolio aggregates
   const avgHealth = portfolioData.reduce((sum, c) => sum + c.healthScore, 0) / portfolioData.length;
   const avgRelative = portfolioData.reduce((sum, c) => sum + c.relativeScore, 0) / portfolioData.length;
-  const underperformers = portfolioData.filter(c => c.status === 'underperformer' || c.status === 'critical');
+  const underperformers = portfolioData.filter(c => c.status === 'underperformer');
   const outperformers = portfolioData.filter(c => c.status === 'outperformer');
   
   // Sort companies
@@ -258,18 +294,19 @@ export default function InvestorDemo() {
     const multiplier = sortDir === 'desc' ? -1 : 1;
     return (a[sortBy] - b[sortBy]) * multiplier;
   });
-
-  // Find dimension with most gaps across portfolio
-  const gapCounts = {};
-  portfolioData.forEach(c => {
-    (c.topGaps || []).forEach(gap => {
-      gapCounts[gap] = (gapCounts[gap] || 0) + 1;
-    });
-  });
-  const topGap = Object.entries(gapCounts).sort((a, b) => b[1] - a[1])[0];
-
-  // Get max health for peer bar scaling
-  const maxPeerHealth = Math.max(...peerFunds.map(f => f.avgHealth), avgHealth);
+  
+  // Portfolio rank
+  const rankedCompanies = [...portfolioData].sort((a, b) => b.healthScore - a.healthScore);
+  const getPortfolioRank = (id) => rankedCompanies.findIndex(c => c.id === id) + 1;
+  
+  // Calculate dimension averages
+  const dimAverages = {
+    valueArticulation: portfolioData.reduce((sum, c) => sum + c.valueArticulation, 0) / portfolioData.length,
+    pricingArchitecture: portfolioData.reduce((sum, c) => sum + c.pricingArchitecture, 0) / portfolioData.length,
+    competitivePositioning: portfolioData.reduce((sum, c) => sum + c.competitivePositioning, 0) / portfolioData.length,
+    salesEnablement: portfolioData.reduce((sum, c) => sum + c.salesEnablement, 0) / portfolioData.length,
+    customerROI: portfolioData.reduce((sum, c) => sum + c.customerROI, 0) / portfolioData.length
+  };
 
   return (
     <div style={{ 
@@ -283,418 +320,765 @@ export default function InvestorDemo() {
         padding: '16px 24px',
         borderBottom: `3px solid ${colors.coral}`
       }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <Link to="/" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: 13 }}>← All Demos</Link>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.7)', fontSize: '13px', marginRight: '16px' }}>
+              <span style={{ fontSize: '16px' }}>←</span> All Demos
+            </Link>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ 
                   backgroundColor: colors.coral, 
-                  padding: '6px 10px',
-                  borderRadius: 6,
-                  fontWeight: 700, color: '#fff', fontSize: 13, letterSpacing: '-0.5px'
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                  color: '#fff',
+                  fontSize: '12px'
                 }}>RW</span>
-                <span style={{ fontSize: 20, fontWeight: 700, color: '#fff' }}>Remidi Works</span>
+                <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>Remidi Works</span>
               </div>
-              <span style={{ fontSize: 11, color: colors.lightBlue, marginLeft: 40 }}>Building Revenue Model Excellence</span>
+              <span style={{ fontSize: '11px', color: colors.lightBlue, marginLeft: '40px' }}>Portfolio Intelligence</span>
             </div>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            {/* Tier Toggle */}
-            <div style={{ display: 'flex', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 6, padding: 3 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <div style={{ display: 'flex', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '6px', padding: '3px' }}>
               <button
-                onClick={() => setTier('investor')}
+                onClick={() => setTier('observer')}
                 style={{
-                  padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 4, border: 'none', cursor: 'pointer',
-                  backgroundColor: tier === 'investor' ? colors.coral : 'transparent',
-                  color: tier === 'investor' ? '#fff' : 'rgba(255,255,255,0.7)'
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: tier === 'observer' ? colors.coral : 'transparent',
+                  color: tier === 'observer' ? '#fff' : 'rgba(255,255,255,0.7)',
+                  transition: 'all 0.2s'
                 }}
-              >Investor</button>
+              >
+                Observer
+              </button>
               <button
-                onClick={() => setTier('operator')}
+                onClick={() => setTier('contributor')}
                 style={{
-                  padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 4, border: 'none', cursor: 'pointer',
-                  backgroundColor: tier === 'operator' ? colors.coral : 'transparent',
-                  color: tier === 'operator' ? '#fff' : 'rgba(255,255,255,0.7)'
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: tier === 'contributor' ? colors.coral : 'transparent',
+                  color: tier === 'contributor' ? '#fff' : 'rgba(255,255,255,0.7)',
+                  transition: 'all 0.2s'
                 }}
-              >Operator</button>
+              >
+                Contributor
+              </button>
             </div>
             
-            <div style={{ color: '#fff', fontSize: 14 }}>
-              <span style={{ opacity: 0.7 }}>Viewing:</span>{' '}
-              <span style={{ fontWeight: 600 }}>{fundInfo.name}</span>
+            <div style={{ color: '#fff', fontSize: '13px' }}>
+              <span style={{ opacity: 0.7 }}>Fund:</span> <span style={{ fontWeight: 600 }}>Apex Growth Partners II</span>
             </div>
           </div>
         </div>
       </header>
-
-      {/* Main Content */}
-      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '24px' }}>
-        
-        {/* Portfolio Summary Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>Portfolio Health</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <ScoreGauge score={avgHealth} />
+      
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px' }}>
+        {/* Key Metrics Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+          {/* Portfolio Health */}
+          <div style={{ 
+            backgroundColor: '#fff', 
+            borderRadius: '12px', 
+            padding: '20px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+          }}>
+            <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Portfolio Health Score</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <MiniGauge score={avgHealth} size={70} />
               <div>
-                <div style={{ fontSize: 13, color: avgRelative >= 0 ? colors.green : colors.red, fontWeight: 600 }}>
-                  {avgRelative >= 0 ? '+' : ''}{avgRelative.toFixed(1)} vs universe
+                <div style={{ fontSize: '11px', color: '#6b7280' }}>vs. universe avg</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: avgRelative >= 0 ? colors.green : colors.coral }}>
+                  {avgRelative >= 0 ? '+' : ''}{avgRelative.toFixed(1)} pts
                 </div>
-                <div style={{ fontSize: 11, color: '#9ca3af' }}>Universe avg: {UNIVERSE_AVG}</div>
               </div>
             </div>
           </div>
           
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>Companies Analyzed</div>
-            <div style={{ fontSize: 32, fontWeight: 700, color: colors.darkNavy }}>{portfolioData.length}</div>
-            <div style={{ fontSize: 12, color: '#6b7280' }}>
-              <span style={{ color: colors.green }}>{outperformers.length} outperforming</span>
-              {' • '}
-              <span style={{ color: colors.red }}>{underperformers.length} need attention</span>
+          {/* Distribution */}
+          <div style={{ 
+            backgroundColor: '#fff', 
+            borderRadius: '12px', 
+            padding: '20px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+          }}>
+            <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Portfolio Distribution</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: colors.green }}>{outperformers.length}</div>
+                <div style={{ fontSize: '10px', color: '#6b7280' }}>Outperform</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: colors.navy }}>{portfolioData.length - outperformers.length - underperformers.length}</div>
+                <div style={{ fontSize: '10px', color: '#6b7280' }}>On Track</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: colors.coral }}>{underperformers.length}</div>
+                <div style={{ fontSize: '10px', color: '#6b7280' }}>Underperform</div>
+              </div>
             </div>
           </div>
           
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>Common Pattern</div>
-            {topGap ? (
-              <>
-                <div style={{ fontSize: 18, fontWeight: 600, color: colors.coral }}>{topGap[0]}</div>
-                <div style={{ fontSize: 12, color: '#6b7280' }}>{topGap[1]} of {portfolioData.length} companies</div>
-              </>
-            ) : (
-              <div style={{ fontSize: 14, color: colors.green }}>No common gaps detected</div>
-            )}
+          {/* Universe Position */}
+          <div style={{ 
+            backgroundColor: '#fff', 
+            borderRadius: '12px', 
+            padding: '20px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+          }}>
+            <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Universe Position</div>
+            <div style={{ fontSize: '13px', color: colors.darkNavy, marginBottom: '8px' }}>
+              {avgHealth >= UNIVERSE_TOP_QUARTILE ? 'Top Quartile' : avgHealth >= UNIVERSE_AVG ? 'Above Average' : avgHealth >= UNIVERSE_BOTTOM_QUARTILE ? 'Below Average' : 'Bottom Quartile'}
+            </div>
+            <div style={{ height: '8px', backgroundColor: '#e5e7eb', borderRadius: '4px', position: 'relative' }}>
+              <div style={{ 
+                position: 'absolute',
+                left: `${(avgHealth / 10) * 100}%`,
+                top: '-4px',
+                width: '16px',
+                height: '16px',
+                backgroundColor: colors.coral,
+                borderRadius: '50%',
+                border: '2px solid #fff',
+                transform: 'translateX(-50%)',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+              }} />
+              <div style={{ position: 'absolute', left: '25%', top: '12px', fontSize: '9px', color: '#9ca3af' }}>Q4</div>
+              <div style={{ position: 'absolute', left: '50%', top: '12px', fontSize: '9px', color: '#9ca3af', transform: 'translateX(-50%)' }}>Avg</div>
+              <div style={{ position: 'absolute', left: '75%', top: '12px', fontSize: '9px', color: '#9ca3af' }}>Q1</div>
+            </div>
           </div>
           
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>Priority Company</div>
-            {underperformers.length > 0 ? (
-              <>
-                <div style={{ fontSize: 18, fontWeight: 600, color: colors.darkNavy }}>
-                  {underperformers.sort((a,b) => a.healthScore - b.healthScore)[0].name}
-                </div>
-                <div style={{ fontSize: 12, color: colors.red }}>
-                  Score: {underperformers.sort((a,b) => a.healthScore - b.healthScore)[0].healthScore.toFixed(1)} • Highest opportunity
-                </div>
-              </>
-            ) : (
-              <div style={{ fontSize: 14, color: colors.green }}>All companies performing well</div>
-            )}
+          {/* Peer Fund Rank */}
+          <div style={{ 
+            backgroundColor: colors.navy, 
+            borderRadius: '12px', 
+            padding: '20px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+          }}>
+            <div style={{ fontSize: '11px', color: colors.lightBlue, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Peer Fund Ranking</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+              <span style={{ fontSize: '32px', fontWeight: 700, color: '#fff' }}>#{currentFund.rank}</span>
+              <span style={{ fontSize: '14px', color: colors.lightBlue }}>of {peerFunds.length} funds</span>
+            </div>
+            <div style={{ fontSize: '11px', color: colors.lightBlue, marginTop: '4px' }}>Based on avg. portfolio health</div>
           </div>
         </div>
-
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
-          {['overview', 'companies', 'benchmarks'].map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                padding: '10px 20px',
-                fontSize: 14,
-                fontWeight: 600,
-                border: 'none',
-                borderRadius: '8px 8px 0 0',
-                cursor: 'pointer',
-                backgroundColor: activeTab === tab ? '#fff' : 'transparent',
-                color: activeTab === tab ? colors.navy : '#6b7280',
-                boxShadow: activeTab === tab ? '0 -1px 3px rgba(0,0,0,0.1)' : 'none'
-              }}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '0 12px 12px 12px', padding: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          
-          {activeTab === 'overview' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32 }}>
-              {/* Company List */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 600, color: colors.darkNavy }}>Portfolio Companies</h3>
-                  <select 
-                    value={`${sortBy}-${sortDir}`}
-                    onChange={(e) => {
-                      const [field, dir] = e.target.value.split('-');
-                      setSortBy(field);
-                      setSortDir(dir);
-                    }}
-                    style={{ padding: '6px 12px', borderRadius: 6, border: '1px solid #e5e7eb', fontSize: 13 }}
+        
+        {/* Main Content Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px' }}>
+          {/* Left Column */}
+          <div>
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
+              {['overview', 'underperformers', 'peer benchmark'].map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    borderRadius: '6px 6px 0 0',
+                    border: 'none',
+                    cursor: 'pointer',
+                    backgroundColor: activeTab === tab ? '#fff' : 'transparent',
+                    color: activeTab === tab ? colors.navy : '#6b7280'
+                  }}
+                >
+                  {tab.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                </button>
+              ))}
+            </div>
+            
+            {activeTab === 'overview' && (
+              <div style={{ backgroundColor: '#fff', borderRadius: '0 12px 12px 12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                {/* Table Header */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '2fr 1fr 90px 90px 110px',
+                  padding: '12px 16px',
+                  borderBottom: '1px solid #e5e7eb',
+                  backgroundColor: '#f8fafc',
+                  borderRadius: '0 12px 0 0'
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Company</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Sector</div>
+                  <button 
+                    onClick={() => { setSortBy('healthScore'); setSortDir(sortDir === 'desc' ? 'asc' : 'desc'); }}
+                    style={{ fontSize: '11px', fontWeight: 600, color: sortBy === 'healthScore' ? colors.navy : '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                   >
-                    <option value="relativeScore-desc">Highest Relative Score</option>
-                    <option value="relativeScore-asc">Lowest Relative Score</option>
-                    <option value="healthScore-desc">Highest Health Score</option>
-                    <option value="healthScore-asc">Lowest Health Score</option>
-                  </select>
+                    Health {sortBy === 'healthScore' && (sortDir === 'desc' ? '↓' : '↑')}
+                  </button>
+                  <button 
+                    onClick={() => { setSortBy('relativeScore'); setSortDir(sortDir === 'desc' ? 'asc' : 'desc'); }}
+                    style={{ fontSize: '11px', fontWeight: 600, color: sortBy === 'relativeScore' ? colors.navy : '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                  >
+                    vs. Univ {sortBy === 'relativeScore' && (sortDir === 'desc' ? '↓' : '↑')}
+                  </button>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</div>
                 </div>
                 
-                <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden' }}>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: '2fr 1.5fr 80px 100px 120px',
-                    padding: '10px 16px',
-                    backgroundColor: '#f9fafb',
-                    borderBottom: '1px solid #e5e7eb',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#6b7280'
-                  }}>
-                    <div>Company</div>
-                    <div>Stage</div>
-                    <div>Score</div>
-                    <div>vs Avg</div>
-                    <div>Status</div>
+                {/* Table Rows */}
+                {sortedCompanies.map((company, idx) => (
+                  <div 
+                    key={company.id}
+                    onClick={() => setSelectedCompany(selectedCompany?.id === company.id ? null : company)}
+                    style={{ 
+                      display: 'grid', 
+                      gridTemplateColumns: '2fr 1fr 90px 90px 110px',
+                      padding: '14px 16px',
+                      borderBottom: idx < portfolioData.length - 1 ? '1px solid #f3f4f6' : 'none',
+                      cursor: 'pointer',
+                      backgroundColor: selectedCompany?.id === company.id ? colors.cream : 'transparent',
+                      transition: 'background-color 0.15s'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy }}>{company.name}</div>
+                      <div style={{ fontSize: '11px', color: '#9ca3af' }}>{company.stage} • #{getPortfolioRank(company.id)} in portfolio</div>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', display: 'flex', alignItems: 'center' }}>{company.sector}</div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <MiniGauge score={company.healthScore} size={50} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <RelativeScore score={company.relativeScore} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <StatusBadge status={company.status} />
+                    </div>
                   </div>
-                  {sortedCompanies.map(company => (
-                    <CompanyRow 
-                      key={company.id} 
-                      company={company} 
-                      onClick={() => setSelectedCompany(company)}
-                      isSelected={selectedCompany?.id === company.id}
-                    />
-                  ))}
-                </div>
+                ))}
               </div>
-              
-              {/* Company Detail Panel */}
-              <div>
-                {selectedCompany ? (
-                  <div style={{ backgroundColor: '#f9fafb', borderRadius: 12, padding: 20 }}>
-                    <h3 style={{ fontSize: 18, fontWeight: 600, color: colors.darkNavy, marginBottom: 4 }}>
-                      {selectedCompany.name}
-                    </h3>
-                    <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
-                      {selectedCompany.sector} • {selectedCompany.stage}
-                    </div>
-                    
-                    <div style={{ marginBottom: 20 }}>
-                      <ScoreGauge score={selectedCompany.healthScore} label="Overall Health" />
-                    </div>
-                    
-                    <div style={{ fontSize: 13, marginBottom: 16 }}>
-                      <div style={{ fontWeight: 600, color: colors.darkNavy, marginBottom: 8 }}>Dimension Scores</div>
-                      {[
-                        { key: 'valueArticulation', label: 'Value Articulation' },
-                        { key: 'pricingArchitecture', label: 'Pricing Architecture' },
-                        { key: 'competitivePositioning', label: 'Competitive Positioning' },
-                        { key: 'salesEnablement', label: 'Sales Enablement' },
-                        { key: 'customerROI', label: 'Customer ROI' }
-                      ].map(dim => (
-                        <div key={dim.key} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                          <div style={{ width: 140, fontSize: 12, color: '#6b7280' }}>{dim.label}</div>
-                          <div style={{ flex: 1, height: 6, backgroundColor: '#e5e7eb', borderRadius: 3 }}>
-                            <div style={{ 
-                              height: '100%', 
-                              width: `${(selectedCompany[dim.key] / 10) * 100}%`,
-                              backgroundColor: selectedCompany[dim.key] >= 7 ? colors.green : selectedCompany[dim.key] >= 5 ? colors.yellow : colors.red,
-                              borderRadius: 3
-                            }} />
+            )}
+            
+            {activeTab === 'underperformers' && (
+              <div style={{ backgroundColor: '#fff', borderRadius: '0 12px 12px 12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px' }}>
+                  {underperformers.length} companies scoring below universe average. Top 3 improvement priorities shown for each.
+                </div>
+                
+                {underperformers
+                  .sort((a, b) => a.relativeScore - b.relativeScore)
+                  .map((company, idx) => (
+                    <div 
+                      key={company.id}
+                      style={{ 
+                        padding: '20px',
+                        backgroundColor: '#f8fafc',
+                        borderRadius: '8px',
+                        marginBottom: idx < underperformers.length - 1 ? '16px' : 0,
+                        border: '1px solid #e5e7eb'
+                      }}
+                    >
+                      {/* Company Header */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                        <div>
+                          <div style={{ fontSize: '16px', fontWeight: 700, color: colors.darkNavy }}>{company.name}</div>
+                          <div style={{ fontSize: '12px', color: '#6b7280' }}>{company.sector} • {company.stage}</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <MiniGauge score={company.healthScore} size={50} />
+                            <div>
+                              <RelativeScore score={company.relativeScore} />
+                              <div style={{ fontSize: '10px', color: '#9ca3af' }}>vs. universe</div>
+                            </div>
                           </div>
-                          <div style={{ width: 28, fontSize: 12, fontWeight: 600 }}>{selectedCompany[dim.key].toFixed(1)}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Top 3 Gaps */}
+                      <div style={{ fontSize: '11px', fontWeight: 600, color: colors.darkNavy, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Top 3 Improvement Priorities
+                      </div>
+                      
+                      {company.topGaps.map((gap, gidx) => (
+                        <div 
+                          key={gidx}
+                          style={{ 
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '12px',
+                            padding: '10px 12px',
+                            backgroundColor: '#fff',
+                            borderRadius: '6px',
+                            marginBottom: gidx < 2 ? '8px' : 0,
+                            borderLeft: `3px solid ${gap.score < 4.5 ? colors.coral : colors.yellow}`
+                          }}
+                        >
+                          <div style={{ 
+                            width: '20px', 
+                            height: '20px', 
+                            borderRadius: '50%', 
+                            backgroundColor: colors.navy,
+                            color: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            flexShrink: 0
+                          }}>
+                            {gidx + 1}
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy }}>{gap.dimension}</div>
+                            <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>{gap.issue}</div>
+                          </div>
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: gap.score < 4.5 ? colors.coral : colors.yellow }}>
+                            {gap.score.toFixed(1)}
+                          </div>
                         </div>
                       ))}
-                    </div>
-                    
-                    {selectedCompany.observation && (
+                      
+                      {/* Size Opportunity CTA */}
                       <div style={{ 
-                        backgroundColor: '#fff', 
-                        border: '1px solid #e5e7eb', 
-                        borderRadius: 8, 
-                        padding: 12,
-                        fontSize: 13
+                        marginTop: '16px', 
+                        padding: '12px 16px', 
+                        backgroundColor: colors.cream,
+                        borderRadius: '6px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        border: `1px solid ${colors.lightBlue}`
                       }}>
-                        <div style={{ fontWeight: 600, color: colors.darkNavy, marginBottom: 4 }}>Observation</div>
-                        <div style={{ color: '#6b7280' }}>{selectedCompany.observation}</div>
+                        <div>
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: colors.navy }}>Want to size this opportunity?</div>
+                          <div style={{ fontSize: '11px', color: '#6b7280' }}>10-minute interview about ARR, pricing model, and sales metrics</div>
+                        </div>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setShowSizeModal(company); }}
+                          style={{
+                            padding: '8px 16px',
+                            backgroundColor: colors.coral,
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          Size It →
+                        </button>
                       </div>
-                    )}
-                    
-                    <button style={{
-                      width: '100%',
-                      marginTop: 16,
-                      padding: '12px',
-                      backgroundColor: colors.coral,
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: 8,
-                      fontWeight: 600,
-                      cursor: 'pointer'
-                    }}>
-                      Request Deep Dive →
+                    </div>
+                  ))}
+              </div>
+            )}
+            
+            {activeTab === 'peer benchmark' && (
+              <div style={{ backgroundColor: '#fff', borderRadius: '0 12px 12px 12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px' }}>
+                  Portfolio health compared against {peerFunds.length} participating funds
+                </div>
+                
+                {/* Fund Rankings */}
+                <div style={{ marginBottom: '24px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Fund Portfolio Health Rankings</div>
+                  {peerFunds
+                    .sort((a, b) => b.avgHealth - a.avgHealth)
+                    .map((fund) => (
+                      <FundComparisonBar 
+                        key={fund.name} 
+                        fund={fund} 
+                        maxHealth={10} 
+                        isCurrentFund={fund.name === currentFund.name} 
+                      />
+                    ))
+                  }
+                </div>
+                
+                {/* Universe Reference */}
+                <div style={{ 
+                  padding: '16px', 
+                  backgroundColor: '#f8fafc', 
+                  borderRadius: '8px',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Reference: 100-Company Universe
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', fontSize: '12px' }}>
+                    <div>
+                      <div style={{ color: '#6b7280' }}>Top Quartile</div>
+                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.green }}>{UNIVERSE_TOP_QUARTILE}</div>
+                    </div>
+                    <div>
+                      <div style={{ color: '#6b7280' }}>Average</div>
+                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.navy }}>{UNIVERSE_AVG}</div>
+                    </div>
+                    <div>
+                      <div style={{ color: '#6b7280' }}>Bottom Quartile</div>
+                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.coral }}>{UNIVERSE_BOTTOM_QUARTILE}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                {tier === 'observer' && (
+                  <div style={{ 
+                    padding: '20px', 
+                    backgroundColor: colors.cream, 
+                    borderRadius: '8px',
+                    border: `1px dashed ${colors.lightBlue}`
+                  }}>
+                    <div style={{ fontSize: '14px', fontWeight: 600, color: colors.navy, marginBottom: '8px' }}>Unlock Detailed Benchmarking</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '16px' }}>
+                      Contribute board-level metrics (ARR, NRR, churn) to unlock:
+                    </div>
+                    <ul style={{ fontSize: '12px', color: '#6b7280', margin: 0, paddingLeft: '20px', marginBottom: '16px' }}>
+                      <li style={{ marginBottom: '4px' }}>Company-level peer comparisons within your sector</li>
+                      <li style={{ marginBottom: '4px' }}>Detailed diagnostics on each dimension</li>
+                      <li style={{ marginBottom: '4px' }}>Trend analysis over time</li>
+                      <li>Recommendations prioritized by revenue impact</li>
+                    </ul>
+                    <button 
+                      onClick={() => setTier('contributor')}
+                      style={{
+                        width: '100%',
+                        padding: '10px',
+                        backgroundColor: colors.navy,
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Become a Contributor
                     </button>
                   </div>
-                ) : (
+                )}
+                
+                {tier === 'contributor' && (
                   <div style={{ 
-                    backgroundColor: '#f9fafb', 
-                    borderRadius: 12, 
-                    padding: 40, 
-                    textAlign: 'center',
-                    color: '#6b7280'
+                    padding: '16px', 
+                    backgroundColor: '#dcfce7', 
+                    borderRadius: '8px',
+                    border: '1px solid #86efac'
                   }}>
-                    <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
-                    <div>Click a company to see details</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#166534', marginBottom: '4px' }}>✓ Contributor Access Active</div>
+                    <div style={{ fontSize: '11px', color: '#166534' }}>
+                      You're contributing data for 8 of 10 portfolio companies. Full benchmarking and diagnostics available.
+                    </div>
                   </div>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
           
-          {activeTab === 'companies' && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-              {sortedCompanies.map(company => (
-                <div 
-                  key={company.id}
-                  style={{ 
-                    backgroundColor: '#f9fafb', 
-                    borderRadius: 12, 
-                    padding: 20,
-                    border: '1px solid #e5e7eb'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+          {/* Right Column */}
+          <div>
+            {selectedCompany ? (
+              <div style={{ 
+                backgroundColor: '#fff', 
+                borderRadius: '12px', 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                position: 'sticky',
+                top: '24px'
+              }}>
+                <div style={{ padding: '20px', borderBottom: '1px solid #e5e7eb' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                      <div style={{ fontWeight: 600, color: colors.darkNavy }}>{company.name}</div>
-                      <div style={{ fontSize: 12, color: '#6b7280' }}>{company.sector}</div>
+                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.darkNavy }}>{selectedCompany.name}</div>
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>{selectedCompany.sector} • {selectedCompany.stage}</div>
                     </div>
-                    <ScoreGauge score={company.healthScore} size="small" />
+                    <StatusBadge status={selectedCompany.status} />
                   </div>
-                  <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>{company.observation}</div>
-                  {company.topGaps?.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                      {company.topGaps.map(gap => (
-                        <span key={gap} style={{ 
-                          fontSize: 10, 
-                          padding: '2px 8px', 
-                          backgroundColor: `${colors.coral}15`,
-                          color: colors.coral,
-                          borderRadius: 10
-                        }}>{gap}</span>
-                      ))}
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginTop: '16px' }}>
+                    <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <div style={{ fontSize: '10px', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '4px' }}>Health</div>
+                      <div style={{ fontSize: '20px', fontWeight: 700, color: colors.darkNavy }}>{selectedCompany.healthScore.toFixed(1)}</div>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <div style={{ fontSize: '10px', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '4px' }}>vs Universe</div>
+                      <div style={{ fontSize: '20px', fontWeight: 700 }}><RelativeScore score={selectedCompany.relativeScore} /></div>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <div style={{ fontSize: '10px', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '4px' }}>Portfolio</div>
+                      <div style={{ fontSize: '20px', fontWeight: 700, color: colors.darkNavy }}>#{getPortfolioRank(selectedCompany.id)}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div style={{ padding: '20px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Revenue Model Health Dimensions</div>
+                  
+                  <ScoreBar score={selectedCompany.valueArticulation} label="Value Articulation" />
+                  <ScoreBar score={selectedCompany.pricingArchitecture} label="Pricing Architecture" />
+                  <ScoreBar score={selectedCompany.competitivePositioning} label="Competitive Positioning" />
+                  <ScoreBar score={selectedCompany.salesEnablement} label="Sales Enablement" />
+                  <ScoreBar score={selectedCompany.customerROI} label="Customer ROI Proof" />
+                  
+                  {selectedCompany.status === 'underperformer' && (
+                    <div style={{ 
+                      marginTop: '16px', 
+                      padding: '12px', 
+                      backgroundColor: '#fef3c7', 
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      color: '#92400e'
+                    }}>
+                      <strong>Primary Gap:</strong> {selectedCompany.topGaps[0]?.dimension || 'Multiple dimensions need attention'}
+                    </div>
+                  )}
+                  
+                  {tier === 'contributor' && (
+                    <div style={{ 
+                      marginTop: '16px', 
+                      padding: '12px', 
+                      backgroundColor: colors.cream, 
+                      borderRadius: '6px',
+                      border: `1px solid ${colors.lightBlue}`
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: 600, color: colors.navy, marginBottom: '8px' }}>Contributor Insights</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '11px' }}>
+                        <div><span style={{ color: '#6b7280' }}>Sector Rank:</span> <span style={{ fontWeight: 600 }}>Top 40%</span></div>
+                        <div><span style={{ color: '#6b7280' }}>Stage Peers:</span> <span style={{ fontWeight: 600 }}>+0.8 pts</span></div>
+                      </div>
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
-          )}
-          
-          {activeTab === 'benchmarks' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 600, color: colors.darkNavy, marginBottom: 16 }}>
-                  {tier === 'operator' ? 'Peer Fund Comparison' : 'Universe Comparison'}
-                </h3>
                 
-                {tier === 'operator' ? (
-                  <div>
-                    <PeerBar 
-                      fund={{ name: fundInfo.name, avgHealth: avgHealth, portfolioSize: portfolioData.length, rank: 0 }} 
-                      maxHealth={maxPeerHealth} 
-                      isCurrentFund={true} 
-                    />
-                    {peerFunds.map(fund => (
-                      <PeerBar key={fund.name} fund={fund} maxHealth={maxPeerHealth} isCurrentFund={false} />
-                    ))}
-                    <div style={{ marginTop: 16, padding: 12, backgroundColor: '#f0fdf4', borderRadius: 8, fontSize: 13 }}>
-                      <span style={{ fontWeight: 600, color: colors.green }}>Operator Benefit:</span>{' '}
-                      <span style={{ color: '#6b7280' }}>Real peer data from 6 participating funds</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <div style={{ 
-                      padding: 20, 
-                      backgroundColor: '#f9fafb', 
-                      borderRadius: 12, 
-                      textAlign: 'center',
-                      border: '2px dashed #e5e7eb'
-                    }}>
-                      <div style={{ fontSize: 14, color: '#6b7280', marginBottom: 12 }}>
-                        Upgrade to Operator tier to see peer fund benchmarks
-                      </div>
-                      <button 
-                        onClick={() => setTier('operator')}
-                        style={{
-                          padding: '10px 20px',
-                          backgroundColor: colors.coral,
-                          color: '#fff',
-                          border: 'none',
-                          borderRadius: 8,
-                          fontWeight: 600,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Unlock Peer Benchmarks
-                      </button>
-                    </div>
-                    <div style={{ marginTop: 16 }}>
-                      <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 8 }}>Your Portfolio vs Universe Average</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ fontSize: 28, fontWeight: 700, color: colors.darkNavy }}>{avgHealth.toFixed(1)}</div>
-                        <div style={{ fontSize: 13, color: avgRelative >= 0 ? colors.green : colors.red }}>
-                          {avgRelative >= 0 ? '+' : ''}{avgRelative.toFixed(1)} vs {UNIVERSE_AVG} universe avg
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 600, color: colors.darkNavy, marginBottom: 16 }}>
-                  Score Distribution
-                </h3>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 150 }}>
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(bucket => {
-                    const count = portfolioData.filter(c => Math.floor(c.healthScore) === bucket).length;
-                    const height = count > 0 ? (count / portfolioData.length) * 100 + 20 : 8;
-                    return (
-                      <div 
-                        key={bucket} 
-                        style={{ 
-                          flex: 1, 
-                          height: `${height}%`,
-                          backgroundColor: bucket >= 7 ? colors.green : bucket >= 5 ? colors.yellow : colors.red,
-                          borderRadius: '4px 4px 0 0',
-                          opacity: count > 0 ? 1 : 0.3
-                        }}
-                        title={`${bucket}-${bucket + 1}: ${count} companies`}
-                      />
-                    );
-                  })}
+                <div style={{ padding: '0 20px 20px' }}>
+                  <button 
+                    onClick={() => setShowSizeModal(selectedCompany)}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      backgroundColor: selectedCompany.status === 'underperformer' ? colors.coral : colors.navy,
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {selectedCompany.status === 'underperformer' ? 'Size This Opportunity →' : 'Request Detailed Diagnostic →'}
+                  </button>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#6b7280', marginTop: 4 }}>
-                  <span>0</span>
-                  <span>5</span>
-                  <span>10</span>
+              </div>
+            ) : (
+              <div style={{ 
+                backgroundColor: '#fff', 
+                borderRadius: '12px', 
+                padding: '24px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+              }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy, marginBottom: '16px' }}>Portfolio Dimension Averages</div>
+                
+                <ScoreBar score={dimAverages.valueArticulation} label="Value Articulation" />
+                <ScoreBar score={dimAverages.pricingArchitecture} label="Pricing Architecture" />
+                <ScoreBar score={dimAverages.competitivePositioning} label="Competitive Positioning" />
+                <ScoreBar score={dimAverages.salesEnablement} label="Sales Enablement" />
+                <ScoreBar score={dimAverages.customerROI} label="Customer ROI Proof" />
+                
+                <div style={{ 
+                  marginTop: '20px', 
+                  padding: '16px', 
+                  backgroundColor: colors.cream, 
+                  borderRadius: '8px',
+                  borderLeft: `4px solid ${colors.coral}`
+                }}>
+                  <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '4px' }}>Weakest Dimension Portfolio-Wide</div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: colors.darkNavy }}>
+                    Sales Enablement
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+                    Avg: {dimAverages.salesEnablement.toFixed(1)} / 10 • {underperformers.filter(c => c.topGaps.some(g => g.dimension === 'Sales Enablement')).length} companies affected
+                  </div>
+                </div>
+                
+                <div style={{ marginTop: '20px', fontSize: '12px', color: '#9ca3af', textAlign: 'center' }}>
+                  Click a company for detailed breakdown
+                </div>
+              </div>
+            )}
+            
+            {/* Data Sources */}
+            <div style={{ 
+              marginTop: '16px',
+              backgroundColor: '#fff', 
+              borderRadius: '12px', 
+              padding: '16px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+            }}>
+              <div style={{ fontSize: '11px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Scoring Basis</div>
+              <div style={{ fontSize: '11px', color: '#6b7280', lineHeight: 1.6 }}>
+                <div style={{ marginBottom: '6px' }}>
+                  <strong>Observable data:</strong> Pricing pages, G2/Capterra reviews, LinkedIn presence, job postings, press releases
+                </div>
+                <div>
+                  <strong>Benchmark:</strong> 100-company database of B2B tech companies ($5M-$50M revenue)
                 </div>
               </div>
             </div>
-          )}
+            
+            {/* Remidi Works CTA */}
+            <div style={{ 
+              marginTop: '16px',
+              backgroundColor: colors.navy, 
+              borderRadius: '12px', 
+              padding: '20px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
+            }}>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '8px' }}>Ready to Fix These Gaps?</div>
+              <div style={{ fontSize: '12px', color: colors.lightBlue, marginBottom: '16px' }}>
+                Remidi Works guides your portco teams through fixing revenue model gaps—with AI and expert support.
+              </div>
+              <button style={{
+                width: '100%',
+                padding: '10px',
+                backgroundColor: colors.coral,
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}>
+                Learn About Remidi Works →
+              </button>
+            </div>
+          </div>
         </div>
         
         {/* Footer */}
         <div style={{ 
-          marginTop: 32, 
+          marginTop: '32px', 
           padding: '16px 0', 
           borderTop: '1px solid #e5e7eb',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <div style={{ fontSize: 11, color: '#9ca3af' }}>
-            Remidi Works Revenue Model Health framework • Last updated: {fundInfo.lastUpdated}
+          <div style={{ fontSize: '11px', color: '#9ca3af' }}>
+            Scores based on HG Partners' Revenue Model Health framework • Last updated: Dec 16, 2025
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span style={{ fontSize: 11, color: '#9ca3af' }}>Demo for concept testing</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: colors.navy }}>RemidiWorks.com</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <span style={{ fontSize: '11px', color: '#9ca3af' }}>Benchmarked against 100-company database</span>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: colors.navy }}>HG Partners</span>
           </div>
         </div>
       </main>
+      
+      {/* Size Opportunity Modal */}
+      {showSizeModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            borderRadius: '16px',
+            padding: '32px',
+            maxWidth: '480px',
+            width: '90%',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: colors.darkNavy, marginBottom: '8px' }}>
+              Size the Opportunity for {showSizeModal.name}
+            </div>
+            <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>
+              We've identified potential revenue model gaps. To estimate the dollar impact, we need a few additional data points.
+            </div>
+            
+            <div style={{ 
+              backgroundColor: '#f8fafc', 
+              borderRadius: '8px', 
+              padding: '20px',
+              marginBottom: '24px'
+            }}>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>
+                10-Minute Interview Covers:
+              </div>
+              <div style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.7 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
+                  <span style={{ color: colors.coral }}>•</span>
+                  <span><strong>Revenue metrics:</strong> Current ARR, NRR, and churn rates</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
+                  <span style={{ color: colors.coral }}>•</span>
+                  <span><strong>Pricing model:</strong> Current structure and recent changes</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <span style={{ color: colors.coral }}>•</span>
+                  <span><strong>Sales metrics:</strong> Win rates, deal cycles, discount patterns</span>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '24px' }}>
+              <strong>Who should take this?</strong> You can answer these questions, or forward to the portco's CRO/CMO. Results go directly to your dashboard.
+            </div>
+            
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button 
+                onClick={() => setShowSizeModal(null)}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  backgroundColor: '#f3f4f6',
+                  color: colors.darkNavy,
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Maybe Later
+              </button>
+              <button style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: colors.coral,
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}>
+                Start Interview →
+              </button>
+            </div>
+            
+            <div style={{ fontSize: '11px', color: '#9ca3af', textAlign: 'center', marginTop: '16px' }}>
+              Data stays confidential. Only summary scores visible at fund level.
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
