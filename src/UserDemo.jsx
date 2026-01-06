@@ -684,6 +684,26 @@ export default function UserDemo() {
                   </p>
                 </div>
               </div>
+
+              <button style={{
+                width: '100%',
+                padding: '16px 20px', 
+                borderRadius: 12,
+                border: `2px solid ${colors.accent}`, 
+                background: '#fff',
+                color: colors.accent, 
+                fontWeight: 600, 
+                fontSize: 14, 
+                cursor: 'pointer',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: 8,
+                marginTop: 16
+              }}>
+                <span>👤</span>
+                <span>Get Expert Help</span>
+              </button>
             </div>
           </div>
         </div>
@@ -779,6 +799,15 @@ export default function UserDemo() {
                       <span>Get AI Coaching on This Step</span>
                       <span>💬</span>
                     </button>
+                    <button style={{
+                      padding: '16px 20px', borderRadius: 12,
+                      border: `2px solid ${colors.accent}`, background: '#fff',
+                      color: colors.accent, fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    }}>
+                      <span>Get Expert Help</span>
+                      <span>👤</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -852,6 +881,28 @@ export default function UserDemo() {
             </div>
             <div style={{ fontSize: 18, fontWeight: 700, color: colors.primary, marginTop: 16 }}>
               That's the difference between a tool and a system.
+            </div>
+          </div>
+
+          <div style={{ marginTop: 24, textAlign: 'center' }}>
+            <button style={{
+              padding: '16px 32px', 
+              borderRadius: 12,
+              border: `2px solid ${colors.accent}`, 
+              background: '#fff',
+              color: colors.accent, 
+              fontWeight: 600, 
+              fontSize: 15, 
+              cursor: 'pointer',
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: 10,
+            }}>
+              <span>👤</span>
+              <span>Get Expert Help</span>
+            </button>
+            <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 8 }}>
+              Human expertise is always available when you need it
             </div>
           </div>
         </div>

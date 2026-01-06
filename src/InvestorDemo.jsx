@@ -393,7 +393,7 @@ export default function InvestorPortfolioDashboard() {
   // Calculate portfolio aggregates
   const avgHealth = portfolioData.reduce((sum, c) => sum + c.healthScore, 0) / portfolioData.length;
   const avgRelative = portfolioData.reduce((sum, c) => sum + c.relativeScore, 0) / portfolioData.length;
-  const underperformers = portfolioData.filter(c => c.status === 'underperformer');
+  const underperformers = portfolioData.filter(c => c.status === 'underperformer').sort((a, b) => a.healthScore - b.healthScore);
   const outperformers = portfolioData.filter(c => c.status === 'outperformer');
   
   // Sort companies
@@ -429,27 +429,22 @@ export default function InvestorPortfolioDashboard() {
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.7)', fontSize: '13px', marginRight: '16px' }}>
-              <span style={{ fontSize: '16px' }}>←</span> All Demos
+            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ 
+                backgroundColor: colors.coral, 
+                width: '32px', 
+                height: '32px', 
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                color: '#fff',
+                fontSize: '10px'
+              }}>RW</span>
+              <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>Remidi Works</span>
             </Link>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ 
-                  backgroundColor: colors.coral, 
-                  width: '32px', 
-                  height: '32px', 
-                  borderRadius: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 700,
-                  color: '#fff',
-                  fontSize: '10px'
-                }}>RW</span>
-                <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>Remidi Works</span>
-              </div>
-              <span style={{ fontSize: '11px', color: colors.lightBlue, marginLeft: '40px' }}>Portfolio Intelligence</span>
-            </div>
+            <span style={{ fontSize: '11px', color: colors.lightBlue }}>Portfolio Intelligence</span>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
@@ -584,6 +579,22 @@ export default function InvestorPortfolioDashboard() {
                 Portfolio Overview
               </button>
               <button
+                onClick={() => setActiveTab('enhanced')}
+                style={{
+                  padding: '16px 24px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: activeTab === 'enhanced' ? colors.navy : '#6b7280',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  borderBottom: activeTab === 'enhanced' ? `2px solid ${colors.coral}` : '2px solid transparent',
+                  cursor: 'pointer',
+                  marginBottom: '-1px'
+                }}
+              >
+                Enhanced View
+              </button>
+              <button
                 onClick={() => setActiveTab('benchmark')}
                 style={{
                   padding: '16px 24px',
@@ -677,6 +688,107 @@ export default function InvestorPortfolioDashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'enhanced' && (
+              <div>
+                {/* Enhanced View Header */}
+                <div style={{ padding: '12px 20px', backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                    {portfolioData.length} companies • Sorted by upside potential
+                  </div>
+                  <div style={{ fontSize: '11px', color: colors.coral, fontWeight: 600 }}>
+                    Total Portfolio Upside: {formatCurrency(portfolioData.reduce((sum, c) => sum + (c.estimatedUpside || 0), 0))}
+                  </div>
+                </div>
+                
+                {/* Enhanced Table Header */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1.5fr 80px 80px 80px 120px', 
+                  padding: '12px 20px',
+                  backgroundColor: '#f9fafb',
+                  borderBottom: '1px solid #e5e7eb',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: '#6b7280',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  <div>Company</div>
+                  <div style={{ textAlign: 'center' }}>Health</div>
+                  <div style={{ textAlign: 'center' }}>vs Univ</div>
+                  <div style={{ textAlign: 'center' }}>Priority</div>
+                  <div style={{ textAlign: 'right' }}>$ Upside Potential</div>
+                </div>
+                
+                {/* Enhanced Company List - sorted by upside */}
+                <div>
+                  {[...portfolioData].sort((a, b) => (b.estimatedUpside || 0) - (a.estimatedUpside || 0)).map((company, idx) => {
+                    const priorityStyles = {
+                      critical: { bg: '#fef2f2', color: '#991b1b', label: 'Critical' },
+                      high: { bg: '#fef3c7', color: '#92400e', label: 'High' },
+                      medium: { bg: '#e0f2fe', color: '#0369a1', label: 'Medium' },
+                      low: { bg: '#f0fdf4', color: '#166534', label: 'Low' }
+                    };
+                    const pStyle = priorityStyles[company.priority] || priorityStyles.medium;
+                    
+                    return (
+                      <div 
+                        key={company.id}
+                        onClick={() => setSelectedCompany(company)}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1.5fr 80px 80px 80px 120px',
+                          alignItems: 'center',
+                          padding: '14px 20px',
+                          borderBottom: '1px solid #f3f4f6',
+                          cursor: 'pointer',
+                          backgroundColor: selectedCompany?.id === company.id ? colors.cream : 'transparent',
+                          transition: 'background-color 0.15s ease'
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                            <span style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy }}>{company.name}</span>
+                            <StatusBadge status={company.status} />
+                          </div>
+                          <div style={{ fontSize: '11px', color: '#6b7280' }}>{company.sector}</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <MiniGauge score={company.healthScore} size={44} />
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <RelativeScore score={company.relativeScore} />
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <span style={{
+                            display: 'inline-block',
+                            padding: '3px 8px',
+                            fontSize: '10px',
+                            fontWeight: 600,
+                            borderRadius: '4px',
+                            backgroundColor: pStyle.bg,
+                            color: pStyle.color
+                          }}>
+                            {pStyle.label}
+                          </span>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '14px', fontWeight: 700, color: company.estimatedUpside > 1000000 ? colors.coral : colors.darkNavy }}>
+                            {formatCurrency(company.estimatedUpside || 0)}
+                          </div>
+                          {company.arr && (
+                            <div style={{ fontSize: '10px', color: '#9ca3af' }}>
+                              {((company.estimatedUpside / company.arr) * 100).toFixed(0)}% of ARR
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -911,7 +1023,7 @@ export default function InvestorPortfolioDashboard() {
                             borderRadius: '8px',
                             textAlign: 'center'
                           }}>
-                            <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>Total Estimated Upside</div>
+                            <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>RW Estimated Upside Potential</div>
                             <div style={{ fontSize: '20px', fontWeight: 700, color: colors.coral }}>{formatCurrency(selectedCompany.estimatedUpside)}</div>
                             <div style={{ fontSize: '10px', color: '#6b7280' }}>{((selectedCompany.estimatedUpside / selectedCompany.arr) * 100).toFixed(0)}% of current ARR</div>
                           </div>
@@ -1320,7 +1432,7 @@ export default function InvestorPortfolioDashboard() {
                     borderRadius: '8px',
                     textAlign: 'center'
                   }}>
-                    <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>Total Addressable Upside</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>RW Estimated Upside Potential</div>
                     <div style={{ fontSize: '32px', fontWeight: 700, color: colors.coral }}>{formatCurrency(showBoardSlide.estimatedUpside)}</div>
                     <div style={{ fontSize: '13px', color: colors.darkNavy, marginTop: '4px' }}>
                       {((showBoardSlide.estimatedUpside / showBoardSlide.arr) * 100).toFixed(0)}% of current ARR
