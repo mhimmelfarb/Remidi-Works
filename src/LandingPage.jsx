@@ -78,9 +78,7 @@ export default function LandingPage() {
             marginBottom: '16px',
             lineHeight: 1.6
           }}>
-            Everyone wants Commercial Excellence. Most middle-market investors and portfolio companies 
-            struggle to define what it actually looks like—or how to get there without adding cost, 
-            complexity, or headcount.
+            Most companies struggle to define what it actually looks like and how to get there without adding cost, complexity, or headcount.
           </p>
           
           <p style={{ 
