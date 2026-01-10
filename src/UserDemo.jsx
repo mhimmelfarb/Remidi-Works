@@ -16,14 +16,74 @@ const defaultCompanyData = {
   },
   scores: {
     initial: {
-      valueArticulation: { score: 3.5, status: "critical" },
-      differentiation: { score: 4.9, status: "warning" },
-      salesEnablement: { score: 3.2, status: "critical" }
+      valueArticulation: { 
+        score: 3.5, 
+        status: "critical",
+        confidence: "Medium",
+        confidenceTier: "T2",
+        peerMedian: 5.2,
+        topQuartile: 7.1,
+        basis: ["Website messaging analysis", "No published ROI claims", "Competitor comparison"],
+        unknown: ["Customer perception data", "Win/loss feedback", "Sales call recordings"],
+        wouldChange: "Score would increase to 5.0+ with documented customer ROI examples"
+      },
+      differentiation: { 
+        score: 4.9, 
+        status: "warning",
+        confidence: "Medium",
+        confidenceTier: "T2",
+        peerMedian: 5.5,
+        topQuartile: 7.8,
+        basis: ["Competitive positioning review", "Feature comparison analysis", "Market messaging audit"],
+        unknown: ["Customer switching reasons", "Head-to-head win rates", "Pricing relative to competitors"],
+        wouldChange: "Score would increase to 6.5+ with win/loss analysis data"
+      },
+      salesEnablement: { 
+        score: 3.2, 
+        status: "critical",
+        confidence: "Low",
+        confidenceTier: "T3",
+        peerMedian: 5.8,
+        topQuartile: 7.5,
+        basis: ["Public case studies audit (found: 1)", "No published pricing", "Testimonials lack specifics"],
+        unknown: ["Internal sales collateral", "Discount patterns", "Proposal win rates", "Sales cycle length"],
+        wouldChange: "Score would increase to 5.5+ with internal sales data access"
+      }
     },
     postDiagnostic: {
-      valueArticulation: { score: 3.2, status: "critical" },
-      differentiation: { score: 4.9, status: "warning" },
-      salesEnablement: { score: 2.8, status: "critical" }
+      valueArticulation: { 
+        score: 3.2, 
+        status: "critical",
+        confidence: "High",
+        confidenceTier: "T1",
+        peerMedian: 5.2,
+        topQuartile: 7.1,
+        basis: ["Website messaging analysis", "No published ROI claims", "Competitor comparison", "Diagnostic interview confirmation"],
+        unknown: ["Customer perception data"],
+        wouldChange: "Score would increase to 5.0+ with customer interview data"
+      },
+      differentiation: { 
+        score: 4.9, 
+        status: "warning",
+        confidence: "Medium",
+        confidenceTier: "T2",
+        peerMedian: 5.5,
+        topQuartile: 7.8,
+        basis: ["Competitive positioning review", "Feature comparison analysis", "Market messaging audit"],
+        unknown: ["Customer switching reasons", "Head-to-head win rates"],
+        wouldChange: "Score would increase to 6.5+ with win/loss analysis data"
+      },
+      salesEnablement: { 
+        score: 2.8, 
+        status: "critical",
+        confidence: "High",
+        confidenceTier: "T1",
+        peerMedian: 5.8,
+        topQuartile: 7.5,
+        basis: ["Public case studies audit (found: 1)", "No published pricing", "Testimonials lack specifics", "Confirmed: zero CFO-ready case studies", "Confirmed: no ROI quantification process"],
+        unknown: ["Discount variance data"],
+        wouldChange: "Score would increase to 6.0+ after case study project completion"
+      }
     },
     commercialMaturity: { initial: 4.2, postDiagnostic: 3.9, benchmark: 6.2 }
   },
@@ -60,9 +120,28 @@ const defaultCompanyData = {
     description: "Your case studies score <strong>2/10 on the CFO-Ready Index™</strong>. For $100-200K deals with CFO sign-off, benchmark is 7+. <strong>Estimated impact:</strong> This gap is likely costing 15-25% of winnable deals."
   },
   priorities: [
-    { rank: 1, name: "Case Study Strategy", status: "critical", description: "Transform operational stats → CFO-ready ROI proof using HGP Proof Point Protocol™", impact: "Est. +20-30% win rate" },
-    { rank: 2, name: "Pricing Clarity", status: "warning", description: "Publish pricing or ROI calculator showing fleet cost savings" },
-    { rank: 3, name: "Value Articulation", status: "critical", description: "Connect route efficiency to customer P&L impact" }
+    { 
+      rank: 1, 
+      name: "Case Study Strategy", 
+      status: "critical", 
+      description: "Transform operational stats → CFO-ready ROI proof using HGP Proof Point Protocol™", 
+      impact: "Est. +20-30% win rate",
+      priorityReason: "Highest confidence (T1 data) + No dependencies + Largest revenue impact"
+    },
+    { 
+      rank: 2, 
+      name: "Pricing Clarity", 
+      status: "warning", 
+      description: "Publish pricing or ROI calculator showing fleet cost savings",
+      priorityReason: "Medium confidence (T2 data) + Depends on value articulation work"
+    },
+    { 
+      rank: 3, 
+      name: "Value Articulation", 
+      status: "critical", 
+      description: "Connect route efficiency to customer P&L impact",
+      priorityReason: "Lower priority: Addressed as part of case study project"
+    }
   ],
   expertInsight: "Your 'route optimization' claims could translate to $200K+ annual savings for mid-size fleets. That's a story that closes deals — if you quantify it.",
   projectedImprovement: {
@@ -81,6 +160,9 @@ export default function UserDemo() {
   const [scoresUpdated, setScoresUpdated] = useState(false);
   const [companyData, setCompanyData] = useState(defaultCompanyData);
   const [loading, setLoading] = useState(false);
+  const [showSanityCheckModal, setShowSanityCheckModal] = useState(false);
+  const [showKickoffModal, setShowKickoffModal] = useState(false);
+  const [expandedScore, setExpandedScore] = useState(null);
 
   // Load custom company data if client param is present
   useEffect(() => {
@@ -131,16 +213,47 @@ export default function UserDemo() {
     textMuted: '#4b5563',
   };
 
-  const ScoreGauge = ({ label, score, previousScore, status, framework }) => {
+  // Enhanced Score Gauge with confidence and benchmark data
+  const ScoreGauge = ({ label, scoreData, previousScore, showDetails = false, onToggleDetails }) => {
+    const { score, status, confidence, confidenceTier, peerMedian, topQuartile, basis, unknown, wouldChange } = scoreData;
     const statusColors = {
       critical: { bg: '#fef2f2', border: '#fecaca', text: '#991b1b' },
       warning: { bg: '#fffbeb', border: '#fde68a', text: '#92400e' },
       good: { bg: '#ecfdf5', border: '#a7f3d0', text: '#065f46' },
     };
+    const confidenceColors = {
+      High: { bg: '#dcfce7', text: '#166534' },
+      Medium: { bg: '#fef3c7', text: '#92400e' },
+      Low: { bg: '#fee2e2', text: '#991b1b' },
+    };
     const c = statusColors[status] || statusColors.warning;
+    const cc = confidenceColors[confidence] || confidenceColors.Medium;
+    
     return (
-      <div style={{ background: c.bg, border: `1px solid ${c.border}`, borderRadius: 12, padding: '12px 16px' }}>
-        <div style={{ fontSize: 11, color: colors.textMuted, marginBottom: 4 }}>{label}</div>
+      <div style={{ 
+        background: c.bg, 
+        border: `1px solid ${c.border}`, 
+        borderRadius: 12, 
+        padding: '12px 16px',
+        cursor: onToggleDetails ? 'pointer' : 'default',
+        transition: 'all 0.2s ease',
+      }}
+      onClick={onToggleDetails}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+          <div style={{ fontSize: 11, color: colors.textMuted }}>{label}</div>
+          <div style={{ 
+            fontSize: 9, 
+            fontWeight: 600,
+            background: cc.bg, 
+            color: cc.text, 
+            padding: '2px 6px', 
+            borderRadius: 4,
+          }}>
+            {confidenceTier} • {confidence}
+          </div>
+        </div>
+        
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
           <span style={{ fontSize: 24, fontWeight: 800, color: c.text }}>{score}</span>
           <span style={{ fontSize: 14, color: colors.textMuted }}>/10</span>
@@ -150,7 +263,68 @@ export default function UserDemo() {
             </span>
           )}
         </div>
-        {framework && <div style={{ fontSize: 10, color: colors.primary, marginTop: 4 }}>{framework}</div>}
+        
+        {/* Benchmark context - always visible */}
+        <div style={{ 
+          display: 'flex', 
+          gap: 8, 
+          marginTop: 8, 
+          fontSize: 10, 
+          color: colors.textMuted,
+          borderTop: '1px solid rgba(0,0,0,0.05)',
+          paddingTop: 8
+        }}>
+          <span>Peer: {peerMedian}</span>
+          <span>|</span>
+          <span>Top 25%: {topQuartile}</span>
+        </div>
+
+        {onToggleDetails && (
+          <div style={{ fontSize: 10, color: colors.primary, marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span>{showDetails ? '▼' : '▶'}</span>
+            <span>See confidence basis</span>
+          </div>
+        )}
+        
+        {/* Expanded details */}
+        {showDetails && (
+          <div style={{ 
+            marginTop: 12, 
+            paddingTop: 12, 
+            borderTop: `1px dashed ${c.border}`,
+            fontSize: 11,
+          }}>
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 4 }}>Based on:</div>
+              {basis.map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#059669', marginBottom: 2 }}>
+                  <span>✓</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 4 }}>Unknown (would improve confidence):</div>
+              {unknown.map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#9ca3af', marginBottom: 2 }}>
+                  <span>?</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{ 
+              background: 'rgba(255,255,255,0.5)', 
+              padding: 8, 
+              borderRadius: 6,
+              color: colors.primary,
+              fontStyle: 'italic'
+            }}>
+              💡 {wouldChange}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -164,6 +338,314 @@ export default function UserDemo() {
     }}>
       <span style={{ fontSize: 12 }}>™</span> {text}
     </span>
+  );
+
+  // Expert Validation Badge
+  const ExpertValidationBadge = ({ reviewed = false, reviewerName = "Michael Himmelfarb" }) => (
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6,
+      padding: '6px 12px',
+      borderRadius: 8,
+      background: reviewed ? '#dcfce7' : '#fef3c7',
+      border: `1px solid ${reviewed ? '#86efac' : '#fde68a'}`,
+      fontSize: 11,
+      fontWeight: 500,
+    }}>
+      {reviewed ? (
+        <>
+          <span style={{ color: '#166534' }}>✓</span>
+          <span style={{ color: '#166534' }}>Expert reviewed by {reviewerName}</span>
+        </>
+      ) : (
+        <>
+          <span style={{ color: '#92400e' }}>⏳</span>
+          <span style={{ color: '#92400e' }}>Pending expert review</span>
+        </>
+      )}
+    </div>
+  );
+
+  // Sanity Check Modal
+  const SanityCheckModal = () => (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+    }}
+    onClick={() => setShowSanityCheckModal(false)}
+    >
+      <div 
+        style={{
+          background: '#fff',
+          borderRadius: 20,
+          padding: 32,
+          maxWidth: 500,
+          width: '90%',
+          boxShadow: '0 25px 50px rgba(0,0,0,0.25)',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+          <div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: colors.textMain, marginBottom: 4 }}>
+              Request Expert Review
+            </div>
+            <div style={{ fontSize: 13, color: colors.textMuted }}>
+              Get a sanity check before going down the wrong path
+            </div>
+          </div>
+          <button 
+            onClick={() => setShowSanityCheckModal(false)}
+            style={{ background: 'none', border: 'none', fontSize: 24, cursor: 'pointer', color: colors.textMuted }}
+          >×</button>
+        </div>
+
+        <div style={{ 
+          background: colors.cream, 
+          borderRadius: 12, 
+          padding: 16, 
+          marginBottom: 20,
+          border: `1px solid ${colors.accentSoft}`
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: colors.primary, marginBottom: 8 }}>
+            📊 Your current step: {steps[step].title}
+          </div>
+          <div style={{ fontSize: 13, color: colors.textMuted }}>
+            An expert will review your work and provide feedback to ensure you're on the right track.
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
+          <button style={{
+            padding: '16px 20px',
+            borderRadius: 12,
+            border: 'none',
+            background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: 14,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span>📞</span>
+              <span>Schedule 15-min call</span>
+            </div>
+            <span style={{ fontSize: 12, opacity: 0.9 }}>Usually within 24hrs</span>
+          </button>
+
+          <button style={{
+            padding: '16px 20px',
+            borderRadius: 12,
+            border: `1px solid ${colors.primary}`,
+            background: '#fff',
+            color: colors.primary,
+            fontWeight: 600,
+            fontSize: 14,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span>✉️</span>
+              <span>Written feedback</span>
+            </div>
+            <span style={{ fontSize: 12, opacity: 0.7 }}>Response within 24hrs</span>
+          </button>
+        </div>
+
+        <div style={{ 
+          background: '#f9fafb', 
+          borderRadius: 10, 
+          padding: 12, 
+          fontSize: 12, 
+          color: colors.textMuted,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8
+        }}>
+          <span>💡</span>
+          <span><strong>2 reviews remaining</strong> this month (included in your plan)</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Expert Kickoff Modal
+  const KickoffModal = () => (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+    }}
+    onClick={() => setShowKickoffModal(false)}
+    >
+      <div 
+        style={{
+          background: '#fff',
+          borderRadius: 20,
+          padding: 32,
+          maxWidth: 560,
+          width: '90%',
+          boxShadow: '0 25px 50px rgba(0,0,0,0.25)',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div style={{ 
+            width: 64, 
+            height: 64, 
+            borderRadius: '50%', 
+            background: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryDark})`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 16px',
+            fontSize: 28
+          }}>
+            👤
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: colors.textMain, marginBottom: 8 }}>
+            30-Minute Expert Kickoff
+          </div>
+          <div style={{ fontSize: 14, color: colors.textMuted, maxWidth: 400, margin: '0 auto' }}>
+            Before you start, let's calibrate your scores with real data only you can provide.
+          </div>
+        </div>
+
+        <div style={{ 
+          background: '#f9fafb', 
+          borderRadius: 12, 
+          padding: 20, 
+          marginBottom: 24 
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMain, marginBottom: 12 }}>
+            What happens in the kickoff:
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+            {[
+              { icon: '🎯', text: 'Review your initial diagnostic and validate assumptions' },
+              { icon: '📊', text: 'Refine confidence levels with data only you have' },
+              { icon: '🗺️', text: 'Customize your action plan based on your constraints' },
+              { icon: '✅', text: 'Set clear success criteria for your project' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, color: colors.textMuted }}>
+                <span>{item.icon}</span>
+                <span>{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ 
+          background: colors.cream, 
+          borderRadius: 12, 
+          padding: 16, 
+          marginBottom: 24,
+          border: `1px solid ${colors.accentSoft}`,
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: 13, color: colors.primary }}>
+            <strong>This is where the magic happens.</strong> Your public-data diagnostic becomes 
+            a real diagnostic with T1 confidence data.
+          </div>
+        </div>
+
+        <button style={{
+          width: '100%',
+          padding: '16px 20px',
+          borderRadius: 12,
+          border: 'none',
+          background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+          color: '#fff',
+          fontWeight: 600,
+          fontSize: 15,
+          cursor: 'pointer',
+          boxShadow: '0 8px 24px rgba(238, 108, 77, 0.4)',
+        }}>
+          Schedule Your Kickoff Call →
+        </button>
+
+        <div style={{ 
+          marginTop: 16, 
+          textAlign: 'center', 
+          fontSize: 12, 
+          color: colors.textMuted 
+        }}>
+          Required before starting guided work • Usually scheduled within 48hrs
+        </div>
+      </div>
+    </div>
+  );
+
+  // Persistent Sanity Check Button (floating)
+  const SanityCheckButton = () => (
+    <div style={{
+      position: 'fixed',
+      bottom: 24,
+      right: 24,
+      zIndex: 100,
+    }}>
+      <button
+        onClick={() => setShowSanityCheckModal(true)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '14px 20px',
+          borderRadius: 999,
+          border: `2px solid ${colors.accent}`,
+          background: '#fff',
+          color: colors.accent,
+          fontWeight: 600,
+          fontSize: 14,
+          cursor: 'pointer',
+          boxShadow: '0 4px 20px rgba(238, 108, 77, 0.3)',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = colors.accent;
+          e.currentTarget.style.color = '#fff';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = '#fff';
+          e.currentTarget.style.color = colors.accent;
+        }}
+      >
+        <span style={{ fontSize: 18 }}>🛟</span>
+        <span>Sanity Check</span>
+      </button>
+      <div style={{ 
+        textAlign: 'center', 
+        fontSize: 10, 
+        color: colors.textMuted, 
+        marginTop: 6,
+        background: 'rgba(255,255,255,0.9)',
+        padding: '2px 8px',
+        borderRadius: 4,
+      }}>
+        2 remaining this month
+      </div>
+    </div>
   );
 
   const steps = [
@@ -229,7 +711,7 @@ export default function UserDemo() {
       )
     },
 
-    // Step 1: Dashboard
+    // Step 1: Dashboard (with enhanced scores)
     {
       title: "Your Dashboard",
       content: (
@@ -247,7 +729,10 @@ export default function UserDemo() {
                 <div style={{ fontSize: 13, color: '#d1d5db' }}>{companyData.company.industry} • {companyData.company.stage}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, color: colors.accentSoft }}>Commercial Maturity Score™</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end', marginBottom: 4 }}>
+                  <div style={{ fontSize: 11, color: colors.accentSoft }}>Commercial Maturity Score™</div>
+                  <ExpertValidationBadge reviewed={false} />
+                </div>
                 <div style={{ fontSize: 36, fontWeight: 800 }}>{companyData.scores.commercialMaturity.initial}<span style={{ fontSize: 18, color: '#9ca3af' }}>/10</span></div>
                 <div style={{ fontSize: 11, color: '#9ca3af' }}>Segment benchmark: {companyData.scores.commercialMaturity.benchmark}</div>
               </div>
@@ -256,10 +741,26 @@ export default function UserDemo() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 24 }}>
             <div>
+              {/* Enhanced Score Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
-                <ScoreGauge label="Value Articulation" score={companyData.scores.initial.valueArticulation.score} status={companyData.scores.initial.valueArticulation.status} framework="Nine Value Levers™" />
-                <ScoreGauge label="Differentiation" score={companyData.scores.initial.differentiation.score} status={companyData.scores.initial.differentiation.status} framework="Competitive Position Index™" />
-                <ScoreGauge label="Sales Enablement" score={companyData.scores.initial.salesEnablement.score} status={companyData.scores.initial.salesEnablement.status} framework="CFO-Ready Index™" />
+                <ScoreGauge 
+                  label="Value Articulation" 
+                  scoreData={companyData.scores.initial.valueArticulation}
+                  showDetails={expandedScore === 'valueArticulation'}
+                  onToggleDetails={() => setExpandedScore(expandedScore === 'valueArticulation' ? null : 'valueArticulation')}
+                />
+                <ScoreGauge 
+                  label="Differentiation" 
+                  scoreData={companyData.scores.initial.differentiation}
+                  showDetails={expandedScore === 'differentiation'}
+                  onToggleDetails={() => setExpandedScore(expandedScore === 'differentiation' ? null : 'differentiation')}
+                />
+                <ScoreGauge 
+                  label="Sales Enablement" 
+                  scoreData={companyData.scores.initial.salesEnablement}
+                  showDetails={expandedScore === 'salesEnablement'}
+                  onToggleDetails={() => setExpandedScore(expandedScore === 'salesEnablement' ? null : 'salesEnablement')}
+                />
               </div>
 
               <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 16, padding: 20, marginBottom: 24 }}>
@@ -293,6 +794,37 @@ export default function UserDemo() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* Expert Kickoff CTA - NEW */}
+              <div style={{ 
+                background: `linear-gradient(135deg, ${colors.primaryDark}, #111827)`,
+                borderRadius: 16, 
+                padding: 20, 
+                color: '#fff',
+                border: '2px solid rgba(238, 108, 77, 0.3)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                  <span style={{ fontSize: 24 }}>👤</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>Expert Kickoff Required</div>
+                    <div style={{ fontSize: 11, color: '#9ca3af' }}>30 minutes • Before you begin</div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 13, color: '#d1d5db', margin: '0 0 16px 0', lineHeight: 1.6 }}>
+                  These scores are based on <strong>public data only</strong>. A kickoff call will calibrate 
+                  them with information only you can provide — dramatically improving accuracy.
+                </p>
+                <button
+                  onClick={() => setShowKickoffModal(true)}
+                  style={{
+                    width: '100%', padding: '12px 20px', borderRadius: 999,
+                    background: colors.accent, color: '#fff',
+                    fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer',
+                  }}
+                >
+                  Schedule Kickoff →
+                </button>
+              </div>
+
               <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
                 <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span>📚</span> Company Knowledge Base
@@ -438,6 +970,23 @@ export default function UserDemo() {
                     </div>
                   </div>
                 </div>
+                
+                {/* Confidence upgrade indicator */}
+                {questionAnswered && (
+                  <div style={{ 
+                    marginTop: 16, 
+                    paddingTop: 12, 
+                    borderTop: '1px solid #e5e7eb',
+                    fontSize: 12,
+                    color: '#059669',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
+                  }}>
+                    <span>↑</span>
+                    <span>Sales Enablement confidence upgraded: T3 → T1</span>
+                  </div>
+                )}
               </div>
 
               {questionAnswered && (
@@ -457,7 +1006,7 @@ export default function UserDemo() {
       )
     },
 
-    // Step 3: Updated Assessment
+    // Step 3: Updated Assessment (with enhanced validation)
     {
       title: "Updated Assessment",
       content: (
@@ -471,7 +1020,7 @@ export default function UserDemo() {
               <span style={{ fontSize: 20 }}>📊</span>
               <span><strong>Assessment refined</strong> — Scores updated based on diagnostic</span>
             </div>
-            <div style={{ fontSize: 12, color: '#059669' }}>Confidence: High (T1 + T2 data)</div>
+            <ExpertValidationBadge reviewed={true} reviewerName="System + Diagnostic" />
           </div>
 
           <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24, marginBottom: 24 }}>
@@ -491,9 +1040,26 @@ export default function UserDemo() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
-              <ScoreGauge label="Value Articulation" score={scoresUpdated ? companyData.scores.postDiagnostic.valueArticulation.score : companyData.scores.initial.valueArticulation.score} previousScore={companyData.scores.initial.valueArticulation.score} status={companyData.scores.postDiagnostic.valueArticulation.status} framework="Nine Value Levers™" />
-              <ScoreGauge label="Differentiation" score={companyData.scores.postDiagnostic.differentiation.score} status={companyData.scores.postDiagnostic.differentiation.status} framework="Competitive Position Index™" />
-              <ScoreGauge label="Sales Enablement" score={scoresUpdated ? companyData.scores.postDiagnostic.salesEnablement.score : companyData.scores.initial.salesEnablement.score} previousScore={companyData.scores.initial.salesEnablement.score} status={companyData.scores.postDiagnostic.salesEnablement.status} framework="CFO-Ready Index™" />
+              <ScoreGauge 
+                label="Value Articulation" 
+                scoreData={scoresUpdated ? companyData.scores.postDiagnostic.valueArticulation : companyData.scores.initial.valueArticulation}
+                previousScore={companyData.scores.initial.valueArticulation.score}
+                showDetails={expandedScore === 'valueArticulation'}
+                onToggleDetails={() => setExpandedScore(expandedScore === 'valueArticulation' ? null : 'valueArticulation')}
+              />
+              <ScoreGauge 
+                label="Differentiation" 
+                scoreData={companyData.scores.postDiagnostic.differentiation}
+                showDetails={expandedScore === 'differentiation'}
+                onToggleDetails={() => setExpandedScore(expandedScore === 'differentiation' ? null : 'differentiation')}
+              />
+              <ScoreGauge 
+                label="Sales Enablement" 
+                scoreData={scoresUpdated ? companyData.scores.postDiagnostic.salesEnablement : companyData.scores.initial.salesEnablement}
+                previousScore={companyData.scores.initial.salesEnablement.score}
+                showDetails={expandedScore === 'salesEnablement'}
+                onToggleDetails={() => setExpandedScore(expandedScore === 'salesEnablement' ? null : 'salesEnablement')}
+              />
             </div>
 
             <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 12, padding: 16 }}>
@@ -520,11 +1086,22 @@ export default function UserDemo() {
                   };
                   const style = statusStyles[priority.status] || statusStyles.good;
                   return (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 16, background: style.bg, borderRadius: 12, border: style.border }}>
+                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: 16, background: style.bg, borderRadius: 12, border: style.border }}>
                       <span style={{ fontSize: 24 }}>{style.icon}</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 600, color: style.titleColor }}>{priority.rank}. {priority.name}</div>
-                        <div style={{ fontSize: 13, color: style.descColor }}>{priority.description}</div>
+                        <div style={{ fontSize: 13, color: style.descColor, marginBottom: 8 }}>{priority.description}</div>
+                        {/* Priority reasoning - NEW */}
+                        <div style={{ 
+                          fontSize: 11, 
+                          color: colors.primary, 
+                          background: 'rgba(61, 90, 128, 0.1)',
+                          padding: '6px 10px',
+                          borderRadius: 6,
+                          display: 'inline-block'
+                        }}>
+                          💡 Why #{priority.rank}: {priority.priorityReason}
+                        </div>
                       </div>
                       {priority.impact && (
                         <div style={{ textAlign: 'right' }}>
@@ -571,7 +1148,7 @@ export default function UserDemo() {
       )
     },
 
-    // Step 4: Action Plan
+    // Step 4: Action Plan (with expert touchpoints highlighted)
     {
       title: "Your Action Plan",
       content: (
@@ -602,17 +1179,17 @@ export default function UserDemo() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
-                  { num: 1, title: 'Audit & Gap Analysis', time: '1-2 hrs', status: 'ready', gate: 'CFO-Ready Index™ scoring' },
-                  { num: 2, title: 'Customer Selection', time: '30 min', status: 'locked', gate: 'Candidate Criteria™ filter' },
-                  { num: 3, title: 'Story Framework', time: '1 hr', status: 'locked', gate: 'Nine Value Levers™ template' },
-                  { num: 4, title: 'Customer Interviews', time: '2-3 hrs', status: 'locked', gate: 'Value Quantification Questions™' },
-                  { num: 5, title: 'Draft & Review', time: '1-2 hrs', status: 'locked', gate: 'Expert review checkpoint' },
-                  { num: 6, title: 'Scale & Distribute', time: '2-3 hrs', status: 'locked', gate: 'Sales enablement playbook' },
+                  { num: 1, title: 'Audit & Gap Analysis', time: '1-2 hrs', status: 'ready', gate: 'CFO-Ready Index™ scoring', hasExpertReview: false },
+                  { num: 2, title: 'Customer Selection', time: '30 min', status: 'locked', gate: 'Candidate Criteria™ filter', hasExpertReview: false },
+                  { num: 3, title: 'Story Framework', time: '1 hr', status: 'locked', gate: 'Nine Value Levers™ template', hasExpertReview: false },
+                  { num: 4, title: 'Customer Interviews', time: '2-3 hrs', status: 'locked', gate: 'Value Quantification Questions™', hasExpertReview: false },
+                  { num: 5, title: 'Draft & Review', time: '1-2 hrs', status: 'locked', gate: 'Expert review checkpoint', hasExpertReview: true },
+                  { num: 6, title: 'Scale & Distribute', time: '2-3 hrs', status: 'locked', gate: 'Sales enablement playbook', hasExpertReview: true },
                 ].map((s) => (
                   <div key={s.num} style={{
                     display: 'flex', alignItems: 'center', gap: 16, padding: 16, borderRadius: 12,
                     background: s.status === 'ready' ? colors.cream : '#f9fafb',
-                    border: s.status === 'ready' ? `2px solid ${colors.primary}` : '1px solid #e5e7eb',
+                    border: s.status === 'ready' ? `2px solid ${colors.primary}` : s.hasExpertReview ? `2px dashed ${colors.accent}` : '1px solid #e5e7eb',
                   }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: '50%',
@@ -621,7 +1198,21 @@ export default function UserDemo() {
                       fontWeight: 700, fontSize: 14,
                     }}>{s.num}</div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, color: s.status === 'ready' ? colors.primary : colors.textMuted }}>{s.title}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontWeight: 600, color: s.status === 'ready' ? colors.primary : colors.textMuted }}>{s.title}</span>
+                        {s.hasExpertReview && (
+                          <span style={{ 
+                            fontSize: 9, 
+                            background: colors.accent, 
+                            color: '#fff', 
+                            padding: '2px 6px', 
+                            borderRadius: 4,
+                            fontWeight: 600 
+                          }}>
+                            👤 EXPERT REVIEW
+                          </span>
+                        )}
+                      </div>
                       <div style={{ fontSize: 11, color: '#9ca3af' }}>Quality Gate: {s.gate}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -642,6 +1233,32 @@ export default function UserDemo() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* Human touchpoints summary - NEW */}
+              <div style={{ 
+                background: `linear-gradient(135deg, ${colors.accent}15, ${colors.accent}05)`, 
+                borderRadius: 16, 
+                border: `2px solid ${colors.accent}`,
+                padding: 20 
+              }}>
+                <div style={{ fontWeight: 700, color: colors.accent, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span>👤</span> Human Touchpoints
+                </div>
+                <div style={{ fontSize: 13, color: colors.textMain, lineHeight: 1.7 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                    <span style={{ color: '#059669' }}>✓</span>
+                    <span><strong>Kickoff call</strong> — Before you start (30 min)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                    <span style={{ color: colors.accent }}>○</span>
+                    <span><strong>Expert review</strong> — At Steps 5 & 6 (built-in)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <span style={{ color: colors.primary }}>🛟</span>
+                    <span><strong>Sanity checks</strong> — Anytime you need (2/month)</span>
+                  </div>
+                </div>
+              </div>
+
               <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 20 }}>
                 <div style={{ fontWeight: 600, color: colors.textMain, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span>📈</span> Projected Impact
@@ -685,24 +1302,25 @@ export default function UserDemo() {
                 </div>
               </div>
 
-              <button style={{
-                width: '100%',
-                padding: '16px 20px', 
-                borderRadius: 12,
-                border: `2px solid ${colors.accent}`, 
-                background: '#fff',
-                color: colors.accent, 
-                fontWeight: 600, 
-                fontSize: 14, 
-                cursor: 'pointer',
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                gap: 8,
-                marginTop: 16
-              }}>
+              <button 
+                onClick={() => setShowKickoffModal(true)}
+                style={{
+                  width: '100%',
+                  padding: '16px 20px', 
+                  borderRadius: 12,
+                  border: `2px solid ${colors.accent}`, 
+                  background: '#fff',
+                  color: colors.accent, 
+                  fontWeight: 600, 
+                  fontSize: 14, 
+                  cursor: 'pointer',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: 8,
+                }}>
                 <span>👤</span>
-                <span>Get Expert Help</span>
+                <span>Schedule Kickoff Call</span>
               </button>
             </div>
           </div>
@@ -799,14 +1417,16 @@ export default function UserDemo() {
                       <span>Get AI Coaching on This Step</span>
                       <span>💬</span>
                     </button>
-                    <button style={{
-                      padding: '16px 20px', borderRadius: 12,
-                      border: `2px solid ${colors.accent}`, background: '#fff',
-                      color: colors.accent, fontWeight: 600, fontSize: 14, cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    }}>
-                      <span>Get Expert Help</span>
-                      <span>👤</span>
+                    <button 
+                      onClick={() => setShowSanityCheckModal(true)}
+                      style={{
+                        padding: '16px 20px', borderRadius: 12,
+                        border: `2px solid ${colors.accent}`, background: '#fff',
+                        color: colors.accent, fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      }}>
+                      <span>🛟 Request Sanity Check</span>
+                      <span style={{ fontSize: 11, opacity: 0.7 }}>2 remaining</span>
                     </button>
                   </div>
                 </div>
@@ -817,7 +1437,7 @@ export default function UserDemo() {
       )
     },
 
-    // Step 6: Why Remidi Works
+    // Step 6: Why Remidi Works (updated)
     {
       title: "Why Remidi Works",
       content: (
@@ -841,15 +1461,15 @@ export default function UserDemo() {
               },
               {
                 icon: '📊', title: 'Benchmark Data',
-                items: ['47 B2B SaaS companies analyzed', 'Competitor case study database', 'Segment-specific benchmarks', '"What good looks like" examples'],
+                items: ['47 B2B SaaS companies analyzed', 'Peer median + top quartile context', 'Segment-specific benchmarks', '"What good looks like" examples'],
               },
               {
-                icon: '🚦', title: 'Quality Gates',
-                items: ['Built-in scoring at each step', 'Can\'t skip until threshold met', 'Expert review checkpoints', 'Methodology enforcement'],
+                icon: '👤', title: 'Human in the Loop',
+                items: ['30-min kickoff calibration', 'Built-in expert review gates', 'On-demand sanity checks (2/mo)', 'Never go too far wrong alone'],
               },
               {
-                icon: '📚', title: 'Knowledge Accumulation',
-                items: ['Every output feeds knowledge base', 'Future projects build on past work', 'System gets smarter over time', 'ChatGPT starts fresh; Remidi remembers'],
+                icon: '🎯', title: 'Confidence Transparency',
+                items: ['T1/T2/T3 data tiers shown', '"Based on" for every score', '"Unknown" gaps surfaced', 'No fabricated certainty'],
               },
             ].map((card, i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 16, border: '1px solid #e5e7eb', padding: 24 }}>
@@ -877,29 +1497,32 @@ export default function UserDemo() {
             </div>
             <div style={{ fontSize: 16, color: colors.textMain, lineHeight: 1.7, marginTop: 8 }}>
               Would they know the right sequence? Have the benchmarks? Apply quality gates? 
-              Get expert help when stuck? <strong>No.</strong>
+              <strong> Know when to call bullshit?</strong> No.
             </div>
             <div style={{ fontSize: 18, fontWeight: 700, color: colors.primary, marginTop: 16 }}>
-              That's the difference between a tool and a system.
+              That's the difference between a tool and a system with human judgment.
             </div>
           </div>
 
           <div style={{ marginTop: 24, textAlign: 'center' }}>
-            <button style={{
-              padding: '16px 32px', 
-              borderRadius: 12,
-              border: `2px solid ${colors.accent}`, 
-              background: '#fff',
-              color: colors.accent, 
-              fontWeight: 600, 
-              fontSize: 15, 
-              cursor: 'pointer',
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: 10,
-            }}>
+            <button 
+              onClick={() => setShowKickoffModal(true)}
+              style={{
+                padding: '16px 32px', 
+                borderRadius: 12,
+                border: 'none', 
+                background: `linear-gradient(135deg, ${colors.accent}, #f97316)`,
+                color: '#fff', 
+                fontWeight: 600, 
+                fontSize: 15, 
+                cursor: 'pointer',
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: 10,
+                boxShadow: '0 8px 24px rgba(238, 108, 77, 0.4)',
+              }}>
               <span>👤</span>
-              <span>Get Expert Help</span>
+              <span>Schedule Your Kickoff</span>
             </button>
             <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 8 }}>
               Human expertise is always available when you need it
@@ -917,6 +1540,13 @@ export default function UserDemo() {
       fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       padding: '24px 16px',
     }}>
+      {/* Modals */}
+      {showSanityCheckModal && <SanityCheckModal />}
+      {showKickoffModal && <KickoffModal />}
+      
+      {/* Persistent Sanity Check Button - shows after step 1 */}
+      {step >= 1 && <SanityCheckButton />}
+
       {/* Header */}
       <div style={{ maxWidth: 1100, margin: '0 auto 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
