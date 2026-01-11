@@ -455,6 +455,7 @@ export default function InvestorPortfolioDashboard() {
   const [showSizeModal, setShowSizeModal] = useState(null);
   const [showBoardSlide, setShowBoardSlide] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [diligenceResults, setDiligenceResults] = useState(null);
   
   // Dynamic portfolio loading from URL param
   const [portfolioData, setPortfolioData] = useState(defaultPortfolioData);
@@ -710,6 +711,22 @@ export default function InvestorPortfolioDashboard() {
               >
                 Peer Benchmarks
               </button>
+              <button
+                onClick={() => setActiveTab('diligence')}
+                style={{
+                  padding: '16px 24px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: activeTab === 'diligence' ? colors.navy : '#6b7280',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  borderBottom: activeTab === 'diligence' ? `2px solid ${colors.coral}` : '2px solid transparent',
+                  cursor: 'pointer',
+                  marginBottom: '-1px'
+                }}
+              >
+                🔍 Diligence Mode
+              </button>
             </div>
             
             {activeTab === 'overview' && (
@@ -895,86 +912,377 @@ export default function InvestorPortfolioDashboard() {
             
             {activeTab === 'benchmark' && (
               <div style={{ padding: '20px' }}>
-                <div style={{ marginBottom: '24px' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy, marginBottom: '8px' }}>Your Portfolio vs. Peer Average</div>
-                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
-                    Based on 300+ companies across 22 investor portfolios
+                {/* Cooperative Stats Header */}
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  padding: '16px 20px',
+                  backgroundColor: colors.cream,
+                  borderRadius: '8px',
+                  marginBottom: '24px'
+                }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data Cooperative</div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, color: colors.darkNavy }}>198 Companies • 24 Funds</div>
                   </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '11px', color: '#6b7280' }}>Your Portfolio Position</div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, color: avgHealth >= UNIVERSE_AVG ? colors.green : colors.coral }}>
+                      {avgHealth >= UNIVERSE_TOP_QUARTILE ? 'Top Quartile' : avgHealth >= UNIVERSE_AVG ? 'Above Average' : 'Below Average'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Distribution Bar */}
+                <div style={{ marginBottom: '32px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Portfolio vs. Cooperative Distribution</div>
+                  <div style={{ position: 'relative', height: '48px', borderRadius: '8px', overflow: 'hidden', background: 'linear-gradient(to right, #fecaca 0%, #fef3c7 40%, #d1fae5 100%)' }}>
+                    {/* Quartile markers */}
+                    <div style={{ position: 'absolute', top: 0, bottom: 0, width: '1px', backgroundColor: '#9ca3af', left: `${(UNIVERSE_BOTTOM_QUARTILE / 10) * 100}%` }}>
+                      <span style={{ position: 'absolute', bottom: '-20px', left: '50%', transform: 'translateX(-50%)', fontSize: '9px', color: '#6b7280' }}>25th</span>
+                    </div>
+                    <div style={{ position: 'absolute', top: 0, bottom: 0, width: '2px', backgroundColor: '#6b7280', left: `${(UNIVERSE_AVG / 10) * 100}%` }}>
+                      <span style={{ position: 'absolute', bottom: '-20px', left: '50%', transform: 'translateX(-50%)', fontSize: '9px', color: '#6b7280', fontWeight: 600 }}>50th</span>
+                    </div>
+                    <div style={{ position: 'absolute', top: 0, bottom: 0, width: '1px', backgroundColor: '#9ca3af', left: `${(UNIVERSE_TOP_QUARTILE / 10) * 100}%` }}>
+                      <span style={{ position: 'absolute', bottom: '-20px', left: '50%', transform: 'translateX(-50%)', fontSize: '9px', color: '#6b7280' }}>75th</span>
+                    </div>
+                    {/* Your position marker */}
+                    <div style={{ 
+                      position: 'absolute', 
+                      top: '50%', 
+                      left: `${(avgHealth / 10) * 100}%`,
+                      transform: 'translate(-50%, -50%)',
+                      width: '20px', 
+                      height: '20px', 
+                      borderRadius: '50%',
+                      backgroundColor: colors.navy,
+                      border: '3px solid white',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                    }} />
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '28px', fontSize: '10px', color: '#9ca3af' }}>
+                    <span>2.0 - Critical</span>
+                    <span style={{ fontWeight: 600, color: colors.navy }}>Your portfolio: {avgHealth.toFixed(1)}</span>
+                    <span>10.0 - Excellent</span>
+                  </div>
+                </div>
+
+                {/* Dimension Comparison */}
+                <div style={{ marginBottom: '24px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: colors.darkNavy, marginBottom: '16px' }}>Your Portfolio vs. Cooperative Median</div>
                   
-                  {/* Dimension Gauges */}
                   {[
-                    { name: 'Value Articulation', yourScore: dimAverages.valueArticulation, peerAvg: 5.9 },
-                    { name: 'Pricing Architecture', yourScore: dimAverages.pricingArchitecture, peerAvg: 5.7 },
-                    { name: 'Competitive Positioning', yourScore: dimAverages.competitivePositioning, peerAvg: 6.1 },
-                    { name: 'Sales Enablement', yourScore: dimAverages.salesEnablement, peerAvg: 5.4 },
-                    { name: 'Customer ROI Proof', yourScore: dimAverages.customerROI, peerAvg: 5.8 },
-                      ].map((dim, idx) => {
+                    { name: 'Value Articulation', yourScore: dimAverages.valueArticulation, peerAvg: 5.9, topQuartile: 7.3 },
+                    { name: 'Pricing Architecture', yourScore: dimAverages.pricingArchitecture, peerAvg: 5.7, topQuartile: 7.1 },
+                    { name: 'Competitive Positioning', yourScore: dimAverages.competitivePositioning, peerAvg: 6.1, topQuartile: 7.5 },
+                    { name: 'Sales Enablement', yourScore: dimAverages.salesEnablement, peerAvg: 5.4, topQuartile: 6.9 },
+                    { name: 'Customer ROI Proof', yourScore: dimAverages.customerROI, peerAvg: 5.8, topQuartile: 7.2 },
+                  ].map((dim, idx) => {
                     const diff = dim.yourScore - dim.peerAvg;
+                    const percentile = Math.round(50 + (diff / (dim.topQuartile - dim.peerAvg)) * 25);
                     const diffColor = diff >= 0.5 ? colors.green : diff <= -0.5 ? colors.red : colors.yellow;
-                    const diffSign = diff > 0 ? '+' : '';
                     return (
                       <div key={idx} style={{ marginBottom: '16px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                           <span style={{ fontSize: '12px', fontWeight: 500, color: colors.darkNavy }}>{dim.name}</span>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ fontSize: '11px', color: '#9ca3af' }}>Peer: {dim.peerAvg.toFixed(1)}</span>
-                            <span style={{ fontSize: '12px', fontWeight: 600, color: diffColor }}>
-                              {diffSign}{diff.toFixed(1)}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            <span style={{ fontSize: '11px', color: '#9ca3af' }}>~{Math.max(20, Math.min(80, percentile))}th %ile</span>
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: diffColor }}>
+                              {diff >= 0 ? '+' : ''}{diff.toFixed(1)}
                             </span>
                           </div>
                         </div>
-                        <div style={{ position: 'relative', height: '8px', backgroundColor: '#e5e7eb', borderRadius: '4px' }}>
-                          {/* Peer average marker */}
+                        <div style={{ position: 'relative', height: '10px', backgroundColor: '#e5e7eb', borderRadius: '5px' }}>
+                          {/* Median marker */}
                           <div style={{
                             position: 'absolute',
                             left: `${(dim.peerAvg / 10) * 100}%`,
                             top: '-2px',
                             width: '2px',
-                            height: '12px',
+                            height: '14px',
                             backgroundColor: '#6b7280',
-                            borderRadius: '1px',
+                          }} />
+                          {/* Top quartile marker */}
+                          <div style={{
+                            position: 'absolute',
+                            left: `${(dim.topQuartile / 10) * 100}%`,
+                            top: '-2px',
+                            width: '1px',
+                            height: '14px',
+                            backgroundColor: colors.green,
                           }} />
                           {/* Your score bar */}
                           <div style={{
                             width: `${(dim.yourScore / 10) * 100}%`,
                             height: '100%',
                             backgroundColor: diffColor,
-                            borderRadius: '4px',
+                            borderRadius: '5px',
                             transition: 'width 0.3s ease',
                           }} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
-                          <span style={{ fontSize: '10px', color: '#9ca3af' }}>0</span>
-                          <span style={{ fontSize: '11px', fontWeight: 600, color: colors.darkNavy }}>Your avg: {dim.yourScore.toFixed(1)}</span>
-                          <span style={{ fontSize: '10px', color: '#9ca3af' }}>10</span>
+                          <span style={{ fontSize: '10px', color: '#9ca3af' }}>Median: {dim.peerAvg}</span>
+                          <span style={{ fontSize: '10px', color: colors.green }}>Top 25%: {dim.topQuartile}</span>
                         </div>
                       </div>
                     );
                   })}
                 </div>
                 
+                {/* Sector Breakdown */}
                 <div style={{ 
                   padding: '16px', 
                   backgroundColor: '#f9fafb', 
                   borderRadius: '8px',
                   marginTop: '24px'
                 }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Universe Benchmarks</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', fontSize: '12px' }}>
-                    <div>
-                      <div style={{ color: '#6b7280', marginBottom: '4px' }}>Top Quartile</div>
-                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.green }}>{UNIVERSE_TOP_QUARTILE}</div>
-                    </div>
-                    <div>
-                      <div style={{ color: '#6b7280', marginBottom: '4px' }}>Average</div>
-                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.navy }}>{UNIVERSE_AVG}</div>
-                    </div>
-                    <div>
-                      <div style={{ color: '#6b7280', marginBottom: '4px' }}>Bottom Quartile</div>
-                      <div style={{ fontSize: '18px', fontWeight: 700, color: colors.coral }}>{UNIVERSE_BOTTOM_QUARTILE}</div>
-                    </div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Sector Intelligence</div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '12px' }}>
+                    Your portfolio spans {[...new Set(portfolioData.map(c => c.sector))].length} sectors. Key insight:
+                  </div>
+                  <div style={{ 
+                    padding: '12px', 
+                    backgroundColor: '#e0f2fe', 
+                    borderRadius: '6px',
+                    borderLeft: `3px solid ${colors.lightBlue}`,
+                    fontSize: '12px',
+                    color: '#0369a1'
+                  }}>
+                    <strong>Sales Enablement</strong> shows the widest gap vs. cooperative (-{(5.4 - dimAverages.salesEnablement).toFixed(1)} from median). Companies that improve this dimension see average <strong>+6% win rate improvement</strong> within 6 months.
                   </div>
                 </div>
+
+                {/* Cooperative Benchmarks Grid */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(3, 1fr)', 
+                  gap: '12px',
+                  marginTop: '24px'
+                }}>
+                  <div style={{ textAlign: 'center', padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
+                    <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>Top Quartile</div>
+                    <div style={{ fontSize: '24px', fontWeight: 700, color: colors.green }}>{UNIVERSE_TOP_QUARTILE}</div>
+                    <div style={{ fontSize: '10px', color: '#059669' }}>75th %ile</div>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+                    <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>Cooperative Median</div>
+                    <div style={{ fontSize: '24px', fontWeight: 700, color: colors.navy }}>{UNIVERSE_AVG}</div>
+                    <div style={{ fontSize: '10px', color: '#6b7280' }}>50th %ile</div>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '16px', backgroundColor: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+                    <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>Bottom Quartile</div>
+                    <div style={{ fontSize: '24px', fontWeight: 700, color: colors.coral }}>{UNIVERSE_BOTTOM_QUARTILE}</div>
+                    <div style={{ fontSize: '10px', color: '#dc2626' }}>25th %ile</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'diligence' && (
+              <div style={{ padding: '20px' }}>
+                {!diligenceResults ? (
+                  <>
+                    <div style={{ marginBottom: '24px' }}>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy, marginBottom: '8px' }}>Target Company Assessment</div>
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                        Enter a target company for pre-acquisition commercial health analysis
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>Company Name</label>
+                        <input type="text" defaultValue="TargetCo Industries" style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px' }} />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>Website URL</label>
+                        <input type="text" defaultValue="www.targetco.com" style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px' }} />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>Sector</label>
+                        <select style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px' }}>
+                          <option>DevOps/Infrastructure</option>
+                          <option>AI/ML Platform</option>
+                          <option>Cybersecurity</option>
+                          <option>FinTech</option>
+                          <option>HR Tech</option>
+                          <option>HealthTech</option>
+                          <option>Logistics Tech</option>
+                          <option>MarTech</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#374151', marginBottom: '4px' }}>Estimated ARR</label>
+                        <input type="text" defaultValue="$12M" style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '13px' }} />
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={() => setDiligenceResults(true)}
+                      style={{ 
+                        width: '100%',
+                        padding: '14px 24px', 
+                        backgroundColor: colors.coral, 
+                        color: 'white', 
+                        border: 'none', 
+                        borderRadius: '8px', 
+                        fontSize: '14px', 
+                        fontWeight: 600, 
+                        cursor: 'pointer',
+                        marginTop: '8px'
+                      }}
+                    >
+                      Run Diligence Assessment
+                    </button>
+                    
+                    <div style={{ marginTop: '24px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '8px' }}>What You'll Get</div>
+                      <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#6b7280', lineHeight: 1.8 }}>
+                        <li>Commercial health score based on observable data</li>
+                        <li>Perception gap analysis (mgmt view vs. external signals)</li>
+                        <li>Sector-specific benchmarking</li>
+                        <li>Value creation opportunity sizing</li>
+                        <li>IC memo-ready export</li>
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Results Header */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: 500, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Diligence Assessment</div>
+                        <div style={{ fontSize: '18px', fontWeight: 700, color: colors.darkNavy }}>TargetCo Industries</div>
+                        <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>DevOps/Infrastructure • ~$12M ARR</div>
+                      </div>
+                      <button 
+                        onClick={() => setDiligenceResults(null)} 
+                        style={{ fontSize: '12px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        ← New Assessment
+                      </button>
+                    </div>
+                    
+                    {/* Score Cards */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '20px' }}>
+                      <div style={{ padding: '14px', backgroundColor: colors.cream, borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '4px' }}>Est. Score</div>
+                        <div style={{ fontSize: '24px', fontWeight: 700, color: colors.navy }}>5.2</div>
+                        <div style={{ fontSize: '10px', color: '#6b7280' }}>38th %ile</div>
+                      </div>
+                      <div style={{ padding: '14px', backgroundColor: '#fef3c7', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#92400e', marginBottom: '4px' }}>Confidence</div>
+                        <div style={{ fontSize: '16px', fontWeight: 700, color: colors.yellow }}>Medium</div>
+                        <div style={{ fontSize: '10px', color: '#92400e' }}>Public data</div>
+                      </div>
+                      <div style={{ padding: '14px', backgroundColor: '#d1fae5', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#065f46', marginBottom: '4px' }}>Potential</div>
+                        <div style={{ fontSize: '16px', fontWeight: 700, color: colors.green }}>HIGH</div>
+                        <div style={{ fontSize: '10px', color: '#065f46' }}>Fixable gaps</div>
+                      </div>
+                    </div>
+                    
+                    {/* Perception Gap */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Perception Gap Analysis</div>
+                      <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '12px' }}>Management Self-Assessment vs. External Observable Data</div>
+                      
+                      {[
+                        { name: 'Value Articulation', mgmt: 7.5, ext: 5.2 },
+                        { name: 'Pricing Architecture', mgmt: 6.0, ext: 4.8 },
+                        { name: 'Competitive Position', mgmt: 7.0, ext: 6.3 },
+                        { name: 'Sales Enablement', mgmt: 5.5, ext: 4.2 },
+                        { name: 'Customer ROI Proof', mgmt: 5.0, ext: 5.5 },
+                      ].map((d, idx) => {
+                        const gap = d.ext - d.mgmt;
+                        const isLargeGap = Math.abs(gap) > 1.5;
+                        return (
+                          <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f3f4f6' }}>
+                            <span style={{ fontSize: '11px', color: colors.darkNavy, width: '120px' }}>{d.name}</span>
+                            <span style={{ fontSize: '11px', color: '#9ca3af', width: '50px', textAlign: 'center' }}>{d.mgmt}</span>
+                            <span style={{ fontSize: '11px', color: colors.darkNavy, width: '50px', textAlign: 'center', fontWeight: 600 }}>{d.ext}</span>
+                            <span style={{ fontSize: '11px', fontWeight: 600, width: '60px', textAlign: 'right', color: isLargeGap ? colors.red : gap < 0 ? colors.yellow : colors.green }}>
+                              {gap > 0 ? '+' : ''}{gap.toFixed(1)} {isLargeGap ? '⚠️' : ''}
+                            </span>
+                          </div>
+                        );
+                      })}
+                      <div style={{ display: 'flex', fontSize: '9px', color: '#9ca3af', marginTop: '8px', justifyContent: 'space-between' }}>
+                        <span></span>
+                        <span style={{ width: '50px', textAlign: 'center' }}>Mgmt</span>
+                        <span style={{ width: '50px', textAlign: 'center' }}>External</span>
+                        <span style={{ width: '60px', textAlign: 'right' }}>Gap</span>
+                      </div>
+                    </div>
+                    
+                    {/* Red Flag */}
+                    <div style={{ 
+                      padding: '12px', 
+                      backgroundColor: '#fef2f2', 
+                      borderRadius: '6px',
+                      borderLeft: `3px solid ${colors.red}`,
+                      marginBottom: '20px'
+                    }}>
+                      <div style={{ fontSize: '11px', color: '#991b1b' }}>
+                        <strong>⚠️ Large perception gap</strong> on Value Articulation (-2.3). This indicates either lack of awareness (fixable) or lack of candor (red flag). Validate in diligence.
+                      </div>
+                    </div>
+                    
+                    {/* Value Creation */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Value Creation Opportunity (3-Year)</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                        <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f9fafb', borderRadius: '6px' }}>
+                          <div style={{ fontSize: '10px', color: '#6b7280' }}>Conservative</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#4b5563' }}>$1.4M</div>
+                        </div>
+                        <div style={{ textAlign: 'center', padding: '12px', backgroundColor: colors.cream, borderRadius: '6px' }}>
+                          <div style={{ fontSize: '10px', color: colors.navy, fontWeight: 500 }}>Realistic</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: colors.navy }}>$2.2M</div>
+                        </div>
+                        <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#d1fae5', borderRadius: '6px' }}>
+                          <div style={{ fontSize: '10px', color: colors.green }}>Optimistic</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: colors.green }}>$3.6M</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '12px' }}>
+                        <strong>Primary lever:</strong> Value Articulation improvement (+$800K)
+                      </div>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button style={{ 
+                        flex: 1,
+                        padding: '10px', 
+                        backgroundColor: colors.navy, 
+                        color: 'white', 
+                        border: 'none', 
+                        borderRadius: '6px', 
+                        fontSize: '12px', 
+                        fontWeight: 600, 
+                        cursor: 'pointer' 
+                      }}>
+                        Export IC Memo
+                      </button>
+                      <button style={{ 
+                        flex: 1,
+                        padding: '10px', 
+                        backgroundColor: '#f3f4f6', 
+                        color: colors.darkNavy, 
+                        border: '1px solid #d1d5db', 
+                        borderRadius: '6px', 
+                        fontSize: '12px', 
+                        fontWeight: 500, 
+                        cursor: 'pointer' 
+                      }}>
+                        Full Report
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
