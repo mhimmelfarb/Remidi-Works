@@ -49,27 +49,15 @@ export default function LandingPage() {
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ 
-            display: 'inline-block',
-            padding: '6px 16px',
-            backgroundColor: 'rgba(238, 108, 77, 0.2)',
-            borderRadius: '20px',
-            marginBottom: '24px'
-          }}>
-           <span style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.5px' }}>
-              FOR MIDDLE MARKET PE FIRMS & PORTFOLIO COMPANIES
-            </span>
-          </div>
-          
           <h1 style={{ 
-            fontSize: '48px', 
-            fontWeight: 800, 
+            fontSize: '44px', 
+            fontWeight: 700, 
             color: '#fff', 
             marginBottom: '24px',
-            lineHeight: 1.1,
-            letterSpacing: '-1px'
+            lineHeight: 1.2,
+            letterSpacing: '-0.5px'
           }}>
-            The fastest, surest path to Commercial Excellence
+            Commercial Excellence shouldn't be <span style={{ fontStyle: 'italic', color: colors.lightBlue }}>"I'll know it when I see it."</span>
           </h1>
           
           <p style={{ 
@@ -78,7 +66,7 @@ export default function LandingPage() {
             marginBottom: '16px',
             lineHeight: 1.6
           }}>
-            Most companies struggle to define what it actually looks like and how to get there without adding cost, complexity, or headcount.
+            B2B companies typically leave 20-30% of revenue on the table due to commercial model gaps in areas like pricing, positioning, and sales enablement. Your metrics show you something's wrong, but not where to focus or how to move the needle.
           </p>
           
           <p style={{ 
@@ -87,11 +75,82 @@ export default function LandingPage() {
             marginBottom: '32px',
             lineHeight: 1.6
           }}>
-            Remidi Works is an expert system powered by real market data that helps investors and 
-            management teams define commercial excellence and get there fast.
+            Remidi Works benchmarks your commercial model against real market data, then shows you exactly where the opportunities are and how to capture them.
           </p>
+        </div>
+      </section>
+
+      {/* What Makes Us Different Section */}
+      <section style={{ 
+        backgroundColor: '#fff', 
+        padding: '60px 24px',
+        borderBottom: '1px solid #e5e7eb'
+      }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h3 style={{ 
+            fontSize: '24px', 
+            fontWeight: 700, 
+            color: colors.darkNavy, 
+            marginBottom: '40px',
+            textAlign: 'center'
+          }}>
+            What Makes Us Different
+          </h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '32px', marginBottom: '16px' }}>📊</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: colors.darkNavy, marginBottom: '8px' }}>
+                Real Market Data
+              </div>
+              <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.6 }}>
+                No more guessing. Benchmarks from 300+ companies show you exactly where you stand and what good looks like.
+              </p>
+            </div>
+            
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '32px', marginBottom: '16px' }}>🎯</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: colors.darkNavy, marginBottom: '8px' }}>
+                Expert-Guided System
+              </div>
+              <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.6 }}>
+                AI does the analysis. Experts validate the findings. Your team builds the muscle.
+              </p>
+            </div>
+            
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '32px', marginBottom: '16px' }}>⚡</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: colors.darkNavy, marginBottom: '8px' }}>
+                Results Without the Overhead
+              </div>
+              <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.6 }}>
+                Actionable insights in weeks, not months. No $200K consulting engagement. No new headcount.
+              </p>
+            </div>
           </div>
-          </section>
+        </div>
+      </section>
+
+      {/* What We Do Section */}
+      <section style={{ 
+        backgroundColor: '#f8fafc', 
+        padding: '60px 24px',
+        borderBottom: '1px solid #e5e7eb'
+      }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
+          <h3 style={{ 
+            fontSize: '24px', 
+            fontWeight: 700, 
+            color: colors.darkNavy, 
+            marginBottom: '16px'
+          }}>
+            What We Do
+          </h3>
+          <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: 1.6 }}>
+            We quantify what's broken, size the opportunity, and guide you through fixing it with peer benchmarks and expert methodology.
+          </p>
+        </div>
+      </section>
 
       {/* Two Paths Section */}
       <section style={{ padding: '80px 24px', maxWidth: '1000px', margin: '0 auto' }}>
@@ -137,7 +196,7 @@ export default function LandingPage() {
             <div style={{ padding: '32px' }}>
               <p style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.7, marginBottom: '24px' }}>
                 See how a marketing leader at a portfolio company uses Remidi Works to diagnose 
-                commercialization gaps and build board-ready deliverables—guided by AI, 
+                commercialization gaps and build board-ready deliverables, guided by AI 
                 with expert support when needed.
               </p>
               
@@ -223,8 +282,8 @@ export default function LandingPage() {
             
             <div style={{ padding: '32px' }}>
               <p style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.7, marginBottom: '24px' }}>
-                See how investors use Remidi Works to monitor Revenue Model Health across their 
-                entire portfolio—identifying which companies need attention and drilling into 
+                See how investors use Remidi Works to monitor commercial health across their 
+                entire portfolio, identifying which companies need attention and drilling into 
                 improvement opportunities.
               </p>
               
@@ -234,7 +293,7 @@ export default function LandingPage() {
                 </div>
                 <ul style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.8, paddingLeft: '20px' }}>
                   <li>Portfolio-wide health scores from public data</li>
-                  <li>Company ranking vs. 100-company universe</li>
+                  <li>Company ranking vs. 300+ company benchmark</li>
                   <li>Top improvement priorities per underperformer</li>
                   <li>Drill-down to company diagnostic workflow</li>
                 </ul>
@@ -387,7 +446,6 @@ export default function LandingPage() {
                   <li>Buyer Journey Mapping</li>
                   <li>Qualification Framework</li>
                   <li>Competitive Intelligence System</li>
-                  <li>GTM Roles & Coverage Model</li>
                 </ul>
               </div>
             </div>
@@ -515,38 +573,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section style={{ 
-        backgroundColor: '#fff', 
-        padding: '60px 24px',
-        borderTop: '1px solid #e5e7eb'
-      }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '24px', fontWeight: 700, color: colors.darkNavy, marginBottom: '16px' }}>
-            Why Remidi Works?
-          </h3>
-          <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
-            Our research shows B2B companies leave 20-30% of potential revenue 
-            on the table due to commercialization gaps.
-          </p>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px' }}>
-            <div>
-              <div style={{ fontSize: '32px', fontWeight: 800, color: colors.coral, marginBottom: '8px' }}>20-30%</div>
-              <div style={{ fontSize: '14px', color: '#6b7280' }}>Revenue recovery opportunity identified in typical engagement</div>
-            </div>
-            <div>
-              <div style={{ fontSize: '32px', fontWeight: 800, color: colors.navy, marginBottom: '8px' }}>2 Weeks</div>
-              <div style={{ fontSize: '14px', color: '#6b7280' }}>Time to actionable recommendations vs. 3-6 months traditional</div>
-            </div>
-            <div>
-              <div style={{ fontSize: '32px', fontWeight: 800, color: colors.coral, marginBottom: '8px' }}>100+</div>
-              <div style={{ fontSize: '14px', color: '#6b7280' }}>B2B tech companies in our benchmark database</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer style={{ 
         backgroundColor: colors.darkNavy, 
@@ -574,7 +600,7 @@ export default function LandingPage() {
             The fastest, surest path to Commercial Excellence for growth-stage B2B companies
           </p>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '16px' }}>
-            © 2025 HG Partners. Demo for concept testing purposes.
+            © 2026 HG Partners. Demo for concept testing purposes.
           </p>
         </div>
       </footer>
