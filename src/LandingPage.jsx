@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const colors = {
   navy: '#3D5A80',
@@ -71,7 +70,8 @@ export default function LandingPage() {
           
           <p style={{ 
             fontSize: '20px', 
-            color: colors.lightBlue,
+            color: '#fff',
+            fontWeight: 700,
             marginBottom: '32px',
             lineHeight: 1.6
           }}>
@@ -137,18 +137,38 @@ export default function LandingPage() {
         padding: '60px 24px',
         borderBottom: '1px solid #e5e7eb'
       }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
-          <h3 style={{ 
-            fontSize: '24px', 
-            fontWeight: 700, 
-            color: colors.darkNavy, 
-            marginBottom: '16px'
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h3 style={{ 
+              fontSize: '24px', 
+              fontWeight: 700, 
+              color: colors.darkNavy, 
+              marginBottom: '16px'
+            }}>
+              What We Do
+            </h3>
+            <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: 1.6, maxWidth: '700px', margin: '0 auto' }}>
+              We quantify what's broken, size the opportunity, and guide you through fixing it with peer benchmarks and expert methodology.
+            </p>
+          </div>
+          
+          <div style={{ 
+            backgroundColor: '#fff',
+            borderRadius: '12px',
+            padding: '24px',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+            border: '1px solid #e5e7eb'
           }}>
-            What We Do
-          </h3>
-          <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: 1.6 }}>
-            We quantify what's broken, size the opportunity, and guide you through fixing it with peer benchmarks and expert methodology.
-          </p>
+            <img 
+              src="/portfolio-dashboard.png" 
+              alt="Remidi Works Portfolio Dashboard showing commercial health scores across portfolio companies"
+              style={{ 
+                width: '100%', 
+                height: 'auto',
+                borderRadius: '8px'
+              }}
+            />
+          </div>
         </div>
       </section>
 
@@ -213,18 +233,29 @@ export default function LandingPage() {
               </div>
               
               <div style={{ 
-                padding: '16px',
                 backgroundColor: '#f8fafc',
                 borderRadius: '8px',
+                padding: '16px',
                 marginBottom: '24px'
               }}>
-                <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Demo Company</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy }}>
-                  FleetOps • Logistics Tech • Series A
-                </div>
+                <img 
+                  src="/portfolio-company-view.png" 
+                  alt="Portfolio company diagnostic view showing dimension scores and improvement priorities"
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto',
+                    borderRadius: '4px',
+                    border: '1px solid #e5e7eb'
+                  }}
+                />
               </div>
               
-              <Link to="/user" style={{ textDecoration: 'none' }}>
+              <a 
+                href="https://hg-partners-45784330.hubspotpagebuilder.com/-temporary-slug-7849a973-8e5e-49c0-ba54-09fbbac11513?hs_preview=IrHJGQuF-204846823727"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
                 <button style={{
                   width: '100%',
                   padding: '16px 24px',
@@ -240,10 +271,10 @@ export default function LandingPage() {
                   justifyContent: 'center',
                   gap: '8px',
                 }}>
-                  Explore Portfolio Company Demo
+                  Get a Company Snapshot
                   <span style={{ fontSize: '18px' }}>→</span>
                 </button>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -299,19 +330,12 @@ export default function LandingPage() {
                 </ul>
               </div>
               
-              <div style={{ 
-                padding: '16px',
-                backgroundColor: '#f8fafc',
-                borderRadius: '8px',
-                marginBottom: '24px'
-              }}>
-                <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Demo Fund</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: colors.darkNavy }}>
-                  Apex Growth Partners II • 10 Portfolio Companies
-                </div>
-              </div>
-              
-              <Link to="/investor" style={{ textDecoration: 'none' }}>
+              <a 
+                href="https://hg-partners-45784330.hubspotpagebuilder.com/-temporary-slug-7849a973-8e5e-49c0-ba54-09fbbac11513?hs_preview=IrHJGQuF-204846823727"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
                 <button style={{
                   width: '100%',
                   padding: '16px 24px',
@@ -327,12 +351,65 @@ export default function LandingPage() {
                   justifyContent: 'center',
                   gap: '8px',
                 }}>
-                  Explore Investor Demo
+                  Get a Portfolio Snapshot
                   <span style={{ fontSize: '18px' }}>→</span>
                 </button>
-              </Link>
+              </a>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section style={{ 
+        backgroundColor: colors.cream,
+        padding: '80px 24px',
+        borderTop: `4px solid ${colors.coral}`,
+        borderBottom: `4px solid ${colors.coral}`
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ 
+            fontSize: '36px', 
+            fontWeight: 700, 
+            color: colors.darkNavy, 
+            marginBottom: '20px',
+            lineHeight: 1.2
+          }}>
+            Get Your Portfolio Snapshot Free
+          </h2>
+          
+          <p style={{ 
+            fontSize: '18px', 
+            color: '#4b5563', 
+            marginBottom: '40px',
+            lineHeight: 1.6,
+            maxWidth: '600px',
+            margin: '0 auto 40px'
+          }}>
+            Send us your portfolio company list. We'll analyze their commercial health and send you the results — no cost, no commitment.
+          </p>
+          
+          <a 
+            href="https://hg-partners-45784330.hubspotpagebuilder.com/-temporary-slug-7849a973-8e5e-49c0-ba54-09fbbac11513?hs_preview=IrHJGQuF-204846823727"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <button style={{
+              padding: '18px 36px',
+              backgroundColor: colors.coral,
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(238, 108, 77, 0.3)',
+              transition: 'all 0.2s'
+            }}>
+              Get Started Free
+            </button>
+          </a>
         </div>
       </section>
 
@@ -345,10 +422,10 @@ export default function LandingPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h3 style={{ fontSize: '28px', fontWeight: 700, color: colors.darkNavy, marginBottom: '12px' }}>
-              Remidi Works Unlocks Commercial Model Excellence
+              Achieve Fast, Measurable Growth
             </h3>
             <p style={{ fontSize: '16px', color: '#6b7280' }}>
-              Data, tools and expertise so your team can deliver with confidence
+              Data-driven commercial strategy and enablement that empowers your teams to execute with confidence
             </p>
           </div>
           
