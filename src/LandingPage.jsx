@@ -565,6 +565,24 @@ export default function LandingPage() {
                 </ul>
               </div>
               
+              <div style={{ 
+                backgroundColor: '#f8fafc',
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '24px'
+              }}>
+                <img 
+                  src="/portfolio-dashboard.png" 
+                  alt="Investor portfolio dashboard showing company rankings and health scores"
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto',
+                    borderRadius: '4px',
+                    border: '1px solid #e5e7eb'
+                  }}
+                />
+              </div>
+              
               <a 
                 href="https://hg-partners-45784330.hubspotpagebuilder.com/-temporary-slug-7849a973-8e5e-49c0-ba54-09fbbac11513?hs_preview=IrHJGQuF-204846823727"
                 target="_blank"
