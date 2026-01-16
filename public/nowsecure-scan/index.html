@@ -30,7 +30,7 @@
             page-break-after: auto;
         }
 
-        /* PAGE 1: DASHBOARD */
+        /* HEADER */
         .header {
             background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
             color: white;
@@ -70,6 +70,7 @@
             opacity: 0.9;
         }
 
+        /* DASHBOARD */
         .dashboard-container {
             padding: 40px;
         }
@@ -128,6 +129,7 @@
             gap: 8px;
         }
 
+        /* DIMENSION CARDS */
         .dimension-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -142,6 +144,11 @@
             padding: 25px;
             position: relative;
             overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .dimension-card:hover {
+            border-color: #cbd5e1;
         }
 
         .dimension-header {
@@ -187,19 +194,138 @@
             margin-bottom: 12px;
         }
 
-        .confidence-link {
+        /* CONFIDENCE TOGGLE */
+        .confidence-toggle {
             color: #3b82f6;
-            text-decoration: none;
+            background: none;
+            border: none;
             font-size: 0.85em;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            transition: all 0.2s;
         }
 
-        .confidence-link:hover {
+        .confidence-toggle:hover {
             text-decoration: underline;
+            color: #2563eb;
         }
 
+        .confidence-toggle .arrow {
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .confidence-toggle.expanded .arrow {
+            transform: rotate(90deg);
+        }
+
+        /* CONFIDENCE BASIS CONTENT */
+        .confidence-basis {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-top: 0;
+        }
+
+        .confidence-basis.expanded {
+            max-height: 600px;
+            margin-top: 15px;
+        }
+
+        .confidence-header {
+            background: #1e293b;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .confidence-level {
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .confidence-score {
+            font-size: 1.8em;
+            font-weight: 900;
+        }
+
+        .confidence-score span {
+            font-size: 0.5em;
+            opacity: 0.7;
+        }
+
+        .confidence-section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 0;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .confidence-section:last-of-type {
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 10px;
+        }
+
+        .confidence-title {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .confidence-item {
+            font-size: 0.85em;
+            color: #1e293b;
+            padding: 4px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .confidence-item.has {
+            color: #047857;
+        }
+
+        .confidence-item.unknown {
+            color: #7f1d1d;
+        }
+
+        .confidence-item .icon {
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+
+        .improvement-note {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.85em;
+            color: #047857;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .improvement-note .impact {
+            display: block;
+            margin-top: 5px;
+            font-weight: 400;
+            color: #065f46;
+        }
+
+        /* CRITICAL GAP */
         .critical-gap {
             background: #fef2f2;
             border: 2px solid #fca5a5;
@@ -240,6 +366,7 @@
             line-height: 1.6;
         }
 
+        /* EXPERT KICKOFF */
         .expert-kickoff {
             background: #1e293b;
             color: white;
@@ -288,322 +415,21 @@
             cursor: pointer;
             white-space: nowrap;
             transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .kickoff-button:hover {
             background: #ea580c;
         }
 
-        /* PAGE 2: KEY FINDINGS */
-        .findings-page {
-            padding: 40px;
-        }
-
-        .page-title {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #1e293b;
-        }
-
-        .page-subtitle {
-            color: #64748b;
-            margin-bottom: 40px;
-            font-size: 0.95em;
-        }
-
-        .finding-card {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .finding-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .finding-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .priority-badge {
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .priority-high {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .priority-medium {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .finding-score {
-            font-size: 0.9em;
-            color: #64748b;
-            margin-bottom: 15px;
-        }
-
-        .finding-impact {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .finding-impact-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .finding-impact-text {
-            color: #1e293b;
-            line-height: 1.6;
-        }
-
-        .finding-direction {
-            background: #ecfdf5;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #10b981;
-        }
-
-        .finding-direction-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            color: #047857;
-            font-weight: 600;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .finding-direction-text {
-            color: #065f46;
-            line-height: 1.6;
-        }
-
-        .unlock-note {
-            background: #fffbeb;
-            border: 2px solid #fde047;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #713f12;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* PAGE 3: NEXT STEPS */
-        .next-steps-page {
-            padding: 40px;
-        }
-
-        .platform-intro {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .platform-intro h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-
-        .platform-intro p {
-            font-size: 1.1em;
-            opacity: 0.95;
-            line-height: 1.7;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .journey-steps {
-            margin-bottom: 40px;
-        }
-
-        .step-card {
-            display: flex;
-            gap: 25px;
-            margin-bottom: 30px;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            background: #f97316;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: 900;
-            flex-shrink: 0;
-        }
-
-        .step-content {
-            flex: 1;
-        }
-
-        .step-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-
-        .step-duration {
-            font-size: 0.85em;
-            color: #64748b;
-            margin-bottom: 10px;
-        }
-
-        .step-description {
-            color: #475569;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .step-deliverables {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #f97316;
-        }
-
-        .step-deliverables-title {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .step-deliverables ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .step-deliverables li {
-            padding: 4px 0 4px 20px;
-            position: relative;
-            color: #475569;
-            font-size: 0.9em;
-        }
-
-        .step-deliverables li:before {
-            content: "\2713";
-            position: absolute;
-            left: 0;
-            color: #f97316;
-            font-weight: bold;
-        }
-
-        .cta-section {
-            background: #1e293b;
-            color: white;
-            padding: 40px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .cta-section h3 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-
-        .cta-section p {
-            font-size: 1.05em;
-            opacity: 0.9;
-            margin-bottom: 25px;
-            line-height: 1.7;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-button-primary {
-            background: #f97316;
-            color: white;
-            padding: 15px 35px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.05em;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-
-        .cta-button-primary:hover {
-            background: #ea580c;
-        }
-
-        .cta-button-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            padding: 15px 35px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.05em;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-
-        .cta-button-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .footer {
-            margin-top: 40px;
-            padding: 25px;
-            text-align: center;
-            color: #64748b;
-            font-size: 0.85em;
-            border-top: 1px solid #e2e8f0;
-        }
-
         @media print {
-            body {
-                background: white;
+            .confidence-toggle {
+                display: none;
             }
-            .page {
-                box-shadow: none;
-                page-break-after: always;
+            .confidence-basis {
+                max-height: none !important;
+                margin-top: 15px !important;
             }
         }
 
@@ -618,9 +444,6 @@
             .expert-kickoff {
                 flex-direction: column;
                 text-align: center;
-            }
-            .step-card {
-                flex-direction: column;
             }
         }
     </style>
@@ -651,6 +474,7 @@
             </div>
 
             <div class="dimension-grid">
+                <!-- VALUE ARTICULATION -->
                 <div class="dimension-card">
                     <div class="dimension-header">
                         <div class="dimension-name">Value Articulation</div>
@@ -658,9 +482,53 @@
                     </div>
                     <div class="dimension-score score-medium">48<span style="font-size: 0.4em; opacity: 0.5;">/100</span></div>
                     <div class="dimension-meta">Peer: 5.2 | Top 25%: 7.1</div>
-                    <a href="#" class="confidence-link">▶ See confidence basis</a>
+                    <button class="confidence-toggle" onclick="toggleConfidence(this)">
+                        <span class="arrow">▶</span>
+                        <span>See confidence basis</span>
+                    </button>
+                    <div class="confidence-basis">
+                        <div class="confidence-header">
+                            <div class="confidence-level">Data Confidence</div>
+                            <div class="confidence-score">6<span>/10</span></div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Based on:</div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Website messaging analysis (homepage, product pages, case studies)</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>No published ROI claims or quantified customer outcomes</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Competitor value prop comparison (Veracode, Checkmarx, Synopsys)</span>
+                            </div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Need from you (kickoff call):</div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Win/loss interview results from last 6 months</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Sample of 10 sales call recordings (discovery + demo)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Customer advisory board feedback on value messaging</span>
+                            </div>
+                        </div>
+                        <div class="improvement-note">
+                            Score increases to 5.8-6.4 with 5+ quantified customer ROI examples in case studies.
+                            <span class="impact">Each point typically represents $1.5-2.5M in revenue impact based on similar company profiles.</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- PRICING ARCHITECTURE -->
                 <div class="dimension-card">
                     <div class="dimension-header">
                         <div class="dimension-name">Pricing Architecture</div>
@@ -668,9 +536,53 @@
                     </div>
                     <div class="dimension-score score-low">28<span style="font-size: 0.4em; opacity: 0.5;">/100</span></div>
                     <div class="dimension-meta">Peer: 4.8 | Top 25%: 7.8</div>
-                    <a href="#" class="confidence-link">▶ See confidence basis</a>
+                    <button class="confidence-toggle" onclick="toggleConfidence(this)">
+                        <span class="arrow">▶</span>
+                        <span>See confidence basis</span>
+                    </button>
+                    <div class="confidence-basis">
+                        <div class="confidence-header">
+                            <div class="confidence-level">Data Confidence</div>
+                            <div class="confidence-score">4<span>/10</span></div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Based on:</div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Pricing page review (no public pricing published)</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Vendr pricing intelligence data (per-app pricing confirmed)</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>G2 reviews mentioning pricing friction and expansion concerns</span>
+                            </div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Need from you (kickoff call):</div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Current price list: tier structure, per-app pricing, enterprise model</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Last 12 months: pricing realization rate (list vs. actual paid)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Expansion revenue by customer cohort (Year 1, Year 2, Year 3+)</span>
+                            </div>
+                        </div>
+                        <div class="improvement-note">
+                            Score increases to 4.5-5.2 with pricing transparency. If per-app model confirmed, 30-40% of revenue at risk.
+                            <span class="impact">Enterprise licensing typically unlocks $8-15M ARR range for similar-sized companies, pending internal data validation.</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- COMPETITIVE POSITIONING -->
                 <div class="dimension-card">
                     <div class="dimension-header">
                         <div class="dimension-name">Competitive Positioning</div>
@@ -678,9 +590,53 @@
                     </div>
                     <div class="dimension-score score-medium">58<span style="font-size: 0.4em; opacity: 0.5;">/100</span></div>
                     <div class="dimension-meta">Peer: 5.5 | Top 25%: 7.8</div>
-                    <a href="#" class="confidence-link">▶ See confidence basis</a>
+                    <button class="confidence-toggle" onclick="toggleConfidence(this)">
+                        <span class="arrow">▶</span>
+                        <span>See confidence basis</span>
+                    </button>
+                    <div class="confidence-basis">
+                        <div class="confidence-header">
+                            <div class="confidence-level">Data Confidence</div>
+                            <div class="confidence-score">7<span>/10</span></div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Based on:</div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Website competitive positioning and differentiation claims</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>G2 competitive comparison grid (vs. Veracode, Checkmarx, Synopsys)</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Government certification moat analysis (NIAP, NIST, FISMA compliance)</span>
+                            </div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Need from you (kickoff call):</div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Win/loss data by competitor for last 12 months (Veracode, Checkmarx, etc.)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Sales battle card usage data from CRM (which objections appear most)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Competitive displacement rate (stealing customers from Veracode/Checkmarx)</span>
+                            </div>
+                        </div>
+                        <div class="improvement-note">
+                            Score increases to 6.5-7.1 with win/loss data showing messaging effectiveness vs. key competitors.
+                            <span class="impact">Enhanced battle cards typically improve win rates 10-20% in competitive deals based on peer benchmarks.</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- SALES ENABLEMENT -->
                 <div class="dimension-card">
                     <div class="dimension-header">
                         <div class="dimension-name">Sales Enablement</div>
@@ -688,9 +644,53 @@
                     </div>
                     <div class="dimension-score score-low">35<span style="font-size: 0.4em; opacity: 0.5;">/100</span></div>
                     <div class="dimension-meta">Peer: 5.8 | Top 25%: 7.5</div>
-                    <a href="#" class="confidence-link">▶ See confidence basis</a>
+                    <button class="confidence-toggle" onclick="toggleConfidence(this)">
+                        <span class="arrow">▶</span>
+                        <span>See confidence basis</span>
+                    </button>
+                    <div class="confidence-basis">
+                        <div class="confidence-header">
+                            <div class="confidence-level">Data Confidence</div>
+                            <div class="confidence-score">5<span>/10</span></div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Based on:</div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Buyer self-service tool availability (no ROI calculator, no pricing guide)</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Case study audit: 8 found, none with quantified ROI or CFO-ready metrics</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Pricing transparency assessment (full opacity = qualification friction)</span>
+                            </div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Need from you (kickoff call):</div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Sales cycle length: median days and 90th percentile (target: <90 days)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Lead-to-opportunity conversion rate (MQL → SQL conversion %)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Number of touches required to close (email, calls, demos per won deal)</span>
+                            </div>
+                        </div>
+                        <div class="improvement-note">
+                            Score increases to 5.0-5.8 with CRM data showing buyer journey friction points.
+                            <span class="impact">Pricing transparency typically adds $3-6M ARR range by reducing qualification cycles, pending CRM validation.</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- CUSTOMER ROI PROOF -->
                 <div class="dimension-card">
                     <div class="dimension-header">
                         <div class="dimension-name">Customer ROI Proof</div>
@@ -698,7 +698,50 @@
                     </div>
                     <div class="dimension-score score-low">38<span style="font-size: 0.4em; opacity: 0.5;">/100</span></div>
                     <div class="dimension-meta">Peer: 6.1 | Top 25%: 8.2</div>
-                    <a href="#" class="confidence-link">▶ See confidence basis</a>
+                    <button class="confidence-toggle" onclick="toggleConfidence(this)">
+                        <span class="arrow">▶</span>
+                        <span>See confidence basis</span>
+                    </button>
+                    <div class="confidence-basis">
+                        <div class="confidence-header">
+                            <div class="confidence-level">Data Confidence</div>
+                            <div class="confidence-score">5<span>/10</span></div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Based on:</div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Published case studies: 8 found, testimonials lack quantified outcomes</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>G2 review analysis: few reviews mention specific ROI or cost savings</span>
+                            </div>
+                            <div class="confidence-item has">
+                                <span class="icon">✓</span>
+                                <span>Customer testimonial analysis: qualitative praise, no numbers</span>
+                            </div>
+                        </div>
+                        <div class="confidence-section">
+                            <div class="confidence-title">Need from you (kickoff call):</div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Net Revenue Retention (NRR) for last 12 months (target: >115%)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Gross Revenue Retention (GRR) - customer churn rate (target: >90%)</span>
+                            </div>
+                            <div class="confidence-item unknown">
+                                <span class="icon">?</span>
+                                <span>Logo retention by cohort: Year 1, Year 2, Year 3+ survival rates</span>
+                            </div>
+                        </div>
+                        <div class="improvement-note">
+                            Score increases to 5.5-6.3 with retention metrics showing value delivery.
+                            <span class="impact">NRR >115% typically validates strong value delivery. NRR <100% indicates value realization gaps requiring investigation.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -708,7 +751,7 @@
                         <span>🔴</span>
                         <span>High-Priority Gap Detected</span>
                     </div>
-                    <span class="index-badge">™ CFO-Ready Index™</span>
+                    <span class="index-badge">CFO-Ready Index™</span>
                 </div>
                 <div class="critical-gap-content">
                     Your case studies score <strong>2/10</strong> on the CFO-Ready Index™. For $100-200K deals with CFO sign-off, benchmark is 7+. This gap is likely costing <strong>15-25% of winnable deals</strong>.
@@ -724,235 +767,14 @@
                         These scores are based on <strong>public data only</strong>. A kickoff call will calibrate them with information only you can provide — dramatically improving accuracy.
                     </div>
                 </div>
-                <button class="kickoff-button">Schedule Kickoff →</button>
+                <a href="/cdn-cgi/l/email-protection#4924202a21282c2509212e39283b3d272c3b3a672a2624763a3c2b232c2a3d7407263e1a2c2a3c3b2c6c7b790c31392c3b3d6c7b7902202a22262f2f6c7b791b2c383c2c3a3d" class="kickoff-button">
+                    Schedule Kickoff →
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- PAGE 2: KEY FINDINGS -->
-    <div class="page">
-        <div class="findings-page">
-            <h1 class="page-title">Key Findings</h1>
-            <p class="page-subtitle">High-level analysis based on public data • Full diagnostic available after expert kickoff</p>
-
-            <div class="finding-card">
-                <div class="finding-header">
-                    <div class="finding-title">
-                        <span>💰</span>
-                        <span>Pricing Architecture</span>
-                    </div>
-                    <span class="priority-badge priority-high">HIGH PRIORITY</span>
-                </div>
-                <div class="finding-score">Score: 28/100 • Weight: 30% • Impact: Significant revenue opportunity</div>
-
-                <div class="finding-impact">
-                    <div class="finding-impact-label">What We Observed</div>
-                    <div class="finding-impact-text">
-                        Per-app pricing model with support tier requirements creates expansion friction. Public pricing data shows inconsistent discounting patterns (5-70% range) and buyer forum discussions about descoping strategies. This structure may be limiting product-led growth and expansion revenue potential.
-                    </div>
-                </div>
-
-                <div class="finding-direction">
-                    <div class="finding-direction-label">Strategic Direction</div>
-                    <div class="finding-direction-text">
-                        Consider transitioning to value-aligned pricing models (usage-based, outcome-based, or platform licensing) that encourage rather than penalize customer growth. Industry benchmarks suggest tiered enterprise licensing can improve Net Revenue Retention by 20-30 percentage points.
-                    </div>
-                </div>
-
-                <div class="unlock-note">
-                    <span>🔒</span>
-                    <span><strong>Unlock full diagnostic:</strong> Expert kickoff will reveal specific pricing tier recommendations, competitive pricing analysis, and ROI-justified implementation roadmap.</span>
-                </div>
-            </div>
-
-            <div class="finding-card">
-                <div class="finding-header">
-                    <div class="finding-title">
-                        <span>📊</span>
-                        <span>Value Articulation</span>
-                    </div>
-                    <span class="priority-badge priority-medium">MEDIUM PRIORITY</span>
-                </div>
-                <div class="finding-score">Score: 48/100 • Weight: 25% • Impact: Sales cycle efficiency</div>
-
-                <div class="finding-impact">
-                    <div class="finding-impact-label">What We Observed</div>
-                    <div class="finding-impact-text">
-                        Homepage messaging splits between mission-driven positioning ("Save the world from unsafe apps"), feature-focused differentiation (SAST+DAST+IAST+APISec), and outcome-based value (MARM). CFO-ready business case materials are limited - case studies lack quantified ROI metrics and attribution.
-                    </div>
-                </div>
-
-                <div class="finding-direction">
-                    <div class="finding-direction-label">Strategic Direction</div>
-                    <div class="finding-direction-text">
-                        Consolidate around single value narrative optimized for economic buyer engagement. Develop CFO-ready collateral including ROI calculators, TCO models, and quantified case studies. Industry best practice: Lead with cost-of-inaction (average breach: $3.86M) vs. cost-of-solution positioning.
-                    </div>
-                </div>
-
-                <div class="unlock-note">
-                    <span>🔒</span>
-                    <span><strong>Unlock full diagnostic:</strong> Receive specific messaging architecture, competitive positioning framework, and buyer journey optimization recommendations.</span>
-                </div>
-            </div>
-
-            <div class="finding-card">
-                <div class="finding-header">
-                    <div class="finding-title">
-                        <span>🎯</span>
-                        <span>Sales Enablement</span>
-                    </div>
-                    <span class="priority-badge priority-high">HIGH PRIORITY</span>
-                </div>
-                <div class="finding-score">Score: 35/100 • Weight: 15% • Impact: Pipeline velocity and conversion</div>
-
-                <div class="finding-impact">
-                    <div class="finding-impact-label">What We Observed</div>
-                    <div class="finding-impact-text">
-                        Limited buyer self-service tools visible (no public ROI calculator, no pricing guidance, no evaluation frameworks). Case studies lack quantified outcomes with customer attribution. Pricing opacity creates qualification friction based on buyer forum feedback.
-                    </div>
-                </div>
-
-                <div class="finding-direction">
-                    <div class="finding-direction-label">Strategic Direction</div>
-                    <div class="finding-direction-text">
-                        Build self-service buyer enablement journey: Maturity assessment (lead gen) → ROI calculator (qualification) → Evaluation guide (positioning) → Pricing framework (transparency). Industry data: Transparent pricing can increase qualified pipeline by 30-40% while filtering unqualified prospects.
-                    </div>
-                </div>
-
-                <div class="unlock-note">
-                    <span>🔒</span>
-                    <span><strong>Unlock full diagnostic:</strong> Access buyer enablement toolkit templates, competitive battle card frameworks, and objection handling playbooks.</span>
-                </div>
-            </div>
-
-            <div class="finding-card">
-                <div class="finding-header">
-                    <div class="finding-title">
-                        <span>💪</span>
-                        <span>Competitive Strength: Undersold Moat</span>
-                    </div>
-                    <span class="priority-badge priority-medium">OPPORTUNITY</span>
-                </div>
-                <div class="finding-score">Score: 58/100 • Weight: 20% • Opportunity: Defensive positioning</div>
-
-                <div class="finding-impact">
-                    <div class="finding-impact-label">What We Observed</div>
-                    <div class="finding-impact-text">
-                        Legitimate differentiation exists but is undersold: Mobile-first architecture (15 years), 600+ mobile-specific tests vs. competitors' 50-100, OWASP MASVS co-development, government certifications (NIAP, NIST, FISMA), nuclear customer logos (DOJ, DOD, Capital One, Citigroup). Category creation opportunity (MARM) initiated but not fully leveraged.
-                    </div>
-                </div>
-
-                <div class="finding-direction">
-                    <div class="finding-direction-label">Strategic Direction</div>
-                    <div class="finding-direction-text">
-                        Shift from defensive positioning ("we're better") to offensive category ownership ("we invented MARM, competitors retrofitted mobile onto web tools"). Weaponize government certification moat and customer logos more aggressively in competitive situations. Consider MARM maturity assessment tool as lead generation mechanism.
-                    </div>
-                </div>
-
-                <div class="unlock-note">
-                    <span>🔒</span>
-                    <span><strong>Unlock full diagnostic:</strong> Receive competitive intelligence database, win/loss pattern analysis, and category positioning playbook.</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAGE 3: NEXT STEPS -->
-    <div class="page">
-        <div class="next-steps-page">
-            <div class="platform-intro">
-                <h2>How Remidi Works Helps</h2>
-                <p>
-                    This rapid scan shows the opportunities. The Remidi Works platform shows you exactly how to capture them—with peer benchmarks, implementation roadmaps, and measurement dashboards that turn insights into revenue.
-                </p>
-            </div>
-
-            <h2 class="page-title">Your Journey with Remidi Works</h2>
-
-            <div class="journey-steps">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <div class="step-title">Expert Kickoff Call</div>
-                        <div class="step-duration">30 minutes • Complimentary</div>
-                        <div class="step-description">
-                            Calibrate public data analysis with internal insights you can provide. Review dimension scores, validate findings, and prioritize opportunities based on your strategic goals and current initiatives.
-                        </div>
-                        <div class="step-deliverables">
-                            <div class="step-deliverables-title">What You'll Get</div>
-                            <ul>
-                                <li>Calibrated Commercial Maturity Score with confidence intervals</li>
-                                <li>Prioritized opportunity list ranked by impact and effort</li>
-                                <li>Recommended diagnostic scope for deep-dive analysis</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <div class="step-title">Full Commercial Diagnostic</div>
-                        <div class="step-duration">2 weeks • Pilot program available</div>
-                        <div class="step-description">
-                            Complete analysis with internal data integration, peer benchmarking from anonymized portfolio company database (50+ B2B SaaS companies), and detailed implementation roadmap with ROI projections for each initiative.
-                        </div>
-                        <div class="step-deliverables">
-                            <div class="step-deliverables-title">What You'll Get</div>
-                            <ul>
-                                <li>Detailed findings with evidence, impact analysis, and specific recommendations</li>
-                                <li>Peer benchmark data: pricing, retention, win rates, sales efficiency metrics</li>
-                                <li>Implementation playbook with 30/60/90-day quick wins and strategic initiatives</li>
-                                <li>ROI model showing expected impact by dimension and initiative</li>
-                                <li>Access to Remidi Works platform for ongoing measurement</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <div class="step-title">Ongoing Platform Access</div>
-                        <div class="step-duration">Quarterly updates • Continuous benchmarking</div>
-                        <div class="step-description">
-                            Remidi Works platform provides continuous commercial health tracking, updated peer benchmarks as portfolio grows, and AI-powered recommendations as your metrics evolve. Access expert advisory on implementation as needed.
-                        </div>
-                        <div class="step-deliverables">
-                            <div class="step-deliverables-title">What You'll Get</div>
-                            <ul>
-                                <li>Real-time dashboard tracking commercial health metrics</li>
-                                <li>Quarterly benchmark updates with portfolio company additions</li>
-                                <li>AI Coach recommendations based on metric changes</li>
-                                <li>Expert advisory hours for implementation guidance</li>
-                                <li>Collaborative workspace for initiative tracking and documentation</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cta-section">
-                <h3>Ready to Unlock the Full Diagnostic?</h3>
-                <p>
-                    Schedule a 30-minute expert kickoff to calibrate these scores with internal data, validate findings, and map out the highest-impact opportunities for your business.
-                </p>
-                <div class="cta-buttons">
-                    <a href="mailto:michael@hgpartners.com?subject=NowSecure%20Expert%20Kickoff%20Request" class="cta-button-primary">
-                        Schedule Expert Kickoff
-                    </a>
-                    <a href="#" class="cta-button-secondary">
-                        Learn More About Platform
-                    </a>
-                </div>
-            </div>
-
-            <div class="footer">
-                <p><strong>Remidi Works</strong> • Commercial Excellence Platform for B2B SaaS</p>
-                <p>This rapid scan was generated using proprietary Commercial Health Scoring Model™</p>
-                <p>© 2026 HG Partners. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        function toggleConfidence(button) {
+            const card = button.closest('.dimension-card');
+            const
