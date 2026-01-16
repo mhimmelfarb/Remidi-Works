@@ -775,6 +775,13 @@
     </div>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        function toggleConfidence(button) {
-            const card = button.closest('.dimension-card');
-            const
+    function toggleConfidence(button) {
+        const card = button.closest('.dimension-card');
+        const basis = card.querySelector('.confidence-basis');
+
+        button.classList.toggle('expanded');
+        basis.classList.toggle('expanded');
+    }
+</script>
+</body>
+</html>
