@@ -126,39 +126,70 @@ export default function LandingPage() {
 
       {/* ================= REALITY SECTION ================= */}
       <section style={{ backgroundColor: "#fff", padding: "72px 24px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <h2
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div
             style={{
-              fontSize: 28,
-              fontWeight: 800,
-              color: colors.darkNavy,
-              marginBottom: 20,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 48,
+              alignItems: "center",
             }}
           >
-            Knowing the numbers is not the problem
-          </h2>
+            <div>
+              <h2
+                style={{
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: colors.darkNavy,
+                  marginBottom: 20,
+                }}
+              >
+                Knowing the numbers is not the problem
+              </h2>
 
-          <p style={{ fontSize: 16, lineHeight: 1.7, color: "#475569" }}>
-            Investors and operators can read topline growth, retention, and
-            pipeline metrics. What is harder is understanding what is driving
-            those outcomes and deciding where to focus limited time and
-            resources.
-          </p>
+              <p style={{ fontSize: 16, lineHeight: 1.7, color: "#475569" }}>
+                Investors and operators can read topline growth, retention, and
+                pipeline metrics. What is harder is understanding what is driving
+                those outcomes and deciding where to focus limited time and
+                resources.
+              </p>
 
-          <ul
-            style={{
-              marginTop: 24,
-              paddingLeft: 20,
-              fontSize: 16,
-              lineHeight: 1.9,
-              color: "#475569",
-            }}
-          >
-            <li>Which gaps actually matter</li>
-            <li>Which opportunities are real versus theoretical</li>
-            <li>What teams can realistically execute</li>
-            <li>What to fix first without endless debate</li>
-          </ul>
+              <ul
+                style={{
+                  marginTop: 24,
+                  paddingLeft: 20,
+                  fontSize: 16,
+                  lineHeight: 1.9,
+                  color: "#475569",
+                }}
+              >
+                <li>Which gaps actually matter</li>
+                <li>Which opportunities are real versus theoretical</li>
+                <li>What teams can realistically execute</li>
+                <li>What to fix first without endless debate</li>
+              </ul>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: "#f8fafc",
+                borderRadius: 16,
+                padding: 16,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+              }}
+            >
+              <img
+                src="/portfolio-dashboard.png"
+                alt="Portfolio dashboard showing commercial health scores"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: 8,
+                  border: "1px solid #e2e8f0",
+                }}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -171,7 +202,7 @@ export default function LandingPage() {
           borderBottom: "1px solid #e5e7eb",
         }}
       >
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <h2
             style={{
               fontSize: 28,
@@ -187,31 +218,61 @@ export default function LandingPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 32,
+              gridTemplateColumns: "1fr 1fr",
+              gap: 48,
+              alignItems: "center",
             }}
           >
-            {[
-              "Surface the highest-impact revenue and margin opportunities",
-              "Explain what is driving performance and what is holding it back",
-              "Prioritize actions across pricing, GTM, and enablement",
-              "Support confident decisions grounded in real operating context",
-            ].map((item) => (
-              <div
-                key={item}
+            <div
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: 16,
+                padding: 16,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+              }}
+            >
+              <img
+                src="/portfolio-company-view.png"
+                alt="Company diagnostic view showing improvement priorities"
                 style={{
-                  backgroundColor: "#fff",
-                  borderRadius: 12,
-                  padding: 24,
-                  boxShadow: "0 6px 24px rgba(0,0,0,0.06)",
-                  fontSize: 15,
-                  lineHeight: 1.6,
-                  color: "#334155",
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: 8,
+                  border: "1px solid #e2e8f0",
                 }}
-              >
-                {item}
-              </div>
-            ))}
+              />
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: 20,
+              }}
+            >
+              {[
+                "Surface the highest-impact revenue and margin opportunities",
+                "Explain what is driving performance and what is holding it back",
+                "Prioritize actions across pricing, GTM, and enablement",
+                "Support confident decisions grounded in real operating context",
+              ].map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    backgroundColor: "#fff",
+                    borderRadius: 12,
+                    padding: 20,
+                    boxShadow: "0 6px 24px rgba(0,0,0,0.06)",
+                    fontSize: 15,
+                    lineHeight: 1.6,
+                    color: "#334155",
+                    borderLeft: `4px solid ${colors.coral}`,
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
