@@ -556,7 +556,7 @@ export default function LandingPage() {
                   "Board-ready outputs and recommendations",
                   "Confidence to act without adding headcount",
                 ]}
-                button="See Your Company Snapshot"
+                button="Get a FREE Company Snapshot"
                 color={colors.navy}
                 link="https://r9bey.share.hsforms.com/2KauIEMEuTVeOtaF8X6lNWw"
               />
@@ -571,7 +571,7 @@ export default function LandingPage() {
                   "Faster triage without heroics",
                   "Repeatable decision frameworks for management teams",
                 ]}
-                button="See Your Portfolio Snapshot"
+                button="Get a FREE Portfolio Snapshot"
                 color={colors.coral}
                 link="https://r9bey.share.hsforms.com/2LHpECgUmSKqEhEFMW4FVHQ"
               />
