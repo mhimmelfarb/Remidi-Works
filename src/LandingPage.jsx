@@ -302,7 +302,7 @@ export default function LandingPage() {
               }}
             >
               Decision support for commercial excellence
-              <span className="rw-coming-soon" aria-label="Coming soon">Coming Soon</span>
+
             </h2>
             <p
               style={{
