@@ -937,7 +937,7 @@ const RemidiLandingPage = () => {
           <div className="hero-label">For B2B SaaS Companies $10M-$60M ARR</div>
           <h1>Find and Fix<br/>Your GTM Gaps</h1>
           <p className="hero-subtitle">We built a platform that shows you which positioning, pricing, or sales enablement gaps are actually costing you revenue—benchmarked against your category—then coaches your team through fixing them with guided workflows and expert validation.</p>
-          <p className="hero-tagline">Like Gong for your GTM: identifies what's broken, shows you how to fix it, tracks whether it's working.</p>
+          <p className="hero-tagline">We diagnose which GTM gaps are costing you revenue using benchmark data, then give you the platform and coaching to actually fix them.</p>
           <div className="hero-cta-group">
             <a href="#calculator" className="btn-primary">See Your Performance Gap →</a>
             <a href="#solution" className="btn-secondary">How It Works</a>
