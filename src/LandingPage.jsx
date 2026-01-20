@@ -902,9 +902,60 @@ const RemidiLandingPage = () => {
           color: var(--color-accent);
         }
 
+        /* Tablet styles */
+        @media (max-width: 1024px) {
+          .pricing-grid {
+            grid-template-columns: 1fr;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .comparison-grid {
+            grid-template-columns: 1fr;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
+
+        /* Mobile styles */
         @media (max-width: 768px) {
+          .container {
+            padding: 0 1rem;
+          }
+
+          nav .container {
+            padding: 0 1rem;
+          }
+
+          .logo {
+            font-size: 1.1rem;
+          }
+
+          .nav-cta {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+          }
+
           .hero {
-            padding: 3rem 1.5rem 2rem;
+            padding: 2.5rem 1rem 2rem;
+          }
+
+          .hero-label {
+            font-size: 0.75rem;
+            padding: 0.375rem 0.75rem;
+            margin-bottom: 1rem;
+          }
+
+          h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+          }
+
+          .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 2rem;
           }
 
           .hero-cta-group {
@@ -914,14 +965,313 @@ const RemidiLandingPage = () => {
           .btn-primary, .btn-secondary {
             width: 100%;
             text-align: center;
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+          }
+
+          section {
+            padding: 3rem 1rem;
+          }
+
+          h2 {
+            font-size: 1.5rem;
+            line-height: 1.3;
+          }
+
+          .lead-text {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+          }
+
+          .problem-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+          }
+
+          .problem-card {
+            padding: 1.5rem;
+          }
+
+          .problem-icon {
+            font-size: 2rem;
+          }
+
+          .callout-box {
+            padding: 1.25rem;
+            margin-top: 2rem;
+          }
+
+          .callout-box p {
+            font-size: 1rem;
+          }
+
+          .solution-steps {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
+          .step {
+            gap: 0.75rem;
+          }
+
+          .step-number {
+            font-size: 1.25rem;
+          }
+
+          .step-content h3 {
+            font-size: 1rem;
+          }
+
+          .step-content p {
+            font-size: 0.9rem;
+          }
+
+          .example-box {
+            padding: 1.5rem;
+            margin-top: 2rem;
+          }
+
+          .example-box h3 {
+            font-size: 1.25rem;
+          }
+
+          .example-lead {
+            font-size: 1rem;
+          }
+
+          .example-item {
+            padding: 1rem;
+          }
+
+          .calculator-section {
+            padding: 3rem 1rem;
+          }
+
+          .calculator-header {
+            margin-bottom: 2rem;
+          }
+
+          .calculator-header h2 {
+            font-size: 1.5rem;
+          }
+
+          .calculator-header p {
+            font-size: 1rem;
           }
 
           .calculator-body {
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1rem;
+            border-radius: 12px;
+          }
+
+          .input-group {
+            margin-bottom: 1.5rem;
+          }
+
+          .input-label {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+          }
+
+          .input-label span:first-child {
+            font-size: 0.875rem;
+          }
+
+          .input-label span:last-child {
+            font-size: 1rem;
+          }
+
+          .slider {
+            height: 10px;
+          }
+
+          .slider::-webkit-slider-thumb {
+            width: 24px;
+            height: 24px;
+          }
+
+          .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+          }
+
+          .results-section {
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+          }
+
+          .results-header h3 {
+            font-size: 1.125rem;
           }
 
           .score-value {
             font-size: 3rem;
+          }
+
+          .score-max {
+            font-size: 1.25rem;
+          }
+
+          .score-interpretation {
+            font-size: 0.9rem;
+          }
+
+          .results-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .result-item {
+            padding: 1.25rem;
+          }
+
+          .result-item h4 {
+            font-size: 0.75rem;
+          }
+
+          .result-item .value {
+            font-size: 1.75rem;
+          }
+
+          .result-item .description {
+            font-size: 0.8rem;
+          }
+
+          .result-breakdown {
+            padding: 1rem;
+          }
+
+          .result-breakdown h4 {
+            font-size: 0.9rem;
+          }
+
+          .breakdown-item {
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0.625rem;
+          }
+
+          .breakdown-item .label {
+            font-size: 0.8rem;
+          }
+
+          .breakdown-item .value {
+            font-size: 0.9rem;
+          }
+
+          .calculator-cta {
+            padding: 1.5rem 1rem;
+          }
+
+          .calculator-cta h3 {
+            font-size: 1.25rem;
+          }
+
+          .calculator-cta p {
+            font-size: 0.9rem;
+          }
+
+          .pricing-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+          }
+
+          .pricing-card {
+            padding: 1.5rem;
+          }
+
+          .pricing-badge {
+            top: -10px;
+            right: 1rem;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+          }
+
+          .pricing-header h3 {
+            font-size: 1.25rem;
+          }
+
+          .pricing-price {
+            font-size: 2rem;
+          }
+
+          .pricing-description {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+          }
+
+          .pricing-features li {
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+          }
+
+          .pricing-cta {
+            padding: 0.875rem;
+          }
+
+          .comparison-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
+          .comparison-card {
+            padding: 1.5rem;
+          }
+
+          .comparison-card h3 {
+            font-size: 1.125rem;
+          }
+
+          .cta-section {
+            padding: 3rem 1rem;
+          }
+
+          .cta-section h2 {
+            font-size: 1.5rem;
+          }
+
+          .cta-section p {
+            font-size: 1rem;
+          }
+
+          .cta-section .btn-primary {
+            font-size: 1rem;
+            padding: 1rem 2rem;
+          }
+
+          footer {
+            padding: 2rem 1rem;
+          }
+
+          footer p {
+            font-size: 0.8rem;
+          }
+        }
+
+        /* Small mobile styles */
+        @media (max-width: 380px) {
+          h1 {
+            font-size: 1.75rem;
+          }
+
+          h2 {
+            font-size: 1.35rem;
+          }
+
+          .hero-label {
+            font-size: 0.7rem;
+          }
+
+          .score-value {
+            font-size: 2.5rem;
+          }
+
+          .pricing-price {
+            font-size: 1.75rem;
           }
         }
       `}</style>
