@@ -1360,6 +1360,40 @@ const RemidiLandingPage = () => {
             </div>
           </div>
 
+          <div style={{
+            marginTop: '3rem',
+            padding: '2rem',
+            background: 'var(--color-white)',
+            borderRadius: '12px',
+            border: '2px solid var(--color-border)'
+          }}>
+            <h3 style={{
+              fontSize: '1.25rem',
+              marginBottom: '1.5rem',
+              textAlign: 'center',
+              fontWeight: 700
+            }}>
+              What Your Diagnostic Looks Like
+            </h3>
+            <img
+              src="/portfolio-company-view.png"
+              alt="GTM diagnostic dashboard showing 5 dimension scores and priority gaps"
+              style={{
+                width: '100%',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }}
+            />
+            <p style={{
+              marginTop: '1rem',
+              textAlign: 'center',
+              color: 'var(--color-text-gray)',
+              fontSize: '0.9rem'
+            }}>
+              Real diagnostic for a logistics tech company showing Sales Enablement as the primary revenue-killing gap
+            </p>
+          </div>
+
           <div className="example-box">
             <h3>The Output: Benchmark Data, Not Consultant Opinions</h3>
             <p className="example-lead">Example from a recent $25M ARR SaaS company:</p>
