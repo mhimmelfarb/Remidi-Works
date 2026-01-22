@@ -7,6 +7,12 @@ const RemidiLandingPage = () => {
   const [salesCycle, setSalesCycle] = useState(90);
   const [nrr, setNrr] = useState(100);
   
+  const [benchmarks, setBenchmarks] = useState({
+    winRate: 25,
+    salesCycle: 75,
+    nrr: 115
+  });
+  
   const [results, setResults] = useState({
     score: 5.0,
     interpretation: '',
@@ -56,6 +62,13 @@ const RemidiLandingPage = () => {
       benchmarkSalesCycle = 120;
       benchmarkNRR = 120;
     }
+    
+    // Update benchmark state for display
+    setBenchmarks({
+      winRate: benchmarkWinRate,
+      salesCycle: benchmarkSalesCycle,
+      nrr: benchmarkNRR
+    });
     
     // Calculate gaps
     const winRateGap = benchmarkWinRate - winRate;
@@ -494,13 +507,13 @@ const RemidiLandingPage = () => {
         }
 
         .calculator-container {
-          max-width: 900px;
+          max-width: 1200px;
           margin: 0 auto;
         }
 
         .calculator-header {
           text-align: center;
-          margin-bottom: 3rem;
+          margin-bottom: 2.5rem;
         }
 
         .calculator-header h2 {
@@ -516,11 +529,23 @@ const RemidiLandingPage = () => {
         .calculator-body {
           background: var(--color-white);
           border-radius: 16px;
-          padding: 3rem 2.5rem;
+          padding: 2.5rem 2rem;
+          display: grid;
+          grid-template-columns: 35% 65%;
+          gap: 3rem;
+          align-items: start;
+        }
+
+        .input-section {
+          /* Left column - sliders */
         }
 
         .input-group {
-          margin-bottom: 2rem;
+          margin-bottom: 1.75rem;
+        }
+        
+        .input-group:last-child {
+          margin-bottom: 0;
         }
 
         .input-label {
@@ -580,21 +605,21 @@ const RemidiLandingPage = () => {
           background: var(--color-light-bg);
           border: 2px solid var(--color-primary);
           border-radius: 12px;
-          padding: 2.5rem;
-          margin-top: 2.5rem;
+          padding: 1.5rem 1rem;
+          /* Right column - no top margin since side-by-side */
         }
 
         .results-header {
           text-align: center;
-          margin-bottom: 2rem;
-          padding-bottom: 1.5rem;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
           border-bottom: 2px solid var(--color-border);
         }
 
         .results-header h3 {
-          font-size: 1.375rem;
+          font-size: 1.125rem;
           font-weight: 700;
-          margin-bottom: 1rem;
+          margin-bottom: 0.5rem;
         }
 
         .results-score {
@@ -602,17 +627,17 @@ const RemidiLandingPage = () => {
           justify-content: center;
           align-items: baseline;
           gap: 0.5rem;
-          margin: 1.5rem 0;
+          margin: 0.75rem 0;
         }
 
         .score-value {
-          font-size: 4rem;
+          font-size: 3rem;
           font-weight: 800;
           line-height: 1;
         }
 
         .score-max {
-          font-size: 1.75rem;
+          font-size: 1.25rem;
           color: var(--color-text-gray);
         }
 
@@ -622,77 +647,43 @@ const RemidiLandingPage = () => {
 
         .score-interpretation {
           color: var(--color-text-gray);
-          font-size: 1rem;
+          font-size: 0.85rem;
         }
 
         .results-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 1.5rem;
-          margin-top: 2rem;
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+          margin-top: 1rem;
         }
 
         .result-item {
           background: var(--color-white);
-          padding: 1.5rem;
+          padding: 1rem;
           border-radius: 8px;
         }
 
         .result-item h4 {
-          font-size: 0.875rem;
+          font-size: 0.75rem;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           color: var(--color-text-gray);
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.4rem;
         }
 
         .result-item .value {
-          font-size: 2.25rem;
+          font-size: 1.75rem;
           font-weight: 800;
           color: var(--color-primary);
           line-height: 1;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
 
         .result-item .description {
           color: var(--color-text-gray);
-          font-size: 0.875rem;
-        }
-
-        .result-breakdown {
-          margin-top: 2rem;
-          padding: 1.5rem;
-          background: var(--color-white);
-          border-radius: 8px;
-        }
-
-        .result-breakdown h4 {
-          font-size: 1rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-        }
-
-        .breakdown-items {
-          display: grid;
-          gap: 0.75rem;
-        }
-
-        .breakdown-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 0.75rem;
-          background: var(--color-bg);
-          border-radius: 4px;
-          font-size: 0.9rem;
-        }
-
-        .breakdown-item .label {
-          color: var(--color-text-gray);
-        }
-
-        .breakdown-item .value {
-          font-weight: 700;
+          font-size: 0.8rem;
+          line-height: 1.4;
         }
 
         .calculator-cta {
@@ -942,6 +933,11 @@ const RemidiLandingPage = () => {
 
         /* Tablet styles */
         @media (max-width: 1024px) {
+          .calculator-body {
+            grid-template-columns: 40% 60%;
+            gap: 2rem;
+          }
+
           .pricing-grid {
             grid-template-columns: 1fr;
             max-width: 500px;
@@ -954,6 +950,13 @@ const RemidiLandingPage = () => {
             max-width: 400px;
             margin-left: auto;
             margin-right: auto;
+          }
+        }
+
+        /* Stack calculator on smaller tablets */
+        @media (max-width: 768px) {
+          .calculator-body {
+            grid-template-columns: 1fr;
           }
         }
 
@@ -1101,6 +1104,10 @@ const RemidiLandingPage = () => {
             padding: 3rem 1rem;
           }
 
+          .calculator-container {
+            max-width: 100%;
+          }
+
           .calculator-header {
             margin-bottom: 2rem;
           }
@@ -1114,6 +1121,8 @@ const RemidiLandingPage = () => {
           }
 
           .calculator-body {
+            grid-template-columns: 1fr;
+            gap: 2rem;
             padding: 1.5rem 1rem;
             border-radius: 12px;
           }
@@ -1152,7 +1161,7 @@ const RemidiLandingPage = () => {
 
           .results-section {
             padding: 1.5rem 1rem;
-            margin-top: 2rem;
+            margin-top: 0; /* No margin needed, grid gap handles spacing */
           }
 
           .results-header h3 {
@@ -1190,28 +1199,6 @@ const RemidiLandingPage = () => {
 
           .result-item .description {
             font-size: 0.8rem;
-          }
-
-          .result-breakdown {
-            padding: 1rem;
-          }
-
-          .result-breakdown h4 {
-            font-size: 0.9rem;
-          }
-
-          .breakdown-item {
-            flex-direction: column;
-            gap: 0.25rem;
-            padding: 0.625rem;
-          }
-
-          .breakdown-item .label {
-            font-size: 0.8rem;
-          }
-
-          .breakdown-item .value {
-            font-size: 0.9rem;
           }
 
           .calculator-cta {
@@ -1500,7 +1487,7 @@ const RemidiLandingPage = () => {
 
               <div className="input-group">
                 <div className="input-label">
-                  <span>Win Rate (Closed-Won / Total Opportunities)</span>
+                  <span>Win Rate <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.winRate}%)</span></span>
                   <span>{winRate}%</span>
                 </div>
                 <input 
@@ -1520,7 +1507,7 @@ const RemidiLandingPage = () => {
 
               <div className="input-group">
                 <div className="input-label">
-                  <span>Average Sales Cycle Length (Days)</span>
+                  <span>Sales Cycle Length <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.salesCycle} days)</span></span>
                   <span>{salesCycle} days</span>
                 </div>
                 <input 
@@ -1540,7 +1527,7 @@ const RemidiLandingPage = () => {
 
               <div className="input-group">
                 <div className="input-label">
-                  <span>Net Revenue Retention (NRR)</span>
+                  <span>Net Revenue Retention <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.nrr}%)</span></span>
                   <span>{nrr}%</span>
                 </div>
                 <input 
@@ -1578,43 +1565,17 @@ const RemidiLandingPage = () => {
 
                 <div className="result-item">
                   <h4>Primary Performance Gap</h4>
-                  <div className="value" style={{ fontSize: '1.5rem' }}>{results.biggestGap}</div>
+                  <div className="value">{results.biggestGap}</div>
                   <div className="description">{results.gapDescription}</div>
                 </div>
               </div>
-
-              <div className="result-breakdown">
-                <h4>Benchmark Comparison</h4>
-                <div className="breakdown-items">
-                  <div className="breakdown-item">
-                    <span className="label">Your Current ARR</span>
-                    <span className="value">{results.calcARR}</span>
-                  </div>
-                  <div className="breakdown-item">
-                    <span className="label">Performance Score</span>
-                    <span className="value">{results.calcScore}</span>
-                  </div>
-                  <div className="breakdown-item">
-                    <span className="label">Win rate gap vs. benchmark</span>
-                    <span className="value">{results.calcWinRate}</span>
-                  </div>
-                  <div className="breakdown-item">
-                    <span className="label">Sales cycle gap vs. benchmark</span>
-                    <span className="value">{results.calcCycle}</span>
-                  </div>
-                  <div className="breakdown-item">
-                    <span className="label">Revenue opportunity (annual)</span>
-                    <span className="value">{results.calcImpact}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="calculator-cta">
-                <h3>Want to Know WHY You're Underperforming?</h3>
-                <p>Get a free GTM diagnostic showing exactly which gaps are causing your low win rate or long sales cycle—and how to fix them.<br/><strong>Delivered within 48 hours.</strong></p>
-                <a href="#free-report" className="btn-primary">Get Your Free Diagnostic →</a>
-              </div>
             </div>
+          </div>
+
+          <div className="calculator-cta">
+            <h3>Want to Know WHY You're Underperforming?</h3>
+            <p>Get a free GTM diagnostic showing exactly which gaps are causing your low win rate or long sales cycle—and how to fix them.<br/><strong>Delivered within 48 hours.</strong></p>
+            <a href="#free-report" className="btn-primary">Get Your Free Diagnostic →</a>
           </div>
         </div>
       </section>
