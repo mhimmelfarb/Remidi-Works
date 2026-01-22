@@ -1330,7 +1330,7 @@ const RemidiLandingPage = () => {
 
       <section className="hero">
         <div className="container">
-          <div className="hero-label">For B2B SaaS Companies $10M-$60M ARR</div>
+          <div className="hero-label">For B2B SaaS Companies ~$1M-$50M ARR</div>
           <h1>Find and Fix<br/>Your GTM Gaps</h1>
           <p className="hero-subtitle">We diagnose which positioning, pricing, or sales enablement gaps are costing you revenue—benchmarked against companies in your category. Then we coach your team through fixing them with guided workflows and expert validation.</p>
           <div className="hero-cta-group">
