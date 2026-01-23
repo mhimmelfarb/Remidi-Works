@@ -712,9 +712,10 @@ const RemidiLandingPage = () => {
 
         .pricing-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          grid-template-columns: repeat(3, 1fr);
           gap: 2rem;
           margin-top: 3rem;
+          align-items: stretch;
         }
 
         .pricing-card {
@@ -724,6 +725,8 @@ const RemidiLandingPage = () => {
           padding: 2.5rem;
           transition: all 0.3s;
           position: relative;
+          display: flex;
+          flex-direction: column;
         }
 
         .pricing-card:hover {
@@ -754,6 +757,7 @@ const RemidiLandingPage = () => {
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
+          min-height: 2rem;
         }
 
         .pricing-price {
@@ -762,6 +766,7 @@ const RemidiLandingPage = () => {
           color: var(--color-primary);
           margin: 1rem 0;
           line-height: 1;
+          min-height: 3rem;
         }
 
         .pricing-price small {
@@ -775,11 +780,13 @@ const RemidiLandingPage = () => {
           margin-bottom: 2rem;
           padding-bottom: 1.5rem;
           border-bottom: 1px solid var(--color-border);
+          min-height: 6rem;
         }
 
         .pricing-features {
           list-style: none;
           margin-bottom: 2rem;
+          flex-grow: 1;
         }
 
         .pricing-features li {
@@ -809,6 +816,7 @@ const RemidiLandingPage = () => {
           text-align: center;
           transition: all 0.3s;
           border: 2px solid var(--color-primary);
+          margin-top: auto;
         }
 
         .pricing-cta:hover {
@@ -831,6 +839,26 @@ const RemidiLandingPage = () => {
           font-size: 0.875rem;
           color: var(--color-text-light);
           text-align: center;
+          line-height: 1.4;
+        }
+
+        .pricing-price.free {
+          color: var(--color-accent);
+        }
+
+        .pricing-cta-secondary {
+          background: transparent;
+          color: var(--color-primary);
+          border: 2px solid var(--color-primary);
+        }
+
+        .pricing-cta-secondary:hover {
+          background: var(--color-primary);
+          color: white;
+        }
+
+        .pricing-badge {
+          white-space: nowrap;
         }
 
         .comparison-grid {
@@ -1589,71 +1617,113 @@ const RemidiLandingPage = () => {
         <div className="container">
           <div className="section-label">Pricing</div>
           <h2>Pick Your Starting Point</h2>
-          <p className="lead-text">No long-term contracts. Clear pricing. Just pick the tier that matches where you are.</p>
+          <p className="lead-text">No long-term contracts. Clear pricing. Expert validation, not just AI.</p>
           
           <div className="pricing-grid">
             <div className="pricing-card">
               <div className="pricing-header">
-                <h3>Free Diagnostic</h3>
-                <div className="pricing-price">$0</div>
-                <p className="pricing-description">Get your GTM score and top 3 priorities. No platform access, no expert support.</p>
+                <h3>Opportunity Finder</h3>
+                <div className="pricing-price free">FREE</div>
+                <p className="pricing-description">Get an honest assessment of your GTM health and 1-3 quick-win opportunities. We analyze your website, customer reviews, competitive positioning, and public pricing data.</p>
               </div>
               <ul className="pricing-features">
-                <li>Website analysis (48-hour turnaround)</li>
+                <li>Website and public data analysis</li>
                 <li>GTM Health Score across 5 dimensions</li>
-                <li>Top 3 priority gaps identified</li>
-                <li>Brief recommendations for each</li>
+                <li>1-3 quick-win opportunities identified</li>
                 <li>Benchmarked vs. your category</li>
+                <li>Delivered in 48 hours</li>
                 <li>Optional 15-min results review call</li>
               </ul>
-              <a href="#free-report" className="pricing-cta">Request Free Diagnostic</a>
-              <p className="pricing-note">Best for: "How bad is it really?"</p>
-            </div>
-
-            <div className="pricing-card">
-              <div className="pricing-header">
-                <h3>Quick Win</h3>
-                <div className="pricing-price">$1,995<small>/month</small></div>
-                <p className="pricing-description">Rapid diagnostic across all 5 dimensions. We tell you your #1 priority and help you fix it in 90 days.</p>
-              </div>
-              <ul className="pricing-features">
-                <li>Rapid diagnostic (all 5 dimensions, 5-7 days)</li>
-                <li>We identify your #1 revenue-killing gap</li>
-                <li>90-day focused roadmap</li>
-                <li>Platform access (priority-focused workflows)</li>
-                <li>3 expert coaching hours per month</li>
-                <li>Progress tracking & quarterly check-in</li>
-              </ul>
-              <a href="#free-report" className="pricing-cta">Get Started</a>
-              <p className="pricing-note">3-month minimum • $5,985 billed upfront</p>
+              <a href="#free-report" className="pricing-cta">Get Your Free Assessment</a>
+              <p className="pricing-note">Best for: "Should I even look into this?"</p>
             </div>
 
             <div className="pricing-card featured">
-              <div className="pricing-badge">Most Popular</div>
+              <div className="pricing-badge">Pilot Pricing</div>
               <div className="pricing-header">
-                <h3>Full Picture</h3>
-                <div className="pricing-price">$2,995<small>/month</small></div>
-                <p className="pricing-description">Comprehensive diagnostic with complete prioritized roadmap across all 5 dimensions.</p>
+                <h3>90-Day Growth Plan</h3>
+                <div className="pricing-price">$8,000</div>
+                <p className="pricing-description">Expert assessment, top revenue opportunities, 90-day execution plan. Delivered in under 2 weeks.</p>
               </div>
               <ul className="pricing-features">
-                <li>Deep diagnostic (all 5 dimensions, 10-14 days)</li>
-                <li>Complete prioritized roadmap (12 months)</li>
-                <li>Revenue impact modeling for each priority</li>
-                <li>Platform access (all dimension workflows)</li>
-                <li>5 expert coaching hours per month</li>
-                <li>Quarterly business reviews with benchmarking</li>
+                <li><strong>Complete 5-dimension assessment (10-day delivery)</strong></li>
+                <li>Top 3-5 revenue growth opportunities identified</li>
+                <li>Board-ready executive summary slide</li>
+                <li>Prioritized 90-day execution roadmap</li>
+                <li>12 hours of expert engagement (analysis + coaching)</li>
+                <li>90-minute live walkthrough + follow-up session</li>
+                <li>Platform access for progress tracking</li>
               </ul>
               <a href="#free-report" className="pricing-cta">Get Started</a>
-              <p className="pricing-note">6-month minimum • $17,970 billed upfront</p>
+              <p className="pricing-note">Pilot pricing for first 10 customers<br/>Standard pricing $12,500 starting Q3</p>
+            </div>
+
+            <div className="pricing-card">
+              <div className="pricing-badge" style={{ background: 'var(--color-primary)' }}>Coming Q3 2026</div>
+              <div className="pricing-header">
+                <h3>GTM Companion</h3>
+                <div className="pricing-price">$399<small>/month</small></div>
+                <p className="pricing-description">Your AI marketing partner, custom-configured for your business. After initial setup, your team gets step-by-step guidance on GTM execution with expert support when you need it.</p>
+              </div>
+              <ul className="pricing-features">
+                <li>Custom GTM diagnostic configured for your company</li>
+                <li>Interactive AI guidance tailored to your business</li>
+                <li>Quarterly progress reviews with benchmarks</li>
+                <li>Continuous improvement recommendations</li>
+                <li>Expert Pack available (1:1 coaching on-demand)</li>
+                <li>Growing benchmark database access</li>
+              </ul>
+              <a href="#free-report" className="pricing-cta pricing-cta-secondary">Join Waitlist</a>
+              <p className="pricing-note">Launching Q3 2026<br/>Early waitlist gets founding member discount</p>
             </div>
           </div>
 
-          <div className="callout-box" style={{ marginTop: '3rem' }}>
-            <p style={{ marginBottom: '1rem' }}><strong>Need more expert time?</strong> Purchase service packs beyond your included hours:</p>
-            <p style={{ color: 'var(--color-text-gray)', fontWeight: 400 }}>
-              • 10-Hour Pack: $1,800 (save 10%)<br/>
-              • 20-Hour Pack: $3,400 (save 15%)<br/>
-              • 40-Hour Pack: $6,400 (save 20%)
+          <div className="callout-box">
+            <h3>What's Included in the 90-Day Growth Plan</h3>
+            <p style={{ marginBottom: '1.5rem', color: 'var(--color-text-gray)' }}>
+              This isn't just an AI-generated report. You get a complete commercial assessment with expert validation, 
+              strategic recommendations, and hands-on coaching to help you execute.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+              <div>
+                <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>📊 The Analysis</strong>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
+                  5-dimension commercial health assessment with evidence-based scoring across Value Articulation, 
+                  Pricing Architecture, Competitive Positioning, Sales Enablement, and Customer ROI Proof
+                </p>
+              </div>
+              <div>
+                <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>🎯 The Roadmap</strong>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
+                  Prioritized action plan showing your top 3-5 revenue growth opportunities, expected impact ranges, 
+                  and 90-day execution milestones. Plus board-ready executive summary for stakeholder communication
+                </p>
+              </div>
+              <div>
+                <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>💡 Expert Coaching</strong>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
+                  12 hours of engagement including initial analysis, 90-minute live walkthrough, follow-up session, 
+                  and coaching calls. Use for strategy validation, execution support, or quarterly check-ins
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="callout-box" style={{ marginTop: '2rem' }}>
+            <p style={{ marginBottom: '0.5rem' }}><strong>Want ongoing support after your 90-day plan?</strong></p>
+            <p style={{ color: 'var(--color-text-gray)', fontSize: '0.95rem' }}>
+              Quarterly update assessments available for $2,500/quarter. Track progress, refresh benchmarks, 
+              and get updated recommendations as your business evolves.
+            </p>
+          </div>
+
+          <div className="callout-box" style={{ marginTop: '2rem', background: 'var(--color-light-bg)', borderColor: 'var(--color-light-bg)' }}>
+            <h3>Why Under 2 Weeks vs. 4-6 Weeks?</h3>
+            <p style={{ color: 'var(--color-text-gray)' }}>
+              Traditional commercial assessments take 4-6 weeks because consultants manually research everything. 
+              We use AI to accelerate data gathering and pattern recognition, then add expert validation, 
+              strategic thinking, and prioritization. You get the same depth of analysis—backed by real 
+              expertise, not just AI output—in a fraction of the time.
             </p>
           </div>
         </div>
