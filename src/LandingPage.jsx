@@ -1780,7 +1780,7 @@ const RemidiLandingPage = () => {
       <section className="cta-section" id="free-report">
         <div className="container">
           <h2>Ready to Get Started?</h2>
-          <p>Request your free GTM diagnostic or book a 15-minute call to discuss your specific situation.</p>
+          <p>Request your free GTM Opportunity Finder report or book a 15-minute call to discuss your specific situation.</p>
           
           <div className="hs-form-frame" data-region="na1" data-form-id="29ab8810-c12e-4d57-8eb5-a17c5fa94d5b" data-portal-id="45784330"></div>
           
