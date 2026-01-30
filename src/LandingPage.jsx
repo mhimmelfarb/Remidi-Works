@@ -6,13 +6,13 @@ const RemidiLandingPage = () => {
   const [winRate, setWinRate] = useState(25);
   const [salesCycle, setSalesCycle] = useState(90);
   const [nrr, setNrr] = useState(100);
-  
+
   const [benchmarks, setBenchmarks] = useState({
     winRate: 25,
     salesCycle: 75,
-    nrr: 115
+    nrr: 105
   });
-  
+
   const [results, setResults] = useState({
     score: 5.0,
     interpretation: '',
@@ -33,8 +33,16 @@ const RemidiLandingPage = () => {
     script.defer = true;
     document.body.appendChild(script);
 
+    // Add favicon
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/png';
+    favicon.href = '/rw-logo.png';
+    document.head.appendChild(favicon);
+
     return () => {
       document.body.removeChild(script);
+      document.head.removeChild(favicon);
     };
   }, []);
 
@@ -45,36 +53,59 @@ const RemidiLandingPage = () => {
   const calculateResults = () => {
     // Calculate current customer base
     const currentCustomers = Math.round((arr * 1000) / acv);
-    
-    // Industry benchmarks
-    let benchmarkWinRate, benchmarkSalesCycle, benchmarkNRR;
-    
+
+    // Industry benchmarks based on ACV for Win Rate and Sales Cycle
+    let benchmarkWinRate, benchmarkSalesCycle;
+
     if (acv < 25) {
       benchmarkWinRate = 30;
       benchmarkSalesCycle = 45;
-      benchmarkNRR = 110;
     } else if (acv < 100) {
       benchmarkWinRate = 25;
       benchmarkSalesCycle = 75;
-      benchmarkNRR = 115;
     } else {
       benchmarkWinRate = 20;
       benchmarkSalesCycle = 120;
-      benchmarkNRR = 120;
     }
-    
+
+    // NRR benchmarks based on ARR (from research data)
+    // Source: Performance metrics research showing NRR improves with scale
+    let benchmarkNRR;
+
+    if (arr < 2) {
+      benchmarkNRR = 99;
+    } else if (arr < 3) {
+      benchmarkNRR = 101;
+    } else if (arr < 5) {
+      benchmarkNRR = 103;
+    } else if (arr < 7) {
+      benchmarkNRR = 103;
+    } else if (arr < 10) {
+      benchmarkNRR = 104;
+    } else if (arr < 15) {
+      benchmarkNRR = 105;
+    } else if (arr < 20) {
+      benchmarkNRR = 107;
+    } else if (arr < 30) {
+      benchmarkNRR = 108;
+    } else if (arr < 50) {
+      benchmarkNRR = 110;
+    } else {
+      benchmarkNRR = 113;
+    }
+
     // Update benchmark state for display
     setBenchmarks({
       winRate: benchmarkWinRate,
       salesCycle: benchmarkSalesCycle,
       nrr: benchmarkNRR
     });
-    
+
     // Calculate gaps
     const winRateGap = benchmarkWinRate - winRate;
     const salesCycleGap = salesCycle - benchmarkSalesCycle;
     const nrrGap = benchmarkNRR - nrr;
-    
+
     // WIN RATE IMPACT
     let revenueFromWinRate = 0;
     if (winRateGap > 0) {
@@ -83,14 +114,14 @@ const RemidiLandingPage = () => {
       const additionalCustomers = customersAtBenchmark - currentCustomers;
       revenueFromWinRate = (additionalCustomers * acv) / 1000;
     }
-    
+
     // NRR IMPACT
     let revenueFromNRR = 0;
     if (nrrGap > 0) {
       const additionalCustomersRetained = currentCustomers * (nrrGap / 100);
       revenueFromNRR = (additionalCustomersRetained * acv) / 1000;
     }
-    
+
     // SALES CYCLE IMPACT
     let revenueFromCycle = 0;
     if (salesCycleGap > 0) {
@@ -98,37 +129,37 @@ const RemidiLandingPage = () => {
       const additionalDealsPerYear = currentCustomers * velocityImprovement * 0.5;
       revenueFromCycle = (additionalDealsPerYear * acv) / 1000;
     }
-    
+
     const totalRevenue = revenueFromWinRate + revenueFromNRR + revenueFromCycle;
-    
+
     // Performance score
     const winRateScore = Math.max(0, Math.min(3.5, 3.5 * (winRate / benchmarkWinRate)));
     const salesCycleScore = Math.max(0, Math.min(3, 3 * (benchmarkSalesCycle / salesCycle)));
     const nrrScore = Math.max(0, Math.min(3.5, 3.5 * (nrr / benchmarkNRR)));
     const totalScore = winRateScore + salesCycleScore + nrrScore;
-    
+
     // Determine primary gap
     const gaps = [
-      { 
-        name: "Win Rate", 
-        impact: revenueFromWinRate, 
+      {
+        name: "Win Rate",
+        impact: revenueFromWinRate,
         desc: `Your ${winRate}% win rate is ${winRateGap.toFixed(1)}% below benchmark. That's ${Math.round((revenueFromWinRate * 1000) / acv)} fewer customers won annually.`
       },
-      { 
-        name: "Sales Velocity", 
-        impact: revenueFromCycle, 
+      {
+        name: "Sales Velocity",
+        impact: revenueFromCycle,
         desc: `Your ${salesCycle}-day cycle is ${salesCycleGap} days slower than benchmark. Faster cycles would let you close ${Math.round((revenueFromCycle * 1000) / acv)} more deals per year.`
       },
-      { 
-        name: "Retention & Expansion", 
-        impact: revenueFromNRR, 
+      {
+        name: "Retention & Expansion",
+        impact: revenueFromNRR,
         desc: `Your ${nrr}% NRR is ${nrrGap.toFixed(0)}% below benchmark. You're losing ${Math.round((revenueFromNRR * 1000) / acv)} customers annually that benchmark companies retain.`
       }
     ];
-    
+
     gaps.sort((a, b) => b.impact - a.impact);
     const topGap = gaps[0];
-    
+
     let scoreInterpretation;
     if (totalScore < 5) {
       scoreInterpretation = 'Significant underperformance vs. industry benchmarks';
@@ -139,7 +170,7 @@ const RemidiLandingPage = () => {
     } else {
       scoreInterpretation = 'Strong performance at or above industry benchmarks';
     }
-    
+
     setResults({
       score: totalScore.toFixed(1),
       interpretation: scoreInterpretation,
@@ -202,9 +233,17 @@ const RemidiLandingPage = () => {
         }
 
         .logo {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
           font-weight: 700;
           font-size: 1.25rem;
           color: var(--color-primary);
+        }
+
+        .logo img {
+          height: 40px;
+          width: auto;
         }
 
         .nav-cta {
@@ -546,7 +585,7 @@ const RemidiLandingPage = () => {
         .input-group {
           margin-bottom: 1.75rem;
         }
-        
+
         .input-group:last-child {
           margin-bottom: 0;
         }
@@ -991,6 +1030,10 @@ const RemidiLandingPage = () => {
           .calculator-body {
             grid-template-columns: 1fr;
           }
+
+          .logo img {
+            height: 32px;
+          }
         }
 
         /* Mobile styles */
@@ -1005,6 +1048,7 @@ const RemidiLandingPage = () => {
 
           .logo {
             font-size: 1.1rem;
+            gap: 0.5rem;
           }
 
           .nav-cta {
@@ -1346,12 +1390,19 @@ const RemidiLandingPage = () => {
           .pricing-price {
             font-size: 1.75rem;
           }
+
+          .logo img {
+            height: 28px;
+          }
         }
       `}</style>
 
       <nav>
         <div className="container">
-          <div className="logo">Remidi Works</div>
+          <div className="logo">
+            <img src="/rw-logo.png" alt="Remidi Works" />
+            Remidi Works
+          </div>
           <a href="#pricing" className="nav-cta">See Pricing</a>
         </div>
       </nav>
@@ -1373,7 +1424,7 @@ const RemidiLandingPage = () => {
           <div className="section-label">The Problem</div>
           <h2>Every company could improve their GTM. The hard part is knowing which problems to fix first and how.</h2>
           <p className="lead-text">Every B2B company has a list of 20+ things they could fix. New messaging. Pricing changes. Battle cards. ROI calculators. Case studies. The question isn't what's wrong—it's which problems are actually costing you revenue.</p>
-          
+
           <div className="problem-grid">
             <div className="problem-card">
               <div className="problem-icon">📊</div>
@@ -1408,7 +1459,7 @@ const RemidiLandingPage = () => {
           <div className="section-label">The Solution</div>
           <h2>Systematic Diagnosis + Guided Execution</h2>
           <p className="lead-text">We analyze your entire commercial model across 30 factors—value articulation, pricing architecture, competitive positioning, sales enablement, buyer trust—benchmarked against comparable companies in your category. Then we give you the execution platform to actually fix what matters.</p>
-          
+
           <div className="solution-steps">
             <div className="step">
               <div className="step-number">01</div>
@@ -1483,12 +1534,12 @@ const RemidiLandingPage = () => {
                   <span>Annual Recurring Revenue (ARR)</span>
                   <span>${arr}M</span>
                 </div>
-                <input 
-                  type="range" 
-                  className="slider" 
-                  min="1" 
-                  max="100" 
-                  step="1" 
+                <input
+                  type="range"
+                  className="slider"
+                  min="1"
+                  max="100"
+                  step="1"
                   value={arr}
                   onChange={(e) => setArr(parseInt(e.target.value))}
                 />
@@ -1503,12 +1554,12 @@ const RemidiLandingPage = () => {
                   <span>Average Contract Value (ACV)</span>
                   <span>${acv}K</span>
                 </div>
-                <input 
-                  type="range" 
-                  className="slider" 
-                  min="5" 
-                  max="500" 
-                  step="5" 
+                <input
+                  type="range"
+                  className="slider"
+                  min="5"
+                  max="500"
+                  step="5"
                   value={acv}
                   onChange={(e) => setAcv(parseInt(e.target.value))}
                 />
@@ -1523,12 +1574,12 @@ const RemidiLandingPage = () => {
                   <span>Win Rate <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.winRate}%)</span></span>
                   <span>{winRate}%</span>
                 </div>
-                <input 
-                  type="range" 
-                  className="slider" 
-                  min="10" 
-                  max="60" 
-                  step="5" 
+                <input
+                  type="range"
+                  className="slider"
+                  min="10"
+                  max="60"
+                  step="5"
                   value={winRate}
                   onChange={(e) => setWinRate(parseInt(e.target.value))}
                 />
@@ -1543,12 +1594,12 @@ const RemidiLandingPage = () => {
                   <span>Sales Cycle Length <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.salesCycle} days)</span></span>
                   <span>{salesCycle} days</span>
                 </div>
-                <input 
-                  type="range" 
-                  className="slider" 
-                  min="30" 
-                  max="365" 
-                  step="15" 
+                <input
+                  type="range"
+                  className="slider"
+                  min="30"
+                  max="365"
+                  step="15"
                   value={salesCycle}
                   onChange={(e) => setSalesCycle(parseInt(e.target.value))}
                 />
@@ -1563,12 +1614,12 @@ const RemidiLandingPage = () => {
                   <span>Net Revenue Retention <span style={{ fontSize: '0.85em', color: 'var(--color-text-light)' }}>(Benchmark: {benchmarks.nrr}%)</span></span>
                   <span>{nrr}%</span>
                 </div>
-                <input 
-                  type="range" 
-                  className="slider" 
-                  min="80" 
-                  max="150" 
-                  step="5" 
+                <input
+                  type="range"
+                  className="slider"
+                  min="80"
+                  max="150"
+                  step="5"
                   value={nrr}
                   onChange={(e) => setNrr(parseInt(e.target.value))}
                 />
@@ -1618,7 +1669,7 @@ const RemidiLandingPage = () => {
           <div className="section-label">Pricing</div>
           <h2>Pick Your Starting Point</h2>
           <p className="lead-text">No long-term contracts. Clear pricing. Expert validation, not just AI.</p>
-          
+
           <div className="pricing-grid">
             <div className="pricing-card">
               <div className="pricing-header">
@@ -1681,28 +1732,28 @@ const RemidiLandingPage = () => {
           <div className="callout-box">
             <h3>What's Included in the 90-Day Growth Plan</h3>
             <p style={{ marginBottom: '1.5rem', color: 'var(--color-text-gray)' }}>
-              This isn't just an AI-generated report. You get a complete commercial assessment with expert validation, 
+              This isn't just an AI-generated report. You get a complete commercial assessment with expert validation,
               strategic recommendations, and hands-on coaching to help you execute.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
               <div>
                 <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>📊 The Analysis</strong>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
-                  5-dimension commercial health assessment with evidence-based scoring across Value Articulation, 
+                  5-dimension commercial health assessment with evidence-based scoring across Value Articulation,
                   Pricing Architecture, Competitive Positioning, Sales Enablement, and Customer ROI Proof
                 </p>
               </div>
               <div>
                 <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>🎯 The Roadmap</strong>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
-                  Prioritized action plan showing your top 3-5 revenue growth opportunities, expected impact ranges, 
+                  Prioritized action plan showing your top 3-5 revenue growth opportunities, expected impact ranges,
                   and 90-day execution milestones. Plus board-ready executive summary for stakeholder communication
                 </p>
               </div>
               <div>
                 <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>💡 Expert Coaching</strong>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
-                  12 hours of engagement including initial analysis, 90-minute live walkthrough, follow-up session, 
+                  12 hours of engagement including initial analysis, 90-minute live walkthrough, follow-up session,
                   and coaching calls. Use for strategy validation, execution support, or quarterly check-ins
                 </p>
               </div>
@@ -1712,7 +1763,7 @@ const RemidiLandingPage = () => {
           <div className="callout-box" style={{ marginTop: '2rem' }}>
             <p style={{ marginBottom: '0.5rem' }}><strong>Want ongoing support after your 90-day plan?</strong></p>
             <p style={{ color: 'var(--color-text-gray)', fontSize: '0.95rem' }}>
-              Quarterly update assessments available for $2,500/quarter. Track progress, refresh benchmarks, 
+              Quarterly update assessments available for $2,500/quarter. Track progress, refresh benchmarks,
               and get updated recommendations as your business evolves.
             </p>
           </div>
@@ -1720,9 +1771,9 @@ const RemidiLandingPage = () => {
           <div className="callout-box" style={{ marginTop: '2rem', background: 'var(--color-light-bg)', borderColor: 'var(--color-light-bg)' }}>
             <h3>Why Under 2 Weeks vs. 4-6 Weeks?</h3>
             <p style={{ color: 'var(--color-text-gray)' }}>
-              Traditional commercial assessments take 4-6 weeks because consultants manually research everything. 
-              We use AI to accelerate data gathering and pattern recognition, then add expert validation, 
-              strategic thinking, and prioritization. You get the same depth of analysis—backed by real 
+              Traditional commercial assessments take 4-6 weeks because consultants manually research everything.
+              We use AI to accelerate data gathering and pattern recognition, then add expert validation,
+              strategic thinking, and prioritization. You get the same depth of analysis—backed by real
               expertise, not just AI output—in a fraction of the time.
             </p>
           </div>
@@ -1733,7 +1784,7 @@ const RemidiLandingPage = () => {
         <div className="container">
           <div className="section-label">Why This, Not That</div>
           <h2>vs. Your Other Options</h2>
-          
+
           <div className="comparison-grid">
             <div className="comparison-card">
               <div className="comparison-label">Traditional Consulting</div>
@@ -1781,9 +1832,9 @@ const RemidiLandingPage = () => {
         <div className="container">
           <h2>Ready to Get Started?</h2>
           <p>Request your free GTM Opportunity Finder report or book a 15-minute call to discuss your specific situation.</p>
-          
+
           <div className="hs-form-frame" data-region="na1" data-form-id="29ab8810-c12e-4d57-8eb5-a17c5fa94d5b" data-portal-id="45784330"></div>
-          
+
           <div style={{ marginTop: '2rem' }}>
             <a href="https://calendly.com/michaelhimmelfarb" className="btn-primary">Or Schedule a Call</a>
           </div>
