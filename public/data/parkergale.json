@@ -12,16 +12,20 @@
       "healthScore": 7.4,
       "relativeScore": 1.6,
       "valueArticulation": 8.2,
-      "pricingArchitecture": 5.5,
-      "competitivePositioning": 7.8,
-      "salesEnablement": 7.5,
-      "customerROI": 8.0,
       "status": "outperformer",
       "invested": 2022,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 5.5, "issue": "No visible pricing page - 'Get custom pricing' creates friction despite strong value metrics" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.5,
+          "issue": "No visible pricing page - 'Get custom pricing' creates friction despite strong value metrics"
+        }
       ],
-      "observation": "Excellent proof points (633% review volume growth, 6 of top 25 dealer groups). Strong automotive vertical focus. Hidden pricing limits self-service conversion."
+      "observation": "Excellent proof points (633% review volume growth, 6 of top 25 dealer groups). Strong automotive vertical focus. Hidden pricing limits self-service conversion.",
+      "buyerTrust": 5.5,
+      "differentiation": 7.8,
+      "buyerEnablement": 7.5,
+      "socialProof": 8.0
     },
     {
       "id": 2,
@@ -32,16 +36,20 @@
       "healthScore": 7.2,
       "relativeScore": 1.4,
       "valueArticulation": 7.5,
-      "pricingArchitecture": 8.0,
-      "competitivePositioning": 6.8,
-      "salesEnablement": 7.0,
-      "customerROI": 6.8,
       "status": "outperformer",
       "invested": 2021,
       "topGaps": [
-        { "dimension": "Competitive Positioning", "score": 6.8, "issue": "Marketplace positioning solid but competitive moat vs. LiveAuctioneers not clearly articulated" }
+        {
+          "dimension": "Differentiation",
+          "score": 6.8,
+          "issue": "Marketplace positioning solid but competitive moat vs. LiveAuctioneers not clearly articulated"
+        }
       ],
-      "observation": "Transparent pricing model (rare in industry). Clear value prop for auctioneers. $95/mo entry point visible. Strong two-sided marketplace dynamics."
+      "observation": "Transparent pricing model (rare in industry). Clear value prop for auctioneers. $95/mo entry point visible. Strong two-sided marketplace dynamics.",
+      "buyerTrust": 8.0,
+      "differentiation": 6.8,
+      "buyerEnablement": 7.0,
+      "socialProof": 6.8
     },
     {
       "id": 3,
@@ -52,17 +60,25 @@
       "healthScore": 6.8,
       "relativeScore": 1.0,
       "valueArticulation": 7.5,
-      "pricingArchitecture": 5.0,
-      "competitivePositioning": 7.2,
-      "salesEnablement": 6.5,
-      "customerROI": 7.8,
       "status": "average",
       "invested": 2020,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 5.0, "issue": "Custom pricing only - enterprise buyers have no anchor for budget discussions" },
-        { "dimension": "Sales Enablement", "score": 6.5, "issue": "No ROI calculator or self-service demo despite strong quantified outcomes" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.0,
+          "issue": "Custom pricing only - enterprise buyers have no anchor for budget discussions"
+        },
+        {
+          "dimension": "Buyer Enablement",
+          "score": 6.5,
+          "issue": "No ROI calculator or self-service demo despite strong quantified outcomes"
+        }
       ],
-      "observation": "Strong analyst recognition (Forrester Wave Leader). Good proof (40% reduction in turnover). Enterprise-only positioning limits mid-market expansion."
+      "observation": "Strong analyst recognition (Forrester Wave Leader). Good proof (40% reduction in turnover). Enterprise-only positioning limits mid-market expansion.",
+      "buyerTrust": 5.0,
+      "differentiation": 7.2,
+      "buyerEnablement": 6.5,
+      "socialProof": 7.8
     },
     {
       "id": 4,
@@ -73,17 +89,25 @@
       "healthScore": 6.5,
       "relativeScore": 0.7,
       "valueArticulation": 7.0,
-      "pricingArchitecture": 5.5,
-      "competitivePositioning": 6.5,
-      "salesEnablement": 6.8,
-      "customerROI": 6.8,
       "status": "average",
       "invested": 2023,
       "topGaps": [
-        { "dimension": "Competitive Positioning", "score": 6.5, "issue": "Comparative guide vs. Bluebeam/Avolve exists but not prominently featured" },
-        { "dimension": "Pricing Architecture", "score": 5.5, "issue": "No pricing visibility - government procurement needs clear budget positioning" }
+        {
+          "dimension": "Differentiation",
+          "score": 6.5,
+          "issue": "Comparative guide vs. Bluebeam/Avolve exists but not prominently featured"
+        },
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.5,
+          "issue": "No pricing visibility - government procurement needs clear budget positioning"
+        }
       ],
-      "observation": "Solid product messaging. Good case studies (Syracuse, Montgomery County). Market position vs. Bluebeam/Adobe could be sharper."
+      "observation": "Solid product messaging. Good case studies (Syracuse, Montgomery County). Market position vs. Bluebeam/Adobe could be sharper.",
+      "buyerTrust": 5.5,
+      "differentiation": 6.5,
+      "buyerEnablement": 6.8,
+      "socialProof": 6.8
     },
     {
       "id": 5,
@@ -94,17 +118,25 @@
       "healthScore": 6.4,
       "relativeScore": 0.6,
       "valueArticulation": 6.8,
-      "pricingArchitecture": 7.0,
-      "competitivePositioning": 7.2,
-      "salesEnablement": 5.5,
-      "customerROI": 5.5,
       "status": "average",
       "invested": 2019,
       "topGaps": [
-        { "dimension": "Sales Enablement", "score": 5.5, "issue": "Complex multi-product suite (Lightyear, Oplogic, Vistadash) creates buyer confusion" },
-        { "dimension": "Customer ROI Proof", "score": 5.5, "issue": "Limited visible case studies despite strong client base claims" }
+        {
+          "dimension": "Buyer Enablement",
+          "score": 5.5,
+          "issue": "Complex multi-product suite (Lightyear, Oplogic, Vistadash) creates buyer confusion"
+        },
+        {
+          "dimension": "Social Proof",
+          "score": 5.5,
+          "issue": "Limited visible case studies despite strong client base claims"
+        }
       ],
-      "observation": "Strong differentiation on data ownership and named-user pricing. Anti-CDK/Reynolds positioning resonates. Suite complexity may slow sales cycles."
+      "observation": "Strong differentiation on data ownership and named-user pricing. Anti-CDK/Reynolds positioning resonates. Suite complexity may slow sales cycles.",
+      "buyerTrust": 7.0,
+      "differentiation": 7.2,
+      "buyerEnablement": 5.5,
+      "socialProof": 5.5
     },
     {
       "id": 6,
@@ -115,16 +147,20 @@
       "healthScore": 7.0,
       "relativeScore": 1.2,
       "valueArticulation": 7.5,
-      "pricingArchitecture": 5.8,
-      "competitivePositioning": 7.5,
-      "salesEnablement": 7.0,
-      "customerROI": 7.2,
       "status": "outperformer",
       "invested": 2023,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 5.8, "issue": "Subscription pricing not published despite freemium signal (MarketSignal)" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.8,
+          "issue": "Subscription pricing not published despite freemium signal (MarketSignal)"
+        }
       ],
-      "observation": "Strong market position via NIQ partnership. 20-year data history is real moat. Free MarketSignal dashboard smart PLG move. Complex acquisition history (TraQline, Gap Intelligence) not fully integrated in messaging."
+      "observation": "Strong market position via NIQ partnership. 20-year data history is real moat. Free MarketSignal dashboard smart PLG move. Complex acquisition history (TraQline, Gap Intelligence) not fully integrated in messaging.",
+      "buyerTrust": 5.8,
+      "differentiation": 7.5,
+      "buyerEnablement": 7.0,
+      "socialProof": 7.2
     },
     {
       "id": 7,
@@ -135,17 +171,25 @@
       "healthScore": 5.8,
       "relativeScore": 0.0,
       "valueArticulation": 6.0,
-      "pricingArchitecture": 5.0,
-      "competitivePositioning": 5.5,
-      "salesEnablement": 6.2,
-      "customerROI": 6.2,
       "status": "average",
       "invested": 2021,
       "topGaps": [
-        { "dimension": "Competitive Positioning", "score": 5.5, "issue": "Regulatory compliance positioning but competitive landscape vs. Assent not addressed" },
-        { "dimension": "Pricing Architecture", "score": 5.0, "issue": "No pricing transparency for a compliance product where budgeting is critical" }
+        {
+          "dimension": "Differentiation",
+          "score": 5.5,
+          "issue": "Regulatory compliance positioning but competitive landscape vs. Assent not addressed"
+        },
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.0,
+          "issue": "No pricing transparency for a compliance product where budgeting is critical"
+        }
       ],
-      "observation": "Addresses real pain (conflict minerals, CMRT). Market tailwinds from ESG/supply chain transparency. Value quantification could be stronger."
+      "observation": "Addresses real pain (conflict minerals, CMRT). Market tailwinds from ESG/supply chain transparency. Value quantification could be stronger.",
+      "buyerTrust": 5.0,
+      "differentiation": 5.5,
+      "buyerEnablement": 6.2,
+      "socialProof": 6.2
     },
     {
       "id": 8,
@@ -156,17 +200,25 @@
       "healthScore": 5.5,
       "relativeScore": -0.3,
       "valueArticulation": 5.8,
-      "pricingArchitecture": 5.0,
-      "competitivePositioning": 5.5,
-      "salesEnablement": 5.0,
-      "customerROI": 5.2,
       "status": "underperformer",
       "invested": 2020,
       "topGaps": [
-        { "dimension": "Value Articulation", "score": 5.8, "issue": "Technical storage/workflow messaging - missing customer ROI quantification" },
-        { "dimension": "Sales Enablement", "score": 5.0, "issue": "Complex product suite without clear buyer journey guidance" }
+        {
+          "dimension": "Value Articulation",
+          "score": 5.8,
+          "issue": "Technical storage/workflow messaging - missing customer ROI quantification"
+        },
+        {
+          "dimension": "Buyer Enablement",
+          "score": 5.0,
+          "issue": "Complex product suite without clear buyer journey guidance"
+        }
       ],
-      "observation": "Niche media production vertical. Cloud + on-prem hybrid positioning. Technical messaging may miss decision-maker value narrative."
+      "observation": "Niche media production vertical. Cloud + on-prem hybrid positioning. Technical messaging may miss decision-maker value narrative.",
+      "buyerTrust": 5.0,
+      "differentiation": 5.5,
+      "buyerEnablement": 5.0,
+      "socialProof": 5.2
     }
   ]
 }

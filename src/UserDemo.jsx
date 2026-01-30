@@ -38,7 +38,7 @@ const defaultCompanyData = {
         unknown: ["Customer switching reasons", "Head-to-head win rates", "Pricing relative to competitors"],
         wouldChange: "Score would increase to 6.5+ with win/loss analysis data"
       },
-      salesEnablement: { 
+      buyerEnablement: { 
         score: 3.2, 
         status: "critical",
         confidence: "Low",
@@ -73,7 +73,7 @@ const defaultCompanyData = {
         unknown: ["Customer switching reasons", "Head-to-head win rates"],
         wouldChange: "Score would increase to 6.5+ with win/loss analysis data"
       },
-      salesEnablement: { 
+      buyerEnablement: { 
         score: 2.8, 
         status: "critical",
         confidence: "High",
@@ -93,12 +93,12 @@ const defaultCompanyData = {
     metricLabel: "CFO-Ready Index™",
     description: "Your case studies score <strong>2/10</strong> on the CFO-Ready Index™. For $100-200K deals with CFO sign-off, benchmark is 7+. This gap is likely costing <strong>15-25% of winnable deals</strong>."
   },
-  aiCoachInsight: "I've analyzed FleetOps' public footprint. Your <strong>Sales Enablement score of 3.2/10</strong> is your biggest blocker. I see operational stats — 'delivery times', 'route efficiency' — but they're not connected to customer P&L impact. <strong>A few quick questions will sharpen this picture.</strong>",
+  aiCoachInsight: "I've analyzed FleetOps' public footprint. Your <strong>Buyer Enablement score of 3.2/10</strong> is your biggest blocker. I see operational stats — 'delivery times', 'route efficiency' — but they're not connected to customer P&L impact. <strong>A few quick questions will sharpen this picture.</strong>",
   diagnostic: {
     q1: {
       question: "When you lose deals, is it price confusion, proof points, or something else?",
       answer: "Prospects don't understand our pricing model. And when they ask how much they'll save, we can't give them specific numbers.",
-      insight: "→ Confirms Sales Enablement gap (pricing clarity + proof points)"
+      insight: "→ Confirms Buyer Enablement gap (pricing clarity + proof points)"
     },
     q2: {
       question: "How many case studies would you confidently share with a CFO?",
@@ -756,10 +756,10 @@ export default function UserDemo() {
                   onToggleDetails={() => setExpandedScore(expandedScore === 'differentiation' ? null : 'differentiation')}
                 />
                 <ScoreGauge 
-                  label="Sales Enablement" 
-                  scoreData={companyData.scores.initial.salesEnablement}
-                  showDetails={expandedScore === 'salesEnablement'}
-                  onToggleDetails={() => setExpandedScore(expandedScore === 'salesEnablement' ? null : 'salesEnablement')}
+                  label="Buyer Enablement" 
+                  scoreData={companyData.scores.initial.buyerEnablement}
+                  showDetails={expandedScore === 'buyerEnablement'}
+                  onToggleDetails={() => setExpandedScore(expandedScore === 'buyerEnablement' ? null : 'buyerEnablement')}
                 />
               </div>
 
@@ -963,9 +963,9 @@ export default function UserDemo() {
                     <span style={{ fontWeight: 700, color: '#d97706' }}>{companyData.scores.initial.differentiation.score}/10</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 13, color: colors.textMuted }}>Sales Enablement</span>
+                    <span style={{ fontSize: 13, color: colors.textMuted }}>Buyer Enablement</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontWeight: 700, color: '#dc2626' }}>{questionAnswered ? companyData.scores.postDiagnostic.salesEnablement.score : companyData.scores.initial.salesEnablement.score}/10</span>
+                      <span style={{ fontWeight: 700, color: '#dc2626' }}>{questionAnswered ? companyData.scores.postDiagnostic.buyerEnablement.score : companyData.scores.initial.buyerEnablement.score}/10</span>
                       {questionAnswered && <span style={{ fontSize: 11, color: '#dc2626' }}>↓</span>}
                     </div>
                   </div>
@@ -984,7 +984,7 @@ export default function UserDemo() {
                     gap: 6
                   }}>
                     <span>↑</span>
-                    <span>Sales Enablement confidence upgraded: T3 → T1</span>
+                    <span>Buyer Enablement confidence upgraded: T3 → T1</span>
                   </div>
                 )}
               </div>
@@ -1054,11 +1054,11 @@ export default function UserDemo() {
                 onToggleDetails={() => setExpandedScore(expandedScore === 'differentiation' ? null : 'differentiation')}
               />
               <ScoreGauge 
-                label="Sales Enablement" 
-                scoreData={scoresUpdated ? companyData.scores.postDiagnostic.salesEnablement : companyData.scores.initial.salesEnablement}
-                previousScore={companyData.scores.initial.salesEnablement.score}
-                showDetails={expandedScore === 'salesEnablement'}
-                onToggleDetails={() => setExpandedScore(expandedScore === 'salesEnablement' ? null : 'salesEnablement')}
+                label="Buyer Enablement" 
+                scoreData={scoresUpdated ? companyData.scores.postDiagnostic.buyerEnablement : companyData.scores.initial.buyerEnablement}
+                previousScore={companyData.scores.initial.buyerEnablement.score}
+                showDetails={expandedScore === 'buyerEnablement'}
+                onToggleDetails={() => setExpandedScore(expandedScore === 'buyerEnablement' ? null : 'buyerEnablement')}
               />
             </div>
 

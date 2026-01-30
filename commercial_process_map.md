@@ -22,7 +22,7 @@
 | 1.1 | **Market & Segment Selection** | CEO / Product / Marketing | Clear target segments with quantified TAM; resource allocation aligned to opportunity size | "We sell to everyone"; scattered wins across unrelated segments |
 | 1.2 | **ICP Definition** | Marketing / Sales Leadership | Documented ICP with firmographic + behavioral criteria; sales can articulate in 30 seconds | Vague personas; "we'll know them when we see them" |
 | 1.3 | **Value Proposition Development** | Product Marketing / CEO | Quantified value claims tied to customer outcomes; differentiated from top 3 competitors | Feature lists; "we're faster/better/cheaper" without proof |
-| 1.4 | **Competitive Positioning** | Product Marketing | Clear positioning vs. alternatives (including status quo); battlecards that sales actually use | Reactive competitive responses; "we don't really have competitors" |
+| 1.4 | **Differentiation** | Product Marketing | Clear positioning vs. alternatives (including status quo); battlecards that sales actually use | Reactive competitive responses; "we don't really have competitors" |
 | 1.5 | **Pricing Strategy & Structure** | CEO / Finance / Product Marketing | Price architecture aligned to value delivered; defensible vs. competition; understood by sales | Cost-plus pricing; discounting >20% on most deals; price as primary objection |
 | 1.6 | **Packaging & Bundling** | Product / Product Marketing | Packages that drive land-and-expand; clear upgrade paths; minimal custom SKUs | One-size-fits-all; proliferating custom deals |
 | 1.7 | **Channel Strategy** | CEO / Sales Leadership | Channel economics that work; clear direct vs. partner rules of engagement | Channel conflict; margin confusion; partner underperformance |
@@ -35,10 +35,10 @@
 | Step | Activity | Owner | Success Signals | Failure Indicators |
 |------|----------|-------|-----------------|---------------------|
 | 2.1 | **Sales Methodology Selection** | Sales Leadership | Methodology matched to buyer journey complexity; trained and reinforced | MEDDIC on paper, Rolodex in practice |
-| 2.2 | **Sales Enablement Content** | Product Marketing / Sales Enablement | Case studies, ROI tools, objection handlers reps actually use; content mapped to buyer journey stages | "Marketing gives us stuff we don't use"; reps build their own decks |
+| 2.2 | **Buyer Enablement Content** | Product Marketing / Buyer Enablement | Case studies, ROI tools, objection handlers reps actually use; content mapped to buyer journey stages | "Marketing gives us stuff we don't use"; reps build their own decks |
 | 2.3 | **Buyer Journey Mapping** | Marketing / Sales | Documented stages with entry/exit criteria; content and touches mapped to each stage | Internal sales stages that don't match how buyers buy |
 | 2.4 | **Qualification Framework** | Sales Leadership | Clear qualification criteria (BANT, MEDDPICC, etc.) enforced at stage gates | Everything is "qualified"; bloated pipeline |
-| 2.5 | **Pricing Tools & CPQ** | RevOps / Sales Enablement | Reps can quote accurately without manager approval (within guardrails); deal desk for exceptions only | Every deal needs approval; spreadsheet quotes |
+| 2.5 | **Pricing Tools & CPQ** | RevOps / Buyer Enablement | Reps can quote accurately without manager approval (within guardrails); deal desk for exceptions only | Every deal needs approval; spreadsheet quotes |
 | 2.6 | **Competitive Intelligence System** | Product Marketing | Regular competitive updates; win/loss intelligence flows back; reps know how to position | Outdated battlecards; "I didn't know they could do that" |
 
 ---

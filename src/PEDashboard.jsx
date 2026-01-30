@@ -38,10 +38,10 @@ const sectorBenchmarks = {
 // Dimension definitions
 const dimensions = [
   { key: 'va', name: 'Value Articulation', short: 'Val. Art.' },
-  { key: 'pa', name: 'Pricing Architecture', short: 'Pricing' },
+  { key: 'pa', name: 'Buyer Trust', short: 'Pricing' },
   { key: 'cp', name: 'Competitive Position', short: 'Comp. Pos.' },
-  { key: 'se', name: 'Sales Enablement', short: 'Sales En.' },
-  { key: 'cr', name: 'Customer ROI Proof', short: 'ROI Proof' },
+  { key: 'se', name: 'Buyer Enablement', short: 'Sales En.' },
+  { key: 'cr', name: 'Social Proof', short: 'ROI Proof' },
 ];
 
 // Portfolio data aligned with InvestorDemo
@@ -60,7 +60,7 @@ const portfolioCompanies = [
     overall: 5.4, trend: 'flat', status: 'underperformer',
     estimatedUpside: 1850000,
     topGaps: [
-      { dimension: 'Sales Enablement', score: 4.5, issue: 'No ROI calculator or quantified proof points' },
+      { dimension: 'Buyer Enablement', score: 4.5, issue: 'No ROI calculator or quantified proof points' },
       { dimension: 'Value Articulation', score: 4.8, issue: 'Features described but outcomes not quantified' }
     ]
   },
@@ -78,9 +78,9 @@ const portfolioCompanies = [
     overall: 4.2, trend: 'down', status: 'underperformer',
     estimatedUpside: 2380000,
     topGaps: [
-      { dimension: 'Sales Enablement', score: 3.2, issue: 'No published pricing, no case studies with ROI' },
+      { dimension: 'Buyer Enablement', score: 3.2, issue: 'No published pricing, no case studies with ROI' },
       { dimension: 'Value Articulation', score: 3.5, issue: 'No connection to customer P&L impact' },
-      { dimension: 'Customer ROI Proof', score: 4.6, issue: 'Claims savings but no calculator or evidence' }
+      { dimension: 'Social Proof', score: 4.6, issue: 'Claims savings but no calculator or evidence' }
     ]
   },
   { 
@@ -104,8 +104,8 @@ const portfolioCompanies = [
     overall: 5.1, trend: 'flat', status: 'underperformer',
     estimatedUpside: 1196000,
     topGaps: [
-      { dimension: 'Pricing Architecture', score: 4.2, issue: 'Single flat-rate tier regardless of size' },
-      { dimension: 'Sales Enablement', score: 4.8, issue: 'Limited competitive positioning materials' }
+      { dimension: 'Buyer Trust', score: 4.2, issue: 'Single flat-rate tier regardless of size' },
+      { dimension: 'Buyer Enablement', score: 4.8, issue: 'Limited competitive positioning materials' }
     ]
   },
   { 
@@ -122,7 +122,7 @@ const portfolioCompanies = [
     overall: 5.5, trend: 'down', status: 'underperformer',
     estimatedUpside: 1534000,
     topGaps: [
-      { dimension: 'Sales Enablement', score: 4.8, issue: 'No battle cards or competitive differentiation' },
+      { dimension: 'Buyer Enablement', score: 4.8, issue: 'No battle cards or competitive differentiation' },
       { dimension: 'Value Articulation', score: 5.2, issue: 'Generic efficiency claims without proof' }
     ]
   },
@@ -597,7 +597,7 @@ const SectorIntelligence = ({ companies }) => {
         <h3 style={{ fontWeight: 600, color: '#1e40af', marginBottom: '12px' }}>Sector Intelligence: {selectedSector}</h3>
         <div style={{ fontSize: '14px', color: '#1e3a8a' }}>
           <p style={{ marginBottom: '12px' }}>
-            <strong>Key differentiator:</strong> In {selectedSector}, <strong>Pricing Architecture</strong> shows the widest variance between top and bottom performers. Companies that improve this dimension see average margin expansion of 12-18%.
+            <strong>Key differentiator:</strong> In {selectedSector}, <strong>Buyer Trust</strong> shows the widest variance between top and bottom performers. Companies that improve this dimension see average margin expansion of 12-18%.
           </p>
           {sectorCompanies.length > 0 && (
             <p>
@@ -702,10 +702,10 @@ const DiligenceMode = () => {
               <tbody>
                 {[
                   { name: 'Value Articulation', mgmt: 7.5, ext: 5.2, gap: -2.3 },
-                  { name: 'Pricing Architecture', mgmt: 6.0, ext: 4.8, gap: -1.2 },
+                  { name: 'Buyer Trust', mgmt: 6.0, ext: 4.8, gap: -1.2 },
                   { name: 'Competitive Position', mgmt: 7.0, ext: 6.3, gap: -0.7 },
-                  { name: 'Sales Enablement', mgmt: 5.5, ext: 4.2, gap: -1.3 },
-                  { name: 'Customer ROI Proof', mgmt: 5.0, ext: 5.5, gap: 0.5 },
+                  { name: 'Buyer Enablement', mgmt: 5.5, ext: 4.2, gap: -1.3 },
+                  { name: 'Social Proof', mgmt: 5.0, ext: 5.5, gap: 0.5 },
                 ].map(d => (
                   <tr key={d.name} style={{ borderBottom: '1px solid #e5e7eb' }}>
                     <td style={{ padding: '12px 0', fontWeight: 500, color: colors.darkNavy }}>{d.name}</td>
@@ -756,7 +756,7 @@ const DiligenceMode = () => {
             <div style={{ fontSize: '14px', color: '#4b5563' }}>
               <div><strong>Based on:</strong> Peer improvement trajectories (n=23 similar companies)</div>
               <div style={{ marginTop: '4px' }}><strong>Primary lever:</strong> Value Articulation improvement (+$800K)</div>
-              <div style={{ marginTop: '4px' }}><strong>Secondary lever:</strong> Sales Enablement (+$520K)</div>
+              <div style={{ marginTop: '4px' }}><strong>Secondary lever:</strong> Buyer Enablement (+$520K)</div>
             </div>
           </div>
 

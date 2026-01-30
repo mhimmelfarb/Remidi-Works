@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Company Intelligence Data (private, local only)
+companies/
+scripts/compare_assessments.py

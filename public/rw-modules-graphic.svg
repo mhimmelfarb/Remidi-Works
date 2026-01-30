@@ -34,7 +34,7 @@
     <text x="100" y="150">• Market Segmentation</text>
     <text x="100" y="172">• ICP Definition</text>
     <text x="100" y="194">• Value Proposition</text>
-    <text x="100" y="216">• Competitive Positioning</text>
+    <text x="100" y="216">• Differentiation</text>
     <text x="100" y="238">• Pricing Strategy</text>
     <text x="100" y="260">• Packaging &amp; Bundling</text>
     <text x="100" y="282">• Channel Strategy</text>
@@ -47,7 +47,7 @@
   
   <!-- Enablement Items -->
   <g class="body-text" fill="#374151" font-size="14">
-    <text x="540" y="150">• Sales Enablement Strategy</text>
+    <text x="540" y="150">• Buyer Enablement Strategy</text>
     <text x="540" y="172">• CS Enablement Strategy</text>
     <text x="540" y="194">• Buyer Journey Mapping</text>
     <text x="540" y="216">• Qualification Framework</text>

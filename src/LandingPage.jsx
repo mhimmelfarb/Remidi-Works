@@ -1488,7 +1488,7 @@ const RemidiLandingPage = () => {
             <div className="screenshot-content">
               <h3>What Your Diagnostic Looks Like</h3>
               <p>See exactly where you're underperforming vs. category benchmarks across all 5 GTM dimensions.</p>
-              <p className="screenshot-caption">Real diagnostic for a logistics tech company showing Sales Enablement as the primary revenue-killing gap.</p>
+              <p className="screenshot-caption">Real diagnostic for a logistics tech company showing Buyer Enablement as the primary revenue-killing gap.</p>
             </div>
             <div className="screenshot-image">
               <img
@@ -1740,7 +1740,7 @@ const RemidiLandingPage = () => {
                 <strong style={{ color: 'var(--color-text-dark)', display: 'block', marginBottom: '0.5rem' }}>📊 The Analysis</strong>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-gray)' }}>
                   5-dimension commercial health assessment with evidence-based scoring across Value Articulation,
-                  Pricing Architecture, Competitive Positioning, Sales Enablement, and Customer ROI Proof
+                  Buyer Trust, Differentiation, Buyer Enablement, and Social Proof
                 </p>
               </div>
               <div>

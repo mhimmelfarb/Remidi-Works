@@ -44,22 +44,22 @@
         "weight": 25,
         "weightedScore": 12.0
       },
-      "pricingArchitecture": {
+      "buyerTrust": {
         "score": 28,
         "weight": 30,
         "weightedScore": 8.4
       },
-      "competitivePositioning": {
+      "differentiation": {
         "score": 58,
         "weight": 20,
         "weightedScore": 11.6
       },
-      "salesEnablement": {
+      "buyerEnablement": {
         "score": 35,
         "weight": 15,
         "weightedScore": 5.25
       },
-      "customerROIProof": {
+      "socialProof": {
         "score": 38,
         "weight": 10,
         "weightedScore": 3.8
@@ -141,7 +141,7 @@
       ]
     },
 
-    "pricingArchitecture": {
+    "buyerTrust": {
       "score": 28,
       "summary": "Pricing model structure presents opportunities for optimization. Per-app pricing may limit customer growth, support tier requirements create expansion friction, and limited transparency may reduce qualified pipeline before first conversation.",
       "findings": [
@@ -216,7 +216,7 @@
       ]
     },
 
-    "competitivePositioning": {
+    "differentiation": {
       "score": 58,
       "summary": "Legitimate technical moat exists but may be undersold. Mobile-first differentiation is real, government certifications are significant barriers to entry, but current positioning may blend in with generic AST vendors. Category creation opportunity (MARM) presents significant upside.",
       "findings": [
@@ -293,7 +293,7 @@
       ]
     },
 
-    "salesEnablement": {
+    "buyerEnablement": {
       "score": 35,
       "summary": "Sales process presents opportunity for standardization. Each deal involves custom negotiation, no standardized methodology visible, limited buyer enablement tools. Guided-selling-only approach may limit scalability.",
       "findings": [
@@ -369,7 +369,7 @@
       ]
     },
 
-    "customerROIProof": {
+    "socialProof": {
       "score": 38,
       "summary": "ROI claims exist but could be strengthened. Limited customer attribution, methodology transparency, and third-party validation. Reference customer program represents significant opportunity given strong logo portfolio.",
       "findings": [

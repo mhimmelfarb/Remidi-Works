@@ -1,0 +1,33 @@
+{
+  "company_name": "Peak Technologies",
+  "website": "https://www.peaktech.com",
+  "industry": "Supply Chain Technology",
+  "vertical": "Digital Supply Chain & Mobile Workforce Solutions",
+  "location": "Columbia, MD",
+  "founded": 1981,
+  "revenue": "$121.9M (2025)",
+  "ownership": "PE Portfolio - Sole Source Capital (acquired 2021)",
+  "employee_count": "~500-1000 (estimated)",
+  "key_facts": [
+    "Roll-up consolidation: 18 acquisitions since 2021",
+    "Zebra Technologies Premier Partner",
+    "$121.9M annual revenue",
+    "Executive Briefing Center in Littleton, MA (60k sqft, launched 2025)"
+  ],
+  "contact_info": {
+    "primary_contact": null,
+    "email": null,
+    "phone": null
+  },
+  "assessment_history": [
+    {
+      "date": "2026-01-30",
+      "type": "rapid_scan",
+      "overall_score": 53,
+      "status": "completed",
+      "path": "assessments/2026-01-30_rapid_scan/"
+    }
+  ],
+  "engagement_status": "prospect",
+  "notes": "Free rapid scan completed. Employee sentiment crisis identified as critical gap. Strong potential for full diagnostic focused on post-acquisition integration and commercial positioning clarity."
+}

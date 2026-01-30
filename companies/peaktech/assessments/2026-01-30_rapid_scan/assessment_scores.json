@@ -1,0 +1,212 @@
+{
+  "assessment_metadata": {
+    "company": "Peak Technologies",
+    "date": "2026-01-30",
+    "type": "rapid_scan",
+    "analyst": "Claude Sonnet 4.5 + Michael Himmelfarb",
+    "data_sources": [
+      "Website analysis (peaktech.com)",
+      "Glassdoor reviews (129 total)",
+      "G2 customer reviews",
+      "Press releases (acquisitions, facility launch)",
+      "Competitive intelligence (Tracxn, ZoomInfo)",
+      "Public financial data ($121.9M revenue)",
+      "PE ownership structure analysis"
+    ]
+  },
+
+  "overall_score": {
+    "value": 53,
+    "scale": "0-100",
+    "tier": "T2 Medium",
+    "benchmark": {
+      "category": "Supply Chain Tech",
+      "value": 58
+    }
+  },
+
+  "dimension_scores": {
+    "value_articulation": {
+      "score": 55,
+      "weight": 0.25,
+      "tier": "T2 Medium",
+      "confidence": 6,
+      "key_issue": "Dual positioning creates messaging confusion",
+      "peer_average": 58,
+      "top_quartile": 72,
+      "observations": [
+        "Dual messaging: 'ROI-driven managed mobility services' vs. 'industry's largest end-to-end solutions provider'",
+        "Multiple sub-brands post-acquisition (VisionID, Siena, ISG, Coridian, etc.)",
+        "No quantified outcome metrics on homepage",
+        "Broad ICP: manufacturing, retail, warehousing, healthcare, logistics, field services"
+      ],
+      "gaps": [
+        "Post-acquisition brand integration strategy unclear",
+        "ICP prioritization needed",
+        "Customer outcome data missing (avg ROI, uptime, cost reduction)",
+        "Differentiation vs. Zebra direct sales unclear"
+      ],
+      "improvement_potential": "68-75 with unified messaging and 3-5 quantified outcomes"
+    },
+
+    "pricing_architecture": {
+      "score": 35,
+      "weight": 0.25,
+      "tier": "T1 Low",
+      "confidence": 7,
+      "key_issue": "Complete pricing opacity",
+      "peer_average": 52,
+      "top_quartile": 68,
+      "observations": [
+        "No pricing information visible on website",
+        "Enterprise 'contact sales' model implied",
+        "No tiers, ranges, or self-qualification guidance",
+        "Managed mobility typically custom-priced by device count and SLA"
+      ],
+      "gaps": [
+        "Typical deal sizes by segment unknown",
+        "Pricing model structure unclear (per-device, per-user, per-location)",
+        "No indicative ranges for SMB/mid-market",
+        "Sales cycle data unavailable"
+      ],
+      "improvement_potential": "55-62 with indicative pricing ranges published"
+    },
+
+    "competitive_positioning": {
+      "score": 48,
+      "weight": 0.30,
+      "tier": "T2 Medium",
+      "confidence": 6,
+      "key_issue": "Zebra partner-competitor ambiguity",
+      "peer_average": 55,
+      "top_quartile": 71,
+      "observations": [
+        "Zebra Technologies Premier Partner (reseller + implementer)",
+        "'Industry's largest provider' claim unsubstantiated",
+        "18 acquisitions since 2021 PE buyout signals roll-up strategy",
+        "Competitors: Hub Group, NFI Industries, Kontakt, Omni-ID"
+      ],
+      "gaps": [
+        "Positioning vs. Zebra direct sales unclear",
+        "No market share data or validation",
+        "Win/loss drivers unknown",
+        "Differentiation beyond scale unclear"
+      ],
+      "improvement_potential": "62-68 with category ownership narrative"
+    },
+
+    "sales_enablement": {
+      "score": 52,
+      "weight": 0.15,
+      "tier": "T2 Medium",
+      "confidence": 5,
+      "key_issue": "Functional infrastructure lacks public visibility",
+      "peer_average": 56,
+      "top_quartile": 70,
+      "observations": [
+        "Limited public-facing sales content",
+        "PE-backed suggests strong sales infrastructure",
+        "60k sqft Executive Briefing Center (2025)",
+        "NRF 2024 presence, industry events"
+      ],
+      "gaps": [
+        "Sales motion unknown (inbound/outbound ratio, AE count)",
+        "Enablement assets visibility low",
+        "EBC utilization and impact unknown",
+        "Partner channel contribution unknown"
+      ],
+      "improvement_potential": "64-70 with published case studies and solution pages"
+    },
+
+    "customer_roi_proof": {
+      "score": 42,
+      "weight": 0.20,
+      "tier": "T1 Low",
+      "confidence": 6,
+      "key_issue": "Minimal public proof points",
+      "peer_average": 54,
+      "top_quartile": 72,
+      "observations": [
+        "Limited public case studies",
+        "No quantified ROI metrics on website",
+        "G2 reviews mention 'ease of use' but lack outcomes",
+        "Fortune 500 claims but no named logos"
+      ],
+      "gaps": [
+        "Named customer references unavailable",
+        "Average outcomes unknown (uptime %, cost reduction, productivity)",
+        "Case study development process unclear",
+        "NPS, retention, customer health metrics unavailable"
+      ],
+      "improvement_potential": "65-75 with 5-8 quantified case studies"
+    }
+  },
+
+  "critical_gap": {
+    "title": "Employee Sentiment Crisis",
+    "priority": "HIGH",
+    "impact_areas": ["GTM execution", "customer retention", "service delivery quality"],
+    "description": "Glassdoor 3.1/5 with only 42% recommending. High turnover, PE-driven layoffs, nepotism complaints, low morale. Cultural fragmentation across 18 acquired entities creates operational risk.",
+    "metrics": {
+      "glassdoor_rating": 3.1,
+      "recommend_to_friend": "42%",
+      "work_life_balance": 3.1,
+      "culture_values": 2.8,
+      "career_opportunities": 2.7,
+      "total_reviews": 129
+    },
+    "risk_assessment": "Fundamental execution risk in services business dependent on talent retention and customer relationship continuity"
+  },
+
+  "key_findings": [
+    {
+      "number": 1,
+      "title": "Employee Sentiment Crisis",
+      "priority": "HIGH",
+      "dimension": "GTM Execution Risk",
+      "summary": "Systematic employee dissatisfaction creates operational risk across customer-facing teams. PE roll-up prioritizing scale over integration."
+    },
+    {
+      "number": 2,
+      "title": "Partner-Competitor Ambiguity",
+      "priority": "HIGH",
+      "dimension": "Differentiation",
+      "summary": "Zebra Premier Partner positioning lacks clarity on when prospects should choose Peak vs. Zebra direct. Category ownership undefined."
+    },
+    {
+      "number": 3,
+      "title": "Messaging Clarity Gap",
+      "priority": "MEDIUM",
+      "dimension": "Value Articulation",
+      "summary": "Dual positioning (managed services vs. transformation partner) creates buyer confusion. Multiple sub-brands compound clarity issue."
+    }
+  ],
+
+  "recommendations": {
+    "immediate": [
+      "Address employee sentiment through transparent communication and retention programs",
+      "Clarify Zebra partner positioning with explicit buyer guidance",
+      "Publish indicative pricing ranges for SMB/mid-market segments"
+    ],
+    "short_term": [
+      "Develop 5-8 quantified customer case studies",
+      "Create category ownership narrative beyond 'largest provider'",
+      "Segment messaging by vertical and buyer type"
+    ],
+    "long_term": [
+      "Cultural integration program across acquired entities",
+      "Brand architecture strategy for sub-brand portfolio",
+      "Analyst relations strategy for market validation"
+    ]
+  },
+
+  "upgrade_potential": {
+    "full_diagnostic_value": "High - significant commercial gaps with clear improvement paths",
+    "estimated_score_lift": "15-20 points achievable in 6 months with focused execution",
+    "priority_workstreams": [
+      "Employee retention and cultural integration",
+      "Competitive positioning and category creation",
+      "Customer proof point development"
+    ]
+  }
+}

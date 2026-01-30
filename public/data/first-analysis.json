@@ -12,16 +12,20 @@
       "healthScore": 7.4,
       "relativeScore": 1.6,
       "valueArticulation": 8.0,
-      "pricingArchitecture": 4.8,
-      "competitivePositioning": 7.5,
-      "salesEnablement": 7.5,
-      "customerROI": 7.2,
       "status": "outperformer",
       "invested": 2021,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 4.8, "issue": "No public pricing despite strong value story ($15B carted, 150M reach)" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 4.8,
+          "issue": "No public pricing despite strong value story ($15B carted, 150M reach)"
+        }
       ],
-      "observation": "Strong value story ($15B carted, 150M reach). Clear 'Click2Cart' positioning. No public pricing hurts."
+      "observation": "Strong value story ($15B carted, 150M reach). Clear 'Click2Cart' positioning. No public pricing hurts.",
+      "buyerTrust": 4.8,
+      "differentiation": 7.5,
+      "buyerEnablement": 7.5,
+      "socialProof": 7.2
     },
     {
       "id": 2,
@@ -32,16 +36,20 @@
       "healthScore": 7.2,
       "relativeScore": 1.4,
       "valueArticulation": 7.8,
-      "pricingArchitecture": 4.5,
-      "competitivePositioning": 7.5,
-      "salesEnablement": 7.2,
-      "customerROI": 6.5,
       "status": "outperformer",
       "invested": 2025,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 4.5, "issue": "Hidden pricing despite clear mid-market positioning" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 4.5,
+          "issue": "Hidden pricing despite clear mid-market positioning"
+        }
       ],
-      "observation": "Sharp mid-market focus, 10:1 analyst ratio (vs 75:1 industry), 99% false positive claim. Pricing hidden."
+      "observation": "Sharp mid-market focus, 10:1 analyst ratio (vs 75:1 industry), 99% false positive claim. Pricing hidden.",
+      "buyerTrust": 4.5,
+      "differentiation": 7.5,
+      "buyerEnablement": 7.2,
+      "socialProof": 6.5
     },
     {
       "id": 3,
@@ -52,16 +60,20 @@
       "healthScore": 6.8,
       "relativeScore": 1.0,
       "valueArticulation": 7.2,
-      "pricingArchitecture": 4.5,
-      "competitivePositioning": 6.8,
-      "salesEnablement": 7.5,
-      "customerROI": 7.0,
       "status": "on-track",
       "invested": 2022,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 4.5, "issue": "No pricing page despite strong customer proof points" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 4.5,
+          "issue": "No pricing page despite strong customer proof points"
+        }
       ],
-      "observation": "Strong customer stories (9M→308M growth). 'Create Customers for Life' resonates. No pricing transparency."
+      "observation": "Strong customer stories (9M\u2192308M growth). 'Create Customers for Life' resonates. No pricing transparency.",
+      "buyerTrust": 4.5,
+      "differentiation": 6.8,
+      "buyerEnablement": 7.5,
+      "socialProof": 7.0
     },
     {
       "id": 4,
@@ -72,18 +84,30 @@
       "healthScore": 5.6,
       "relativeScore": -0.2,
       "valueArticulation": 6.5,
-      "pricingArchitecture": 4.2,
-      "competitivePositioning": 5.8,
-      "salesEnablement": 5.5,
-      "customerROI": 5.5,
       "status": "underperformer",
       "invested": 2021,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 4.2, "issue": "Pricing page empty ('Request Pricing')" },
-        { "dimension": "Sales Enablement", "score": 5.5, "issue": "Limited quantified proof points on website" },
-        { "dimension": "Customer ROI", "score": 5.5, "issue": "AI+crowdsourcing value proposition unclear" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 4.2,
+          "issue": "Pricing page empty ('Request Pricing')"
+        },
+        {
+          "dimension": "Buyer Enablement",
+          "score": 5.5,
+          "issue": "Limited quantified proof points on website"
+        },
+        {
+          "dimension": "Social Proof",
+          "score": 5.5,
+          "issue": "AI+crowdsourcing value proposition unclear"
+        }
       ],
-      "observation": "AI+crowdsourcing story unclear. Pricing page empty ('Request Pricing'). Limited quantified proof points."
+      "observation": "AI+crowdsourcing story unclear. Pricing page empty ('Request Pricing'). Limited quantified proof points.",
+      "buyerTrust": 4.2,
+      "differentiation": 5.8,
+      "buyerEnablement": 5.5,
+      "socialProof": 5.5
     },
     {
       "id": 5,
@@ -94,18 +118,30 @@
       "healthScore": 4.9,
       "relativeScore": -0.9,
       "valueArticulation": 5.0,
-      "pricingArchitecture": 4.0,
-      "competitivePositioning": 5.5,
-      "salesEnablement": 4.8,
-      "customerROI": 4.2,
       "status": "underperformer",
       "invested": 2022,
       "topGaps": [
-        { "dimension": "Value Articulation", "score": 5.0, "issue": "Abstract 'orchestration' positioning doesn't connect to customer outcomes" },
-        { "dimension": "Pricing Architecture", "score": 4.0, "issue": "No pricing information available" },
-        { "dimension": "Customer ROI", "score": 4.2, "issue": "One anonymous testimonial, no quantified ROI proof" }
+        {
+          "dimension": "Value Articulation",
+          "score": 5.0,
+          "issue": "Abstract 'orchestration' positioning doesn't connect to customer outcomes"
+        },
+        {
+          "dimension": "Buyer Trust",
+          "score": 4.0,
+          "issue": "No pricing information available"
+        },
+        {
+          "dimension": "Social Proof",
+          "score": 4.2,
+          "issue": "One anonymous testimonial, no quantified ROI proof"
+        }
       ],
-      "observation": "Abstract 'orchestration' positioning. One anonymous testimonial. No pricing, no ROI proof, jargon-heavy."
+      "observation": "Abstract 'orchestration' positioning. One anonymous testimonial. No pricing, no ROI proof, jargon-heavy.",
+      "buyerTrust": 4.0,
+      "differentiation": 5.5,
+      "buyerEnablement": 4.8,
+      "socialProof": 4.2
     }
   ]
 }

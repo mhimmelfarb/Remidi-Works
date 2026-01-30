@@ -14,12 +14,12 @@
     "initial": {
       "valueArticulation": { "score": 5, "status": "warning" },
       "differentiation": { "score": 6, "status": "warning" },
-      "salesEnablement": { "score": 3, "status": "critical" }
+      "buyerEnablement": { "score": 3, "status": "critical" }
     },
     "postDiagnostic": {
       "valueArticulation": { "score": 4.5, "status": "warning" },
       "differentiation": { "score": 6, "status": "warning" },
-      "salesEnablement": { "score": 2.5, "status": "critical" }
+      "buyerEnablement": { "score": 2.5, "status": "critical" }
     },
     "commercialMaturity": { "initial": 4.7, "postDiagnostic": 4.3, "benchmark": 6.2 }
   },

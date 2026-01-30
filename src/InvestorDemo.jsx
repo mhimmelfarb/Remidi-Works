@@ -67,7 +67,7 @@ const defaultPortfolioData = [
   { 
     id: 1, name: 'CloudSync Pro', sector: 'DevOps/Infrastructure', stage: 'Series B', 
     healthScore: 7.8, relativeScore: 2.0,
-    valueArticulation: 8.2, pricingArchitecture: 7.5, competitivePositioning: 7.9, salesEnablement: 6.8, customerROI: 8.5,
+    valueArticulation: 8.2, buyerTrust: 7.5, differentiation: 7.9, buyerEnablement: 6.8, socialProof: 8.5,
     status: 'outperformer', invested: 2022,
     arr: 18500000, nrr: 112, grr: 94, winRate: 32, salesCycle: 45, cac: 28000, ltv: 168000,
     estimatedUpside: 925000, priority: 'low',
@@ -77,24 +77,24 @@ const defaultPortfolioData = [
   { 
     id: 2, name: 'DataForge AI', sector: 'AI/ML Platform', stage: 'Series A', 
     healthScore: 5.4, relativeScore: -0.4,
-    valueArticulation: 4.8, pricingArchitecture: 5.2, competitivePositioning: 6.1, salesEnablement: 4.5, customerROI: 6.4,
+    valueArticulation: 4.8, buyerTrust: 5.2, differentiation: 6.1, buyerEnablement: 4.5, socialProof: 6.4,
     status: 'underperformer', invested: 2023,
     arr: 8200000, nrr: 98, grr: 88, winRate: 18, salesCycle: 78, cac: 42000, ltv: 118000,
     estimatedUpside: 1850000, priority: 'high',
     topGaps: [
-      { dimension: 'Sales Enablement', score: 4.5, issue: 'No ROI calculator or quantified proof points on website' },
+      { dimension: 'Buyer Enablement', score: 4.5, issue: 'No ROI calculator or quantified proof points on website' },
       { dimension: 'Value Articulation', score: 4.8, issue: 'Features described but customer outcomes not quantified' },
-      { dimension: 'Pricing Architecture', score: 5.2, issue: 'Flat per-seat pricing doesn\'t scale with value delivered' }
+      { dimension: 'Buyer Trust', score: 5.2, issue: 'Flat per-seat pricing doesn\'t scale with value delivered' }
     ],
     topOpportunities: [
-      { dimension: 'Sales Enablement', currentScore: 4.5, targetScore: 6.5, metric: 'Win Rate', impact: '+6%', arrImpact: 492000 },
+      { dimension: 'Buyer Enablement', currentScore: 4.5, targetScore: 6.5, metric: 'Win Rate', impact: '+6%', arrImpact: 492000 },
       { dimension: 'Value Articulation', currentScore: 4.8, targetScore: 6.5, metric: 'Sales Cycle', impact: '-18 days', arrImpact: 410000 }
     ]
   },
   { 
     id: 3, name: 'SecureVault', sector: 'Cybersecurity', stage: 'Series C', 
     healthScore: 8.1, relativeScore: 2.3,
-    valueArticulation: 8.5, pricingArchitecture: 8.0, competitivePositioning: 8.3, salesEnablement: 7.8, customerROI: 7.9,
+    valueArticulation: 8.5, buyerTrust: 8.0, differentiation: 8.3, buyerEnablement: 7.8, socialProof: 7.9,
     status: 'outperformer', invested: 2021,
     arr: 32000000, nrr: 118, grr: 96, winRate: 35, salesCycle: 38, cac: 26000, ltv: 195000,
     estimatedUpside: 640000, priority: 'low',
@@ -104,25 +104,25 @@ const defaultPortfolioData = [
   { 
     id: 4, name: 'FleetOps', sector: 'Logistics Tech', stage: 'Series A', 
     healthScore: 4.2, relativeScore: -1.6,
-    valueArticulation: 3.5, pricingArchitecture: 4.8, competitivePositioning: 4.9, salesEnablement: 3.2, customerROI: 4.6,
+    valueArticulation: 3.5, buyerTrust: 4.8, differentiation: 4.9, buyerEnablement: 3.2, socialProof: 4.6,
     status: 'underperformer', invested: 2023,
     arr: 6800000, nrr: 91, grr: 82, winRate: 14, salesCycle: 92, cac: 48000, ltv: 96000,
     estimatedUpside: 2380000, priority: 'critical',
     topGaps: [
-      { dimension: 'Sales Enablement', score: 3.2, issue: 'No published pricing, no case studies with quantified ROI' },
+      { dimension: 'Buyer Enablement', score: 3.2, issue: 'No published pricing, no case studies with quantified ROI' },
       { dimension: 'Value Articulation', score: 3.5, issue: 'Operational stats shown but no connection to customer P&L impact' },
-      { dimension: 'Customer ROI Proof', score: 4.6, issue: 'Claims savings but no calculator or specific customer evidence' }
+      { dimension: 'Social Proof', score: 4.6, issue: 'Claims savings but no calculator or specific customer evidence' }
     ],
     topOpportunities: [
-      { dimension: 'Sales Enablement', currentScore: 3.2, targetScore: 6.0, metric: 'Win Rate', impact: '+9%', arrImpact: 856000 },
+      { dimension: 'Buyer Enablement', currentScore: 3.2, targetScore: 6.0, metric: 'Win Rate', impact: '+9%', arrImpact: 856000 },
       { dimension: 'Value Articulation', currentScore: 3.5, targetScore: 6.0, metric: 'Sales Cycle', impact: '-28 days', arrImpact: 680000 },
-      { dimension: 'Customer ROI Proof', currentScore: 4.6, targetScore: 6.5, metric: 'NRR', impact: '+8%', arrImpact: 544000 }
+      { dimension: 'Social Proof', currentScore: 4.6, targetScore: 6.5, metric: 'NRR', impact: '+8%', arrImpact: 544000 }
     ]
   },
   { 
     id: 5, name: 'TalentMatch', sector: 'HR Tech', stage: 'Series B', 
     healthScore: 6.3, relativeScore: 0.5,
-    valueArticulation: 6.8, pricingArchitecture: 5.5, competitivePositioning: 6.2, salesEnablement: 6.5, customerROI: 6.5,
+    valueArticulation: 6.8, buyerTrust: 5.5, differentiation: 6.2, buyerEnablement: 6.5, socialProof: 6.5,
     status: 'on-track', invested: 2022,
     arr: 12400000, nrr: 104, grr: 90, winRate: 24, salesCycle: 58, cac: 35000, ltv: 140000,
     estimatedUpside: 1116000, priority: 'medium',
@@ -132,7 +132,7 @@ const defaultPortfolioData = [
   { 
     id: 6, name: 'PayStream', sector: 'FinTech', stage: 'Series B', 
     healthScore: 7.2, relativeScore: 1.4,
-    valueArticulation: 7.5, pricingArchitecture: 7.8, competitivePositioning: 6.8, salesEnablement: 7.0, customerROI: 6.9,
+    valueArticulation: 7.5, buyerTrust: 7.8, differentiation: 6.8, buyerEnablement: 7.0, socialProof: 6.9,
     status: 'outperformer', invested: 2021,
     arr: 21000000, nrr: 110, grr: 93, winRate: 30, salesCycle: 48, cac: 30000, ltv: 162000,
     estimatedUpside: 840000, priority: 'low',
@@ -142,24 +142,24 @@ const defaultPortfolioData = [
   { 
     id: 7, name: 'HealthBridge', sector: 'HealthTech', stage: 'Series A', 
     healthScore: 5.1, relativeScore: -0.7,
-    valueArticulation: 5.5, pricingArchitecture: 4.2, competitivePositioning: 5.8, salesEnablement: 4.8, customerROI: 5.2,
+    valueArticulation: 5.5, buyerTrust: 4.2, differentiation: 5.8, buyerEnablement: 4.8, socialProof: 5.2,
     status: 'underperformer', invested: 2024,
     arr: 5200000, nrr: 96, grr: 85, winRate: 19, salesCycle: 72, cac: 38000, ltv: 108000,
     estimatedUpside: 1196000, priority: 'high',
     topGaps: [
-      { dimension: 'Pricing Architecture', score: 4.2, issue: 'Single flat-rate tier regardless of practice size or usage' },
-      { dimension: 'Sales Enablement', score: 4.8, issue: 'Limited competitive positioning materials visible' },
-      { dimension: 'Customer ROI Proof', score: 5.2, issue: 'Testimonials but no quantified outcomes' }
+      { dimension: 'Buyer Trust', score: 4.2, issue: 'Single flat-rate tier regardless of practice size or usage' },
+      { dimension: 'Buyer Enablement', score: 4.8, issue: 'Limited competitive positioning materials visible' },
+      { dimension: 'Social Proof', score: 5.2, issue: 'Testimonials but no quantified outcomes' }
     ],
     topOpportunities: [
-      { dimension: 'Pricing Architecture', currentScore: 4.2, targetScore: 6.5, metric: 'NRR', impact: '+6%', arrImpact: 468000 },
-      { dimension: 'Sales Enablement', currentScore: 4.8, targetScore: 6.5, metric: 'Win Rate', impact: '+5%', arrImpact: 390000 }
+      { dimension: 'Buyer Trust', currentScore: 4.2, targetScore: 6.5, metric: 'NRR', impact: '+6%', arrImpact: 468000 },
+      { dimension: 'Buyer Enablement', currentScore: 4.8, targetScore: 6.5, metric: 'Win Rate', impact: '+5%', arrImpact: 390000 }
     ]
   },
   { 
     id: 8, name: 'RetailIQ', sector: 'Retail Analytics', stage: 'Series B', 
     healthScore: 6.8, relativeScore: 1.0,
-    valueArticulation: 7.2, pricingArchitecture: 6.5, competitivePositioning: 6.9, salesEnablement: 6.2, customerROI: 7.2,
+    valueArticulation: 7.2, buyerTrust: 6.5, differentiation: 6.9, buyerEnablement: 6.2, socialProof: 7.2,
     status: 'on-track', invested: 2022,
     arr: 15600000, nrr: 106, grr: 91, winRate: 26, salesCycle: 55, cac: 33000, ltv: 152000,
     estimatedUpside: 780000, priority: 'medium',
@@ -169,24 +169,24 @@ const defaultPortfolioData = [
   { 
     id: 9, name: 'SupplyCore', sector: 'Supply Chain', stage: 'Series B', 
     healthScore: 5.5, relativeScore: -0.3,
-    valueArticulation: 5.2, pricingArchitecture: 6.8, competitivePositioning: 5.5, salesEnablement: 4.8, customerROI: 5.2,
+    valueArticulation: 5.2, buyerTrust: 6.8, differentiation: 5.5, buyerEnablement: 4.8, socialProof: 5.2,
     status: 'underperformer', invested: 2021,
     arr: 11800000, nrr: 100, grr: 88, winRate: 21, salesCycle: 68, cac: 40000, ltv: 125000,
     estimatedUpside: 1534000, priority: 'high',
     topGaps: [
-      { dimension: 'Sales Enablement', score: 4.8, issue: 'No visible battle cards or competitive differentiation content' },
+      { dimension: 'Buyer Enablement', score: 4.8, issue: 'No visible battle cards or competitive differentiation content' },
       { dimension: 'Value Articulation', score: 5.2, issue: 'Generic efficiency claims without segment-specific proof' },
-      { dimension: 'Customer ROI Proof', score: 5.2, issue: 'Case studies lack specific financial outcomes' }
+      { dimension: 'Social Proof', score: 5.2, issue: 'Case studies lack specific financial outcomes' }
     ],
     topOpportunities: [
-      { dimension: 'Sales Enablement', currentScore: 4.8, targetScore: 6.5, metric: 'Win Rate', impact: '+5%', arrImpact: 590000 },
+      { dimension: 'Buyer Enablement', currentScore: 4.8, targetScore: 6.5, metric: 'Win Rate', impact: '+5%', arrImpact: 590000 },
       { dimension: 'Value Articulation', currentScore: 5.2, targetScore: 6.5, metric: 'Sales Cycle', impact: '-12 days', arrImpact: 472000 }
     ]
   },
   { 
     id: 10, name: 'MarketPulse', sector: 'MarTech', stage: 'Series A', 
     healthScore: 6.5, relativeScore: 0.7,
-    valueArticulation: 6.9, pricingArchitecture: 6.2, competitivePositioning: 6.8, salesEnablement: 5.8, customerROI: 6.8,
+    valueArticulation: 6.9, buyerTrust: 6.2, differentiation: 6.8, buyerEnablement: 5.8, socialProof: 6.8,
     status: 'on-track', invested: 2023,
     arr: 7400000, nrr: 105, grr: 90, winRate: 25, salesCycle: 56, cac: 34000, ltv: 148000,
     estimatedUpside: 592000, priority: 'medium',
@@ -258,7 +258,7 @@ const dimensionTooltips = {
       'Competitive Advantage'
     ]
   },
-  'Pricing Architecture': {
+  'Buyer Trust': {
     description: 'Clarity and structure of pricing model',
     components: [
       'Pricing Transparency',
@@ -268,7 +268,7 @@ const dimensionTooltips = {
       'Low Commitment Entry Options'
     ]
   },
-  'Competitive Positioning': {
+  'Differentiation': {
     description: 'Whether competitive claims are proven with evidence',
     components: [
       'Differentiation Claims',
@@ -277,7 +277,7 @@ const dimensionTooltips = {
       'G2/Capterra Positioning'
     ]
   },
-  'Sales Enablement': {
+  'Buyer Enablement': {
     description: 'Information completeness for buyer self-qualification',
     components: [
       'ICP/Persona Clarity',
@@ -287,7 +287,7 @@ const dimensionTooltips = {
       'Decision-Making Information'
     ]
   },
-  'Customer ROI Proof': {
+  'Social Proof': {
     description: 'Third-party credibility and validation',
     components: [
       'Customer Logos (Relevant)',
@@ -511,10 +511,10 @@ export default function InvestorPortfolioDashboard() {
   // Calculate dimension averages
   const dimAverages = {
     valueArticulation: portfolioData.reduce((sum, c) => sum + c.valueArticulation, 0) / portfolioData.length,
-    pricingArchitecture: portfolioData.reduce((sum, c) => sum + c.pricingArchitecture, 0) / portfolioData.length,
-    competitivePositioning: portfolioData.reduce((sum, c) => sum + c.competitivePositioning, 0) / portfolioData.length,
-    salesEnablement: portfolioData.reduce((sum, c) => sum + c.salesEnablement, 0) / portfolioData.length,
-    customerROI: portfolioData.reduce((sum, c) => sum + c.customerROI, 0) / portfolioData.length
+    buyerTrust: portfolioData.reduce((sum, c) => sum + c.buyerTrust, 0) / portfolioData.length,
+    differentiation: portfolioData.reduce((sum, c) => sum + c.differentiation, 0) / portfolioData.length,
+    buyerEnablement: portfolioData.reduce((sum, c) => sum + c.buyerEnablement, 0) / portfolioData.length,
+    socialProof: portfolioData.reduce((sum, c) => sum + c.socialProof, 0) / portfolioData.length
   };
 
   return (
@@ -992,10 +992,10 @@ export default function InvestorPortfolioDashboard() {
                   
                   {[
                     { name: 'Value Articulation', yourScore: dimAverages.valueArticulation, peerAvg: 5.9, topQuartile: 7.3 },
-                    { name: 'Pricing Architecture', yourScore: dimAverages.pricingArchitecture, peerAvg: 5.7, topQuartile: 7.1 },
-                    { name: 'Competitive Positioning', yourScore: dimAverages.competitivePositioning, peerAvg: 6.1, topQuartile: 7.5 },
-                    { name: 'Sales Enablement', yourScore: dimAverages.salesEnablement, peerAvg: 5.4, topQuartile: 6.9 },
-                    { name: 'Customer ROI Proof', yourScore: dimAverages.customerROI, peerAvg: 5.8, topQuartile: 7.2 },
+                    { name: 'Buyer Trust', yourScore: dimAverages.buyerTrust, peerAvg: 5.7, topQuartile: 7.1 },
+                    { name: 'Differentiation', yourScore: dimAverages.differentiation, peerAvg: 6.1, topQuartile: 7.5 },
+                    { name: 'Buyer Enablement', yourScore: dimAverages.buyerEnablement, peerAvg: 5.4, topQuartile: 6.9 },
+                    { name: 'Social Proof', yourScore: dimAverages.socialProof, peerAvg: 5.8, topQuartile: 7.2 },
                   ].map((dim, idx) => {
                     const diff = dim.yourScore - dim.peerAvg;
                     const percentile = Math.round(50 + (diff / (dim.topQuartile - dim.peerAvg)) * 25);
@@ -1067,7 +1067,7 @@ export default function InvestorPortfolioDashboard() {
                     fontSize: '12px',
                     color: '#0369a1'
                   }}>
-                    <strong>Sales Enablement</strong> shows the widest gap vs. cooperative (-{(5.4 - dimAverages.salesEnablement).toFixed(1)} from median). Companies that improve this dimension see average <strong>+6% win rate improvement</strong> within 6 months.
+                    <strong>Buyer Enablement</strong> shows the widest gap vs. cooperative (-{(5.4 - dimAverages.buyerEnablement).toFixed(1)} from median). Companies that improve this dimension see average <strong>+6% win rate improvement</strong> within 6 months.
                   </div>
                 </div>
 
@@ -1152,10 +1152,10 @@ export default function InvestorPortfolioDashboard() {
                       // Calculate dimension averages for sector
                       const sectorDimAvgs = {
                         valueArticulation: sectorCompanies.reduce((a, c) => a + c.valueArticulation, 0) / sectorCompanies.length,
-                        pricingArchitecture: sectorCompanies.reduce((a, c) => a + c.pricingArchitecture, 0) / sectorCompanies.length,
-                        competitivePositioning: sectorCompanies.reduce((a, c) => a + c.competitivePositioning, 0) / sectorCompanies.length,
-                        salesEnablement: sectorCompanies.reduce((a, c) => a + c.salesEnablement, 0) / sectorCompanies.length,
-                        customerROI: sectorCompanies.reduce((a, c) => a + c.customerROI, 0) / sectorCompanies.length
+                        buyerTrust: sectorCompanies.reduce((a, c) => a + c.buyerTrust, 0) / sectorCompanies.length,
+                        differentiation: sectorCompanies.reduce((a, c) => a + c.differentiation, 0) / sectorCompanies.length,
+                        buyerEnablement: sectorCompanies.reduce((a, c) => a + c.buyerEnablement, 0) / sectorCompanies.length,
+                        socialProof: sectorCompanies.reduce((a, c) => a + c.socialProof, 0) / sectorCompanies.length
                       };
 
                       return (
@@ -1263,10 +1263,10 @@ export default function InvestorPortfolioDashboard() {
                             </div>
                             {[
                               { name: 'Value Articulation', yourScore: sectorDimAvgs.valueArticulation, sectorMedian: sectorData.median + 0.1 },
-                              { name: 'Pricing Architecture', yourScore: sectorDimAvgs.pricingArchitecture, sectorMedian: sectorData.median - 0.1 },
-                              { name: 'Competitive Positioning', yourScore: sectorDimAvgs.competitivePositioning, sectorMedian: sectorData.median + 0.3 },
-                              { name: 'Sales Enablement', yourScore: sectorDimAvgs.salesEnablement, sectorMedian: sectorData.median - 0.4 },
-                              { name: 'Customer ROI Proof', yourScore: sectorDimAvgs.customerROI, sectorMedian: sectorData.median },
+                              { name: 'Buyer Trust', yourScore: sectorDimAvgs.buyerTrust, sectorMedian: sectorData.median - 0.1 },
+                              { name: 'Differentiation', yourScore: sectorDimAvgs.differentiation, sectorMedian: sectorData.median + 0.3 },
+                              { name: 'Buyer Enablement', yourScore: sectorDimAvgs.buyerEnablement, sectorMedian: sectorData.median - 0.4 },
+                              { name: 'Social Proof', yourScore: sectorDimAvgs.socialProof, sectorMedian: sectorData.median },
                             ].map((dim, idx) => {
                               const diff = dim.yourScore - dim.sectorMedian;
                               const diffColor = diff >= 0.5 ? colors.green : diff <= -0.5 ? colors.red : colors.yellow;
@@ -1444,10 +1444,10 @@ export default function InvestorPortfolioDashboard() {
                       
                       {[
                         { name: 'Value Articulation', mgmt: 7.5, ext: 5.2 },
-                        { name: 'Pricing Architecture', mgmt: 6.0, ext: 4.8 },
+                        { name: 'Buyer Trust', mgmt: 6.0, ext: 4.8 },
                         { name: 'Competitive Position', mgmt: 7.0, ext: 6.3 },
-                        { name: 'Sales Enablement', mgmt: 5.5, ext: 4.2 },
-                        { name: 'Customer ROI Proof', mgmt: 5.0, ext: 5.5 },
+                        { name: 'Buyer Enablement', mgmt: 5.5, ext: 4.2 },
+                        { name: 'Social Proof', mgmt: 5.0, ext: 5.5 },
                       ].map((d, idx) => {
                         const gap = d.ext - d.mgmt;
                         const isLargeGap = Math.abs(gap) > 1.5;
@@ -1617,10 +1617,10 @@ export default function InvestorPortfolioDashboard() {
                       <div style={{ fontSize: '12px', fontWeight: 600, color: colors.darkNavy, marginBottom: '12px' }}>Revenue Model Health Dimensions</div>
                       
                       <ScoreBar score={selectedCompany.valueArticulation} label="Value Articulation" />
-                      <ScoreBar score={selectedCompany.pricingArchitecture} label="Pricing Architecture" />
-                      <ScoreBar score={selectedCompany.competitivePositioning} label="Competitive Positioning" />
-                      <ScoreBar score={selectedCompany.salesEnablement} label="Sales Enablement" />
-                      <ScoreBar score={selectedCompany.customerROI} label="Customer ROI Proof" />
+                      <ScoreBar score={selectedCompany.buyerTrust} label="Buyer Trust" />
+                      <ScoreBar score={selectedCompany.differentiation} label="Differentiation" />
+                      <ScoreBar score={selectedCompany.buyerEnablement} label="Buyer Enablement" />
+                      <ScoreBar score={selectedCompany.socialProof} label="Social Proof" />
                       
                       {selectedCompany.status === 'underperformer' && (
                         <div style={{ 
@@ -1808,10 +1808,10 @@ export default function InvestorPortfolioDashboard() {
                 <div style={{ fontSize: '10px', color: '#9ca3af', marginBottom: '12px' }}>Hover over dimension names to see scoring components</div>
                 
                 <ScoreBar score={dimAverages.valueArticulation} label="Value Articulation" showTooltip={true} />
-                <ScoreBar score={dimAverages.pricingArchitecture} label="Pricing Architecture" showTooltip={true} />
-                <ScoreBar score={dimAverages.competitivePositioning} label="Competitive Positioning" showTooltip={true} />
-                <ScoreBar score={dimAverages.salesEnablement} label="Sales Enablement" showTooltip={true} />
-                <ScoreBar score={dimAverages.customerROI} label="Customer ROI Proof" showTooltip={true} />
+                <ScoreBar score={dimAverages.buyerTrust} label="Buyer Trust" showTooltip={true} />
+                <ScoreBar score={dimAverages.differentiation} label="Differentiation" showTooltip={true} />
+                <ScoreBar score={dimAverages.buyerEnablement} label="Buyer Enablement" showTooltip={true} />
+                <ScoreBar score={dimAverages.socialProof} label="Social Proof" showTooltip={true} />
                 
                 <div style={{ 
                   marginTop: '20px', 

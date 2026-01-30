@@ -523,7 +523,7 @@ export default function CompanyDemo() {
         {activeTab === 'dimensions' && (
           <div>
             {Object.entries(dimensions).map(([key, dimension]) => (
-              <ExpandableSection key={key} title={`${key.replace(/([A-Z])/g, ' $1').trim()} — Score: ${dimension.score}/100`} defaultOpen={key === 'pricingArchitecture'}>
+              <ExpandableSection key={key} title={`${key.replace(/([A-Z])/g, ' $1').trim()} — Score: ${dimension.score}/100`} defaultOpen={key === 'buyerTrust'}>
                 <div style={{ marginBottom: '16px' }}>
                   <p style={{ margin: '0 0 16px 0', color: '#4b5563', lineHeight: 1.6, fontSize: '14px' }}>
                     {dimension.summary}

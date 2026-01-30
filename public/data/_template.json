@@ -12,16 +12,20 @@
       "healthScore": 6.5,
       "relativeScore": 0.7,
       "valueArticulation": 7.0,
-      "pricingArchitecture": 5.5,
-      "competitivePositioning": 6.8,
-      "salesEnablement": 6.2,
-      "customerROI": 6.5,
       "status": "on-track",
       "invested": 2023,
       "topGaps": [
-        { "dimension": "Pricing Architecture", "score": 5.5, "issue": "Description of the gap" }
+        {
+          "dimension": "Buyer Trust",
+          "score": 5.5,
+          "issue": "Description of the gap"
+        }
       ],
-      "observation": "Brief summary of key findings."
+      "observation": "Brief summary of key findings.",
+      "buyerTrust": 5.5,
+      "differentiation": 6.8,
+      "buyerEnablement": 6.2,
+      "socialProof": 6.5
     }
   ]
 }

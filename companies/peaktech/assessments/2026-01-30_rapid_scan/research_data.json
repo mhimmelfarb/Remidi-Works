@@ -1,0 +1,227 @@
+{
+  "research_session": {
+    "date": "2026-01-30",
+    "company": "Peak Technologies",
+    "url": "https://www.peaktech.com",
+    "analyst": "Claude Sonnet 4.5",
+    "total_searches": 7,
+    "total_sources": 45
+  },
+
+  "company_overview": {
+    "sources": [
+      "https://www.peaktech.com/",
+      "https://www.peaktech.com/corpinfo/",
+      "https://www.zoominfo.com/c/peak-technologies-inc/82379636",
+      "https://rocketreach.co/peak-technologies-inc-profile_b5c630abf42e0c5e"
+    ],
+    "findings": {
+      "description": "Trusted provider of end-to-end digital supply chain services. Industry's largest provider of end-to-end solutions that modernize the factory, optimize the warehouse, revolutionize the retail experience and reimagine field services and last mile delivery.",
+      "founded": "September 1981, Illinois",
+      "headquarters": "Columbia, Maryland",
+      "global_hq": "Littleton, Massachusetts (Executive Briefing Center)",
+      "revenue": "$121.9 million (2025)",
+      "ownership": "Independently operated portfolio company of Sole Source Capital, Inc. (Santa Monica, CA)",
+      "experience": "Over 35 years of supply chain, field mobility and retail services expertise",
+      "core_solutions": "Managed mobility, mobile workforce, RFID, enterprise mobility, managed services, printing, software and mobile data capture solutions",
+      "industries_served": [
+        "Manufacturing",
+        "Retail",
+        "Warehousing",
+        "Healthcare",
+        "E-commerce",
+        "Food distribution",
+        "Logistics"
+      ]
+    }
+  },
+
+  "employee_sentiment": {
+    "sources": [
+      "https://www.glassdoor.com/Reviews/Peak-Technologies-Reviews-E678792.htm",
+      "https://www.glassdoor.com/Reviews/Peak-Technologies-management-Reviews-EI_IE678792.0,17_KH18,28.htm"
+    ],
+    "glassdoor_metrics": {
+      "overall_rating": 3.1,
+      "total_reviews": 129,
+      "would_recommend": "42%",
+      "work_life_balance": 3.1,
+      "culture_values": 2.8,
+      "career_opportunities": 2.7,
+      "compensation_benefits": 2.9
+    },
+    "positive_themes": [
+      "Great people to work with",
+      "Flexible work schedules",
+      "Management willing to accommodate needs",
+      "Intimate office culture"
+    ],
+    "negative_themes": [
+      "High employee turnover and very low morale",
+      "Nepotism and cronyism is rampant - only 'favored ones' receive advancement",
+      "Hard work and customer service dedication means little to management",
+      "PE-owned, multiple waves of layoffs kept quiet by management",
+      "Essential employees laid off with work dumped on others",
+      "CEO described as elusive, only seen in town halls",
+      "Incompetent and dysfunctional HR department"
+    ],
+    "critical_quotes": [
+      "Employee turnover is high and morale is very low",
+      "Nepotism and cronyism is described as rampant",
+      "Multiple waves of layoffs with management keeping it quiet rather than being transparent",
+      "Essential employees being laid off with their work dumped on others",
+      "The CEO is described as elusive, with most people only seeing or hearing from him on town halls"
+    ]
+  },
+
+  "customer_reviews": {
+    "sources": [
+      "https://www.g2.com/products/peak-technologies/reviews",
+      "https://www.bbb.org/us/md/linthicum/profile/computer-hardware/peak-technologies-inc-0011-22010690"
+    ],
+    "g2_findings": {
+      "positive_mentions": [
+        "Easy to use for all associates with easy training",
+        "Helps with ease of inventory and ability to help customers faster"
+      ],
+      "negative_mentions": [
+        "Troubleshooting with issues and IT support"
+      ],
+      "note": "Some reviewers offered nominal gift card for completing reviews"
+    },
+    "bbb_status": "Not BBB Accredited"
+  },
+
+  "pricing_and_revenue": {
+    "sources": [
+      "https://www.cbinsights.com/company/peak-technologies/financials",
+      "https://growjo.com/company/Peak_Technologies",
+      "https://www.zoominfo.com/c/peak-technologies-inc/82379636"
+    ],
+    "findings": {
+      "annual_revenue": "$121.9 million (2025)",
+      "customer_base": "Fortune 500 customers, local and regional customers throughout North America and Europe",
+      "pricing_visibility": "None - no pricing on website, custom enterprise pricing implied",
+      "deal_size_data": "Not publicly disclosed",
+      "customer_logos": "Not prominently displayed"
+    }
+  },
+
+  "competitive_landscape": {
+    "sources": [
+      "https://tracxn.com/d/companies/peak-technologies/__8muyb9bx2lcRM-BzFp4t-Z67fUhRS-NXE3hlJhW_4lo",
+      "https://www.peaktech.com/about-peak-technologies/partners/zebra/",
+      "https://tracxn.com/d/companies/peak-technologies/__8muyb9bx2lcRM-BzFp4t-Z67fUhRS-NXE3hlJhW_4lo/competitors"
+    ],
+    "findings": {
+      "partner_relationship": "Zebra Technologies Premier Partner (reseller and implementer, not competitor)",
+      "competitors": [
+        "Zebra (direct sales)",
+        "Hub Group",
+        "NFI Industries",
+        "Kontakt",
+        "Omni-ID",
+        "Honeywell International Inc.",
+        "Datalogic S.p.A.",
+        "Sato Holdings Corporation"
+      ],
+      "competitive_count": "469 active competitors (32 funded, 59 exited)",
+      "positioning_note": "Premier Partner with Zebra creates partner-competitor ambiguity"
+    }
+  },
+
+  "marketing_and_content": {
+    "sources": [
+      "https://www.peaktech.com/about-peak-technologies/news-and-events/",
+      "https://www.peaktech.com/blog/connected-autonomy-rewiring-the-last-mile-for-results/",
+      "https://www.peaktech.com/press-releases/b2m-solutions-partnership/"
+    ],
+    "findings": {
+      "recent_developments": [
+        "60,000 sqft facility in Littleton, MA launched April 2025",
+        "18 companies now operating under Peak Technologies brand: VisionID, Siena Analytics, ISG Technologies, Coridian, Miles Data, Inovity, Supply Chain Services, Bar Code Direct, Avalon Integration, DBK, North Coast Technical, Graphic Label",
+        "New partnership with B2M Solutions announced",
+        "Energous partnerships with Annukin, Ecobyte, Peak Technologies"
+      ],
+      "events": [
+        "NRF 2024 participation",
+        "CRN's Fast Growth 150 ranked #13 (August 2023)"
+      ],
+      "blog_content": "Connected autonomy and last-mile delivery focus",
+      "content_cadence": "Limited - not prominent blog/thought leadership presence"
+    }
+  },
+
+  "ownership_and_ma": {
+    "sources": [
+      "https://pitchbook.com/profiles/company/40360-60",
+      "https://www.peaktech.com/press-releases/sole-source-capital-portfolio-company-peak-technologies-acquires-automation-intelligence/",
+      "https://solesourcecapital.com/portfolio/peak-technologies/"
+    ],
+    "findings": {
+      "pe_firm": "Sole Source Capital (founded 2016 by David Fredston, Santa Monica, CA)",
+      "acquisition_date": "2021",
+      "ma_activity": "18 add-on acquisitions since 2021",
+      "recent_acquisitions": [
+        "Automation Intelligence (May 2025)",
+        "VisionID & Dalosy",
+        "Siena Analytics (July 2022)",
+        "North Coast Technical"
+      ],
+      "strategy": "Roll-up consolidation play creating scale advantage",
+      "valuation": "Not publicly disclosed"
+    }
+  },
+
+  "value_proposition_analysis": {
+    "homepage_messaging": {
+      "primary": "ROI-driven, customizable managed mobility technology services that ensure your mobile workforce operates effectively, efficiently, and with ease",
+      "secondary": "Industry's largest provider of end-to-end solutions that modernize the factory, optimize the warehouse, revolutionize the retail experience and reimagine field services and last mile delivery"
+    },
+    "target_customers": [
+      "Retailers (click and collect, grocery)",
+      "Delivery/logistics companies",
+      "Warehouses and factories",
+      "Field services organizations"
+    ],
+    "quantified_outcomes": "None visible on homepage or public materials",
+    "differentiation": "Managed mobility services with 24/7 support, particularly Zebra devices"
+  },
+
+  "data_gaps": {
+    "high_priority": [
+      "Internal customer metrics (NPS, retention, upsell rates)",
+      "Win/loss analysis data",
+      "Actual pricing models and deal sizes",
+      "Sales cycle and conversion metrics",
+      "Employee retention data and turnover rates",
+      "Post-acquisition integration progress",
+      "Brand consolidation strategy"
+    ],
+    "medium_priority": [
+      "Competitive battle cards",
+      "Executive Briefing Center utilization",
+      "Partner channel contribution",
+      "Marketing attribution data",
+      "Product roadmap and R&D investment"
+    ]
+  },
+
+  "research_confidence": {
+    "overall": 6.5,
+    "explanation": "Strong public data on ownership, revenue, employee sentiment, and competitive landscape. Limited visibility into internal metrics, customer outcomes, and strategic decision-making.",
+    "high_confidence_areas": [
+      "Employee sentiment (Glassdoor reviews)",
+      "M&A activity (public press releases)",
+      "Revenue and ownership structure",
+      "Partner relationships"
+    ],
+    "low_confidence_areas": [
+      "Customer satisfaction and outcomes",
+      "Pricing and deal economics",
+      "Win/loss drivers",
+      "Internal sales metrics",
+      "Brand integration strategy"
+    ]
+  }
+}
